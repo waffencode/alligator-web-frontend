@@ -5,11 +5,38 @@ const AuthPage: React.FC = () => {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [message, setMessage] = React.useState('');
+  const errorMessageText: string = "Неправильный email или пароль";
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Здесь можно добавить логику для обработки отправки формы аутентификации
+    setMessage(''); // Сброс сообщения об ошибке перед отправкой
+
+    try {
+      const response = await fetch('http://194.87.234.28:8080/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          setMessage('Неправильный email или пароль');
+        } else {
+          setMessage('Ошибка при аутентификации. Попробуйте еще раз.');
+        }
+      } else {
+        const token = await response.text();
+        // Сохранение токена и редирект на защищенную страницу
+        localStorage.setItem('token', token);
+        window.location.href = '/dashboard';
+      }
+    } catch (error) {
+      setMessage('Ошибка при аутентификации. Попробуйте еще раз.');
+    }
   };
+
 
   return (
     <div className="container">
@@ -18,7 +45,7 @@ const AuthPage: React.FC = () => {
         <label className="error-message">{message}</label>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label htmlFor="username">Эл. почта</label><br />
+            <label htmlFor="username">Email</label><br />
             <input
               type="text"
               id="username"
