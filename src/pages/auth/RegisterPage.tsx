@@ -1,5 +1,6 @@
 import React from 'react';
 import './AuthPage.css';
+import { register } from '../../shared/api/index';
 
 const RegisterPage: React.FC = () => {
     const [name, setName] = React.useState('');
@@ -24,24 +25,20 @@ const RegisterPage: React.FC = () => {
             setMessage(errorMessageTextNotEqual);
         } else {
             try {
-                const response = await fetch('http://localhost:8080/register', { //194.87.234.28
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-    
-                if (!response.ok) {
-                    setMessage('Ошибка при регистрации. Попробуйте еще раз.');
-                } else {
-                    const token = await response.text();
-                    // Сохранение токена и редирект на защищенную страницу
-                    localStorage.setItem('token', token);
-                    window.location.href = '/dashboard';
-                }
+                const response = await register(username, password); // Получение AuthResponse из функции register
+                localStorage.setItem('token', response.token); // Сохранение токена в локальное хранилище
+                window.location.href = '/profile'; // Перенаправление на защищенную страницу
             } catch (error) {
-                setMessage('Ошибка при аутентификации. Попробуйте еще раз.');
+                if (error instanceof Error) {
+                    const [status, errorMessage] = error.message.split(': ', 2);
+                    if ( errorMessage === '{"message":"Username ' + username + ' already exists"}') {
+                        setMessage('Пользователь с таким email уже существует.');
+                    } else {
+                        setMessage(`Ошибка ${status}: ${errorMessage}`);
+                    }
+                } else {
+                    setMessage('Неизвестная ошибка. Попробуйте еще раз.');
+                }
             }
         }        
     };

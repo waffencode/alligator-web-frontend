@@ -3,10 +3,14 @@ import AuthPage from '../pages/auth/AuthPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import Profile from '../pages/profile/Profile';
 
+import AppRoutes from '../pages/AppRoutes';
+
 const App: React.FC = () => {
   return (
     <div>
-      <Profile />
+      <React.StrictMode>
+        <AppRoutes />
+      </React.StrictMode>
     </div>
   );
 }
