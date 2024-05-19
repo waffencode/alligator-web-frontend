@@ -5,6 +5,7 @@ import { register } from '../../shared/api/index';
 const RegisterPage: React.FC = () => {
     const [name, setName] = React.useState('');
     const [surname, setSurname] = React.useState('');
+    const [phone, setPhone] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [message, setMessage] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -25,7 +26,7 @@ const RegisterPage: React.FC = () => {
             setMessage(errorMessageTextNotEqual);
         } else {
             try {
-                const response = await register(username, password); // Получение AuthResponse из функции register
+                const response = await register(username, password, name+" "+surname, username, phone); // Получение AuthResponse из функции register
                 localStorage.setItem('token', response.token); // Сохранение токена в локальное хранилище
                 window.location.href = '/profile'; // Перенаправление на защищенную страницу
             } catch (error) {
@@ -66,6 +67,16 @@ const RegisterPage: React.FC = () => {
                             id="surname"
                             value={surname}
                             onChange={(e) => setSurname(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label>Телефон</label><br />
+                        <input
+                            type="text"
+                            id="phone"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
                             required
                         />
                     </div>

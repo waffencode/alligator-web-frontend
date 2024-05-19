@@ -13,6 +13,7 @@ interface AuthResponse {
 const API_URL = 'http://localhost:8080';
 
 async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
+    console.log(options);
     const response = await fetch(url, options);
     if (!response.ok) {
         const errorText = await response.text();
@@ -47,12 +48,12 @@ export async function login(username: string, password: string): Promise<AuthRes
     });
 }
 
-export async function register(username: string, password: string): Promise<AuthResponse> {
+export async function register(username: string, password: string, fullName: string, email: string, phoneNumber: string): Promise<AuthResponse> {
     return fetchJson<AuthResponse>(`${API_URL}/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password, fullName, email, phoneNumber})
     });
 }
