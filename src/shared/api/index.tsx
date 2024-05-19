@@ -9,8 +9,8 @@ interface AuthResponse {
     token: string;
 }
 
-//const API_URL = 'http://194.87.234.28:8080';
-const API_URL = 'http://localhost:8080';
+const API_URL = 'http://194.87.234.28:8080';
+//const API_URL = 'http://localhost:8080';
 
 async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
     console.log(options);
