@@ -9,12 +9,14 @@ interface MenuItem {
 
 interface SidebarProps {
   menuItems: MenuItem[];
+  headerIcon?: string; // Сделаем свойство необязательным
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ menuItems }) => {
+const Sidebar: React.FC<SidebarProps> = ({ menuItems, headerIcon }) => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
+        {headerIcon && <img src={headerIcon} alt="Header Icon" className="header-icon" />}
         <h2>Аллигатор</h2>
       </div>
       <ul className="menu-list">
