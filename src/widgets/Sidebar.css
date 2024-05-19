@@ -39,3 +39,14 @@
     width: 24px;
     height: 24px;
   }
+
+  .logout-container {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    padding-bottom: 1rem; /* Отступ от нижнего края */
+  }
+
+  .logout-container .menu-item:hover {
+    color: red; /* Красный фон при наведении на "Выход" */
+  }

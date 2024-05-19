@@ -14,8 +14,8 @@ const AuthPage: React.FC = () => {
 
         try {
           const response = await login(username, password);
-          localStorage.setItem('token', response.token); // Сохранение токена в локальное хранилище
-          //window.location.href = '/profile'; // Перенаправление на защищенную страницу
+          localStorage.setItem('token', response.toString()); // Сохранение токена в локальное хранилище
+          window.location.href = '/profile'; // Перенаправление на защищенную страницу
       } catch (error) {
           if (error instanceof Error) {
               const [status, errorMessage] = error.message.split(': ', 2);

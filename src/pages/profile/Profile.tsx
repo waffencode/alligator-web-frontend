@@ -5,8 +5,8 @@ import './Profile.css';
 const Profile: React.FC = () => {
 
     const menuItems = [
-        { label: 'Команды', icon: '/icons/user.svg', onClick: () => alert('Главная') },
-        { label: 'Профиль', icon: '/icons/user.svg', onClick: () => alert('Профиль') },
+        { label: 'Команды', icon: '/icons/user.svg', onClick: () => {}},
+        { label: 'Профиль', icon: '/icons/user.svg', onClick: () => {} },
     ];
 
     const [fullName, setFullname] = React.useState('Иван Иванов');
