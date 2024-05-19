@@ -12,13 +12,12 @@ interface SidebarProps {
   headerIcon?: string; // Сделаем свойство необязательным
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ menuItems }) => {
-
+const Sidebar: React.FC<SidebarProps> = ({ menuItems, headerIcon }) => {
   const handleLogout = () => {
     const confirmLogout = window.confirm('Вы уверены, что хотите выйти?');
     if (confirmLogout) {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+      localStorage.removeItem('token');
+      window.location.href = '/login';
     }
   };
 
@@ -41,7 +40,6 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems }) => {
           <span>Выход</span>
         </li>
       </ul>
-
     </div>
   );
 };
