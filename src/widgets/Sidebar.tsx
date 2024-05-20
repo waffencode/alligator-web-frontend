@@ -9,21 +9,22 @@ interface MenuItem {
 
 interface SidebarProps {
   menuItems: MenuItem[];
+  headerIcon?: string; // Сделаем свойство необязательным
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ menuItems }) => {
-
+const Sidebar: React.FC<SidebarProps> = ({ menuItems, headerIcon }) => {
   const handleLogout = () => {
     const confirmLogout = window.confirm('Вы уверены, что хотите выйти?');
     if (confirmLogout) {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+      localStorage.removeItem('token');
+      window.location.href = '/login';
     }
   };
 
   return (
     <div className="sidebar">
       <div className="sidebar-header">
+        {headerIcon && <img src={headerIcon} alt="Header Icon" className="header-icon" />}
         <h2>Аллигатор</h2>
       </div>
       <ul className="menu-list">
@@ -39,7 +40,6 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems }) => {
           <span>Выход</span>
         </li>
       </ul>
-
     </div>
   );
 };

@@ -1,12 +1,17 @@
 import React from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import './Profile.css';
+import alligatorIcon from '../../shared/ui/icons/alligator.png';
+import appsIcon from '../../shared/ui/icons/apps.png';
+import profileIcon from '../../shared/ui/icons/profile.png';
+
+
 
 const Profile: React.FC = () => {
 
     const menuItems = [
-        { label: 'Команды', icon: '/icons/user.svg', onClick: () => {}},
-        { label: 'Профиль', icon: '/icons/user.svg', onClick: () => {} },
+        { label: 'Команды', icon: appsIcon, onClick: () => alert('Команды') },
+        { label: 'Профиль', icon: profileIcon, onClick: () => alert('Профиль') },
     ];
 
     const [fullName, setFullname] = React.useState('Иван Иванов');
@@ -16,7 +21,7 @@ const Profile: React.FC = () => {
 
     return (
         <div className="profile-page">
-            <Sidebar menuItems={menuItems} />
+            <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} /> 
             <div className="profile-content">
                 <h1>Профиль</h1>
                 <div className="profile-info">
