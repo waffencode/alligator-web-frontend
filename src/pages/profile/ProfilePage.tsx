@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import './ProfilePage.css';
@@ -8,12 +9,34 @@ import sprintIcon from '../../shared/ui/icons/sprint.png';
 import { getCurUserProfileInfo } from '../../shared/api';
 
 const ProfilePage: React.FC = () => {
-
     const menuItems = [
-        { label: 'Команды', icon: appsIcon, onClick: () => alert('Команды') },
-        { label: 'Спринты', icon: sprintIcon, onClick: () => alert('Спринты') },
-        { label: 'Профиль', icon: profileIcon, onClick: () => alert('Профиль') },
-    ];
+        {
+          label: 'Команды',
+          icon: appsIcon,
+          onClick: () => {},
+          subItems: [
+            { label: 'Team 1', onClick: () => alert('Team 1') },
+            { label: 'Team 2', onClick: () => alert('Team 2') },
+            { label: 'Team 3', onClick: () => alert('Team 3') }
+          ],
+        },
+        {
+          label: 'Спринты',
+          icon: sprintIcon,
+          onClick: () => {},
+          subItems: [
+            { label: 'Sprint 1', onClick: () => alert('Sprint 1') },
+            { label: 'Sprint 2', onClick: () => alert('Sprint 2') },
+            { label: 'Sprint 3', onClick: () => alert('Sprint 3') }
+          ],
+        },
+        {
+          label: 'Профиль',
+          icon: profileIcon,
+          onClick: () => alert('Профиль'),
+        },
+      ];
+    
 
     const [fullName, setFullName] = useState('');
     const [role, setRole] = useState('');
