@@ -8,6 +8,17 @@ interface whoamiResponse {
     roles: []
 }
 
+interface UserProfile {
+    fullName: string;
+    email: string;
+    phone_number: string;
+    _links: Link;
+}
+
+interface UserProfileWithRoles extends UserProfile {
+    roles: string[];
+}
+
 // Интерфейс для ссылки
 interface Link {
     href: string;
@@ -27,15 +38,6 @@ interface UserInfo {
     phone_number: string | null;
     _links: UserInfoLinks;
 }
-
-
-interface UserProfile {
-    fullName: string;
-    email: string;
-    phone_number: string; // Если phone_number может быть null
-    _links: Link;
-}
-
 
 // Интерфейс для _embedded части ответа
 interface EmbeddedUserInfoes {
@@ -65,4 +67,4 @@ interface UserInfoResponse {
 }
 
 
-export type {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse};
+export type {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles};

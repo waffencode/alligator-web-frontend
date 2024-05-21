@@ -1,4 +1,4 @@
-import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse} from './IResponses'
+import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles} from './IResponses'
 
 //const API_URL = 'http://194.87.234.28:8080';
 const API_URL = 'http://localhost:8080';
@@ -20,12 +20,26 @@ async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
 }
 
 // Получение информации о пользователе для профиля ProfilePage
-export async function getCurUserProfileInfo(token: string): Promise<UserProfile> {
+export async function getCurUserProfileInfo(token: string): Promise<UserProfileWithRoles> {
     const whoamiResp = await whoami(token);
 
     const userId = whoamiResp.id;
-    console.log("getCurUserProfileInfo");
+    const roles = whoamiResp.roles;
 
+    // добавление ролей к запросу
+    const getUserInfoesByUserIdResp = await getUserInfoesByUserId(token, userId);
+
+    const userProfileWithRoles: UserProfileWithRoles = {
+        ...getUserInfoesByUserIdResp,
+        roles
+    };
+
+    return userProfileWithRoles;
+}
+
+//userInfoes/search/getByUserId?userId={userId}
+export async function getUserInfoesByUserId(token: string, userId: number): Promise<UserProfile> {
+    console.log("getUserInfoesByUserId");
     return fetchJson<UserProfile>(`${API_URL}/userInfoes/search/getByUserId?userId=`+userId, {
         method: 'GET',
         headers: {
@@ -34,7 +48,6 @@ export async function getCurUserProfileInfo(token: string): Promise<UserProfile>
         }
     });
 }
-
 
 //whoami
 export async function whoami(token: string): Promise<whoamiResponse> {
