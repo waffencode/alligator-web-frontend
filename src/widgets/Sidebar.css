@@ -48,9 +48,37 @@
   transform: scale(1.2); /* Увеличиваем иконку при наведении */
 }
 
+
 .menu-icon {
   margin-right: 1rem;
   width: 24px;
   height: 24px;
   transition: transform 0.2s; /* Добавляем плавный переход для иконки */
+}
+
+.logout-container {
+  margin-top: auto; /* Перемещаем блок "Выход" вниз */
+}
+
+.logout-item {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.logout-item:hover {
+  color: #49c61d;
+}
+
+.logout-item:hover .logout-icon {
+  transform: scale(1.2);
+}
+
+.logout-icon {
+  margin-right: 1rem;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s;
 }

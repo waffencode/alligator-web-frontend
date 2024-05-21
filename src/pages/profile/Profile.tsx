@@ -4,6 +4,7 @@ import './Profile.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import appsIcon from '../../shared/ui/icons/apps.png';
 import profileIcon from '../../shared/ui/icons/profile.png';
+import sprintIcon from '../../shared/ui/icons/sprint.png';
 
 
 
@@ -11,6 +12,7 @@ const Profile: React.FC = () => {
 
     const menuItems = [
         { label: 'Команды', icon: appsIcon, onClick: () => alert('Команды') },
+        { label: 'Спринты', icon: sprintIcon, onClick: () => alert('Спринты') },
         { label: 'Профиль', icon: profileIcon, onClick: () => alert('Профиль') },
     ];
 

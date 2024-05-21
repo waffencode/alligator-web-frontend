@@ -1,5 +1,6 @@
 import React from 'react';
 import './Sidebar.css';
+import exitIcon from '../shared/ui/icons/exit.png';
 
 interface MenuItem {
   label: string;
@@ -9,7 +10,7 @@ interface MenuItem {
 
 interface SidebarProps {
   menuItems: MenuItem[];
-  headerIcon?: string; // Сделаем свойство необязательным
+  headerIcon?: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ menuItems, headerIcon }) => {
@@ -35,11 +36,12 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, headerIcon }) => {
           </li>
         ))}
       </ul>
-      <ul className="logout-container">
-        <li className="menu-item" onClick={handleLogout}>
+      <div className="logout-container">
+        <li className="logout-item" onClick={handleLogout}>
+          <img src={exitIcon} alt="Logout Icon" className="logout-icon" />
           <span>Выход</span>
         </li>
-      </ul>
+      </div>
     </div>
   );
 };
