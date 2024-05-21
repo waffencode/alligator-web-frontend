@@ -1,16 +1,7 @@
-interface UserProfile {
-    fullName: string;
-    role: string;
-    phone: string;
-    email: string;
-}
+import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse} from './IResponses'
 
-interface AuthResponse {
-    token: string;
-}
-
-const API_URL = 'http://194.87.234.28:8080';
-//const API_URL = 'http://localhost:8080';
+//const API_URL = 'http://194.87.234.28:8080';
+const API_URL = 'http://localhost:8080';
 
 async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
     console.log(options);
@@ -28,8 +19,14 @@ async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
     }
 }
 
-export async function getUserProfile(token: string): Promise<UserProfile> {
-    return fetchJson<UserProfile>(`${API_URL}/profile`, {
+// Получение информации о пользователе для профиля ProfilePage
+export async function getCurUserProfileInfo(token: string): Promise<UserProfile> {
+    const whoamiResp = await whoami(token);
+
+    const userId = whoamiResp.id;
+    console.log("getCurUserProfileInfo");
+
+    return fetchJson<UserProfile>(`${API_URL}/userInfoes/search/getByUserId?userId=`+userId, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -38,6 +35,31 @@ export async function getUserProfile(token: string): Promise<UserProfile> {
     });
 }
 
+
+//whoami
+export async function whoami(token: string): Promise<whoamiResponse> {
+    console.log("whoami");
+    return fetchJson<whoamiResponse>(`${API_URL}/whoami`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+// userinfoes
+export async function userinfoes(token: string): Promise<UserInfoResponse> {
+    return fetchJson<UserInfoResponse>(`${API_URL}/userinfoes`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+// login
 export async function login(username: string, password: string): Promise<AuthResponse> {
     return fetchJson<AuthResponse>(`${API_URL}/login`, {
         method: 'POST',
@@ -48,6 +70,7 @@ export async function login(username: string, password: string): Promise<AuthRes
     });
 }
 
+// register
 export async function register(username: string, password: string, fullName: string, email: string, phoneNumber: string): Promise<AuthResponse> {
     return fetchJson<AuthResponse>(`${API_URL}/register`, {
         method: 'POST',

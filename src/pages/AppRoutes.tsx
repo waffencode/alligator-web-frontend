@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import AuthPage from './auth/AuthPage';
 import RegisterPage from './auth/RegisterPage';
-import Profile from './profile/Profile';
+import ProfilePage from './profile/ProfilePage';
 
 const AppRoutes: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -25,7 +25,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route 
           path="/profile" 
-          element={token ? <Profile /> : <Navigate to="/login" replace />} 
+          element={token ? <ProfilePage /> : <Navigate to="/login" replace />} 
         />
         <Route 
           path="*" 

@@ -1,7 +1,7 @@
 import React from 'react';
 import AuthPage from '../pages/auth/AuthPage';
 import RegisterPage from '../pages/auth/RegisterPage';
-import Profile from '../pages/profile/Profile';
+import Profile from '../pages/profile/ProfilePage';
 
 import AppRoutes from '../pages/AppRoutes';
 

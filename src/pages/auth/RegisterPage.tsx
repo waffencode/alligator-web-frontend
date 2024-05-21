@@ -27,7 +27,7 @@ const RegisterPage: React.FC = () => {
         } else {
             try {
                 const response = await register(username, password, name+" "+surname, username, phone); // Получение AuthResponse из функции register
-                localStorage.setItem('token', response.token); // Сохранение токена в локальное хранилище
+                localStorage.setItem('token', response.toString()); // Сохранение токена в локальное хранилище
                 window.location.href = '/profile'; // Перенаправление на защищенную страницу
             } catch (error) {
                 if (error instanceof Error) {
