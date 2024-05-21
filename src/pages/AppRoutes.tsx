@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import AuthPage from './auth/AuthPage';
 import RegisterPage from './auth/RegisterPage';
-import Profile from './profile/Profile';
+import Profile from './profile/ProfilePage';
 
 const AppRoutes: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
