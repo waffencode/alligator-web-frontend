@@ -95,3 +95,14 @@ export async function register(username: string, password: string, fullName: str
         body: JSON.stringify({ username, password, fullName, email, phoneNumber})
     });
 }
+
+// register
+export async function changePassword(oldPassword: string, newPassword: string): Promise<AuthResponse> {
+    return fetchJson<AuthResponse>(`${API_URL}/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ oldPassword, newPassword})
+    });
+}

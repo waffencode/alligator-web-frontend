@@ -14,7 +14,7 @@ import { rolesTranslator } from '../../entities/RolesTranslator';
 const ProfilePage: React.FC = () => {
    
     const menuItems = SliderItemsGenerator(); // Получаем элементы меню
-    
+    const navigate = useNavigate(); // используем useNavigate вместо navigator
 
     const [fullName, setFullName] = useState('');
     const [role, setRole] = useState<string>('');
@@ -63,7 +63,7 @@ const ProfilePage: React.FC = () => {
                             <label>Номер телефона:</label><span>{phone}</span>
                         </div>
                         <div className="profile-info-row">
-                            <label>Смена пароля:</label>
+                            <label>Смена пароля:</label><button onClick ={() => navigate("/change-password")}>Сменить пароль</button>
                         </div>
                     </div>
                 )}

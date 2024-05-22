@@ -4,6 +4,7 @@ import AuthPage from './auth/AuthPage';
 import RegisterPage from './auth/RegisterPage';
 import ProfilePage from './profile/ProfilePage';
 import AvaliableTeamsPage from './teams/AvailableTeamsPage';
+import ChangePasswordPage from './auth/ChangePasswordPage';
 
 const AppRoutes: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -24,6 +25,7 @@ const AppRoutes: React.FC = () => {
       <Routes>
         <Route path="/login" element={<AuthPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/change-password" element={<ChangePasswordPage />} />
         <Route 
           path="/profile" 
           element={token ? <ProfilePage /> : <Navigate to="/login" replace />} 
@@ -33,6 +35,7 @@ const AppRoutes: React.FC = () => {
           element={<Navigate to={token ? "/profile" : "/login"} replace />} 
         />
         <Route path="/available-teams" element={<AvaliableTeamsPage />} />
+
       </Routes>
     </Router>
   );
