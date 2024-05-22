@@ -43,9 +43,7 @@ const ProfilePage: React.FC = () => {
             <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
             <div className="profile-content">
                 <h1>Профиль</h1>
-                {error ? (
-                    <div className="error-message">{error}</div>
-                ) : (
+                {error ? ( <div className="error-message">{error}</div>) : ("")}
                     <div className="profile-info">
                         <div className="profile-info-row">
                             <label>ФИО:</label><span>{fullName}</span>
@@ -63,7 +61,6 @@ const ProfilePage: React.FC = () => {
                             <label>Смена пароля:</label><button onClick ={() => navigate("/change-password")}>Сменить пароль</button>
                         </div>
                     </div>
-                )}
             </div>
         </div>
     );
