@@ -20,6 +20,21 @@ async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
     }
 }
 
+// Получение команд, доступных для обычного пользователя
+
+
+// Получение списка участников конкретной команды
+
+
+// Получение списка спринтов конкретной команды
+
+
+// Получение спринтов обычного пользователя
+
+
+// Получение задач в конкретном спринте
+
+
 // Получение информации о пользователе для профиля ProfilePage
 export async function getCurUserProfileInfo(token: string): Promise<UserProfileWithRoles> {
     const whoamiResp = await whoami(token);
