@@ -9,6 +9,7 @@ import sprintIcon from '../../shared/ui/icons/sprint.png';
 import { getCurUserProfileInfo } from '../../shared/api';
 import { useNavigate } from 'react-router-dom';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
+import { rolesTranslator } from '../../entities/RolesTranslator';
 
 const ProfilePage: React.FC = () => {
    
@@ -16,7 +17,7 @@ const ProfilePage: React.FC = () => {
     
 
     const [fullName, setFullName] = useState('');
-    const [role, setRole] = useState('');
+    const [role, setRole] = useState<string>('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
@@ -27,8 +28,7 @@ const ProfilePage: React.FC = () => {
             getCurUserProfileInfo(token)
                 .then((profile) => {
                     setFullName(profile.fullName);
-                    //setRole(profile.role); 
-                    // TODO: получение ролей
+                    setRole(rolesTranslator(profile.roles)); 
                     setPhone(profile.phone_number);
                     setEmail(profile.email);
                 })

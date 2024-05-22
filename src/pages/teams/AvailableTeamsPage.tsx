@@ -22,18 +22,7 @@ const AvaliableTeamsPage: React.FC = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            getCurUserProfileInfo(token)
-                .then((profile) => {
-                    setFullName(profile.fullName);
-                    //setRole(profile.role); 
-                    // TODO: получение ролей
-                    setPhone(profile.phone_number);
-                    setEmail(profile.email);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch user profile', err);
-                    setError('Failed to load user profile');
-                });
+            
         } else {
             setError('No authentication token found');
         }
@@ -48,21 +37,7 @@ const AvaliableTeamsPage: React.FC = () => {
                     <div className="error-message">{error}</div>
                 ) : (
                     <div className="profile-info">
-                        <div className="profile-info-row">
-                            <label>ФИО:</label><span>{fullName}</span>
-                        </div>
-                        <div className="profile-info-row">
-                            <label>Основная роль:</label><span>{role}</span>
-                        </div>
-                        <div className="profile-info-row">
-                            <label>Email:</label><span>{email}</span>
-                        </div>
-                        <div className="profile-info-row">
-                            <label>Номер телефона:</label><span>{phone}</span>
-                        </div>
-                        <div className="profile-info-row">
-                            <label>Смена пароля:</label>
-                        </div>
+                        
                     </div>
                 )}
             </div>

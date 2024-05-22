@@ -12,9 +12,10 @@ async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
     }
 
     const contentType = response.headers.get('Content-Type');
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && (contentType.includes('application/json') || contentType.includes('application/hal+json'))) {
         return response.json();
     } else {
+        //console.log("text");
         return response.text() as unknown as T; // Преобразование текста к типу T
     }
 }
@@ -33,6 +34,7 @@ export async function getCurUserProfileInfo(token: string): Promise<UserProfileW
         ...getUserInfoesByUserIdResp,
         roles
     };
+    console.log(userProfileWithRoles);
 
     return userProfileWithRoles;
 }
