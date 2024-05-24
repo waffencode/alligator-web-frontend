@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import './AvaliableTeamsPage.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
-import appsIcon from '../../shared/ui/icons/apps.png';
-import profileIcon from '../../shared/ui/icons/profile.png';
-import sprintIcon from '../../shared/ui/icons/sprint.png';
 import { getTeamsByUserIdWithCountOfMembers } from '../../shared/api';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
 import { Team } from '../../shared/api/IResponses';
@@ -25,7 +22,6 @@ const AvaliableTeamsPage: React.FC = () => {
             getTeamsByUserIdWithCountOfMembers(token).
             then((teams) => {
                 setTeams(teams);
-                //console.log(teams);
             })
             .catch((err) => {
                 console.error('Failed to fetch user profile', err);
@@ -35,12 +31,6 @@ const AvaliableTeamsPage: React.FC = () => {
             setError('No authentication token found');
         }
     }, []);
-/*
-    const teams: Team[] = [
-        { id: '1', name: 'Codebreakers', participants: 5 },
-        { id: '2', name: 'Команда2', participants: 8 },
-        { id: '3', name: 'Команда3', participants: 4 },
-    ];*/
 
     return (
         <div className="avaliable-teams-page">

@@ -140,4 +140,47 @@ interface TeamMembersResponse {
     page: PageInfo;
 }
 
-export type { UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team};
+// sprints
+
+interface TeamLead {
+    id: number;
+    username: string;
+    password: string;
+}
+
+interface Team_sprints {
+    id: number;
+    name: string;
+    state: string;
+    teamLead: TeamLead;
+}
+
+interface User {
+    id: number;
+    username: string;
+    password: string;
+}
+
+interface ScrumMaster {
+    id: number;
+    team: Team_sprints;
+    user: User;
+    state: string;
+}
+
+interface Sprint {
+    id: number;
+    team: Team_sprints;
+    scrumMaster: ScrumMaster;
+    startTime: string;
+    endTime: string;
+    sp: number;
+    name: string;
+    state: string;
+}
+
+interface SprintResponse {
+    sprints: Sprint[];
+}
+
+export type { UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, SprintResponse};

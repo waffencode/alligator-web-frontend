@@ -69,7 +69,22 @@ function countTeamMembers(teamMembers: TeamMembersResponse): number {
 
 
 // Получение списка спринтов конкретной команды
+export async function getSprintsByUserId(token: string): Promise<Team[]> {
+    const whoamiResp = await whoami(token);
+    const userId = whoamiResp.id;
 
+    const teamResp = await getTeamsByUserId(token, userId);
+    const teams = teamResp._embedded.teams;
+
+    // для каждой команды вычисляем количество участников
+    for (const team of teams) {
+        const teamMembers = await getTeamMembers(token, team.id);
+        const memberCount = countTeamMembers(teamMembers);
+        team.memberCount = memberCount;
+    }
+
+    return teams;
+}
 
 
 // Получение спринтов обычного пользователя
