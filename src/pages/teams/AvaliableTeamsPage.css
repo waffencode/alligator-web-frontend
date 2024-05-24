@@ -1,8 +1,10 @@
-.profile-page {
+/* Styles for available teams page */
+
+.avaliable-teams-page {
     display: flex;
 }
 
-.profile-content {
+.teams-content {
     margin-left: 250px; /* Ширина бокового меню */
     padding: 0 2rem;
     width: calc(100% - 250px);
@@ -10,56 +12,48 @@
     height: 100vh; /* Полная высота экрана */
 }
 
-.profile-content h1 {
-    margin-bottom: 1rem;
+.teams-content h1 {
+    color: #333; /* Change heading color */
+    font-size: 2em;
+    margin-bottom: 20px;
 }
 
-.profile-info {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 2rem 5rem;
-}
-
-.profile-info-row {
-    display: contents; /* This allows grid-template-columns to apply to children directly */
-}
-
-.profile-info-row label {
-    font-weight: bold;
-}
-
-.profile-info-row span {
-    text-align: left;
-}
-.profile-page {
-    display: flex;
-}
-
-.profile-content {
-    margin-left: 250px; /* Ширина бокового меню */
-    padding: 0 2rem;
-    width: calc(100% - 250px);
-    background-color: #f9f9f9;
-    height: 100vh; /* Полная высота экрана */
-}
-
-.profile-content h1 {
-    margin-bottom: 1rem;
+.teams-list {
+    display: grid; /* Use grid for better alignment */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid layout */
+    gap: 20px;
 }
 
 .team-tile {
+    padding: 20px; /* Increase padding */
+    border: none; /* Remove border */
+    border-radius: 10px; /* Increase border radius */
     background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+    line-height: 1.6; /* Increase line spacing for better readability */
 }
 
-.slick-prev:before, .slick-next:before {
-    color: #000;
+.team-info h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333; /* Change heading color */
 }
 
-.error-message {
-    color: red;
+.team-info p {
+    margin: 10px 0; /* Increase margin between paragraphs */
+    color: #777;
+    line-height: 1.6; /* Increase line spacing */
+}
+
+.navigate-button {
+    background-color: #6cc24a;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navigate-button:hover {
+    background-color: #5aa83e;
 }
