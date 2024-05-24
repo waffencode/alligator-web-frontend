@@ -1,17 +1,15 @@
-
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../widgets/Sidebar';
+import Slider from "react-slick";
 import './AvaliableTeamsPage.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
-import appsIcon from '../../shared/ui/icons/apps.png';
-import profileIcon from '../../shared/ui/icons/profile.png';
-import sprintIcon from '../../shared/ui/icons/sprint.png';
 import { getTeamsByUserIdWithCountOfMembers } from '../../shared/api';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
 import { Team } from '../../shared/api/IResponses';
 
 const AvaliableTeamsPage: React.FC = () => {
-       
     const menuItems = SliderItemsGenerator(); // Получаем элементы меню
 
     const [teams, setTeams] = useState<Team[]>([]);
@@ -23,7 +21,6 @@ const AvaliableTeamsPage: React.FC = () => {
             getTeamsByUserIdWithCountOfMembers(token).
             then((teams) => {
                 setTeams(teams);
-                //console.log(teams);
             })
             .catch((err) => {
                 console.error('Failed to fetch user profile', err);
@@ -34,15 +31,47 @@ const AvaliableTeamsPage: React.FC = () => {
         }
     }, []);
 
+    const settings = {
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
+    };
+
     return (
         <div className="profile-page">
             <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
             <div className="profile-content">
                 <h1>Доступные команды</h1>
-                {error ? (<div className="error-message">{error}</div>) : ('')}
-                <div className="profile-info">
-                        
-                </div>
+                {error ? (<div className="error-message">{error}</div>) : (
+                    <Slider {...settings}>
+                        {teams.map((team) => (
+                            <div key={team.id} className="team-tile">
+                                <h3>{team.name}</h3>
+                                <p>Members: {team.memberCount}</p>
+                            </div>
+                        ))}
+                    </Slider>
+                )}
             </div>
         </div>
     );
