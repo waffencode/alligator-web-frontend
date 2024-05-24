@@ -1,8 +1,10 @@
-.profile-page {
+/* Styles for available teams page */
+
+.avaliable-teams-page {
     display: flex;
 }
 
-.profile-content {
+.teams-content {
     margin-left: 250px; /* Ширина бокового меню */
     padding: 0 2rem;
     width: calc(100% - 250px);
@@ -10,24 +12,48 @@
     height: 100vh; /* Полная высота экрана */
 }
 
-.profile-content h1 {
-    margin-bottom: 1rem;
+.teams-content h1 {
+    color: #333; /* Change heading color */
+    font-size: 2em;
+    margin-bottom: 20px;
 }
 
-.profile-info {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 2rem 5rem;
+.teams-list {
+    display: grid; /* Use grid for better alignment */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid layout */
+    gap: 20px;
 }
 
-.profile-info-row {
-    display: contents; /* This allows grid-template-columns to apply to children directly */
+.team-tile {
+    padding: 20px; /* Increase padding */
+    border: none; /* Remove border */
+    border-radius: 10px; /* Increase border radius */
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+    line-height: 1.6; /* Increase line spacing for better readability */
 }
 
-.profile-info-row label {
-    font-weight: bold;
+.team-info h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333; /* Change heading color */
 }
 
-.profile-info-row span {
-    text-align: left;
+.team-info p {
+    margin: 10px 0; /* Increase margin between paragraphs */
+    color: #777;
+    line-height: 1.6; /* Increase line spacing */
+}
+
+.navigate-button {
+    background-color: #6cc24a;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navigate-button:hover {
+    background-color: #5aa83e;
 }
