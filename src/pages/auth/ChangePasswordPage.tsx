@@ -11,6 +11,8 @@ const ChangePasswordPage: React.FC = () => {
     const errorMessageText: string = "Неправильный email или пароль";
     const errorMessageTextNotEqual: string = "Пароли не совпадают";
 
+    const token = localStorage.getItem('token');
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setMessage(''); // Сброс сообщения об ошибке перед отправкой
@@ -18,7 +20,7 @@ const ChangePasswordPage: React.FC = () => {
             setMessage(errorMessageTextNotEqual);
         } else {
             try {
-                const response = await changePassword(oldPassword, password);
+                const response = await changePassword((token ? token : ''), oldPassword, password);
                 //localStorage.setItem('token', response.toString()); // Сохранение токена в локальное хранилище
                 //window.location.href = '/profile'; // Перенаправление на защищенную страницу
             } catch (error) {
