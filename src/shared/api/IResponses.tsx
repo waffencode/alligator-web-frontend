@@ -179,8 +179,6 @@ interface Sprint {
     state: string;
 }
 
-interface SprintResponse {
-    sprints: Sprint[];
-}
 
-export type { UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, SprintResponse};
+export type { UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, 
+    UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, Sprint};

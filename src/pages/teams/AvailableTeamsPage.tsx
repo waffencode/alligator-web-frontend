@@ -19,7 +19,7 @@ const AvaliableTeamsPage: React.FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
+        if (token) { 
             getTeamsByUserIdWithCountOfMembers(token).
             then((teams) => {
                 setTeams(teams);

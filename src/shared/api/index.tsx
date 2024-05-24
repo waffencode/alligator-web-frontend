@@ -1,7 +1,7 @@
-import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team} from './IResponses'
+import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, Sprint} from './IResponses'
 
-const API_URL = 'http://194.87.234.28:8080';
-//const API_URL = 'http://localhost:8080';
+//const API_URL = 'http://194.87.234.28:8080';
+const API_URL = 'http://localhost:8080';
 
 async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
     //console.log(options);
@@ -69,7 +69,8 @@ function countTeamMembers(teamMembers: TeamMembersResponse): number {
 
 
 // Получение списка спринтов конкретной команды
-export async function getSprintsByUserId(token: string): Promise<Team[]> {
+/*
+export async function getSprintsByUserId(token: string): Promise<Sprint[]> {
     const whoamiResp = await whoami(token);
     const userId = whoamiResp.id;
 
@@ -85,7 +86,7 @@ export async function getSprintsByUserId(token: string): Promise<Team[]> {
 
     return teams;
 }
-
+*/
 
 // Получение спринтов обычного пользователя
 
