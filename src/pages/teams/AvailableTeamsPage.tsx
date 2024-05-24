@@ -1,7 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../widgets/Sidebar';
+import Slider from "react-slick";
 import './AvaliableTeamsPage.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { getTeamsByUserIdWithCountOfMembers } from '../../shared/api';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
@@ -9,7 +11,6 @@ import { Team } from '../../shared/api/IResponses';
 import { useNavigate } from 'react-router-dom';
 
 const AvaliableTeamsPage: React.FC = () => {
-       
     const menuItems = SliderItemsGenerator(); // Получаем элементы меню
     const navigate = useNavigate(); 
 
@@ -31,6 +32,32 @@ const AvaliableTeamsPage: React.FC = () => {
             setError('No authentication token found');
         }
     }, []);
+
+    const settings = {
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
+    };
 
     return (
         <div className="avaliable-teams-page">
