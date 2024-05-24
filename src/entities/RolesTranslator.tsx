@@ -1,7 +1,7 @@
 const roleTranslations: { [key: string]: string } = {
     PROJECT_MANAGER: 'Менеджер проекта',
     BUSINESS_ANALYTIC: 'Бизнес-аналитик',
-    USER: 'Пользователь'
+    USER: 'Пользователь',
 };
 
 const rolesTranslator = (roles: string[] | undefined): string => {

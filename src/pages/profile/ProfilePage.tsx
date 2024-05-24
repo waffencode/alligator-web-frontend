@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import './ProfilePage.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
-import appsIcon from '../../shared/ui/icons/apps.png';
-import profileIcon from '../../shared/ui/icons/profile.png';
-import sprintIcon from '../../shared/ui/icons/sprint.png';
 import { getCurUserProfileInfo } from '../../shared/api';
 import { useNavigate } from 'react-router-dom';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
@@ -46,9 +43,7 @@ const ProfilePage: React.FC = () => {
             <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
             <div className="profile-content">
                 <h1>Профиль</h1>
-                {error ? (
-                    <div className="error-message">{error}</div>
-                ) : (
+                {error ? ( <div className="error-message">{error}</div>) : ("")}
                     <div className="profile-info">
                         <div className="profile-info-row">
                             <label>ФИО:</label><span>{fullName}</span>
@@ -66,7 +61,6 @@ const ProfilePage: React.FC = () => {
                             <label>Смена пароля:</label><button onClick ={() => navigate("/change-password")}>Сменить пароль</button>
                         </div>
                     </div>
-                )}
             </div>
         </div>
     );

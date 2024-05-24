@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import './AvaliableTeamsPage.css';
@@ -34,13 +32,10 @@ const SprintsPages: React.FC = () => {
             <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
             <div className="profile-content">
                 <h1>Доступные команды</h1>
-                {error ? (
-                    <div className="error-message">{error}</div>
-                ) : (
-                    <div className="profile-info">
-                        
-                    </div>
-                )}
+                {error ? ( <div className="error-message">{error}</div>) : ("")}
+                <div className="error-message">{error}</div>
+                <div className="profile-info">        
+                </div>
             </div>
         </div>
     );
