@@ -35,6 +35,7 @@ const AppRoutes: React.FC = () => {
           path="*" 
           element={<Navigate to={token ? "/profile" : "/login"} replace />} 
         />
+        {/*<Route path="/teams/team-members/:teamId" element={<TeamMembersPage />} /> */}
         <Route path="/available-teams" element={<AvaliableTeamsPage />} />
         <Route path="/sprints" element={<SprintsPage />} />
 

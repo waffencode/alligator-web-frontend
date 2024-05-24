@@ -1,4 +1,5 @@
-import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, TeamMembersResponse, Team, Sprint, TeamResponse} from './IResponses'
+import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, 
+    TeamMembersResponse, Team, Sprint, TeamResponse, TeamMembersResponse_TeamMember} from './IResponses'
 
 //const API_URL = 'http://194.87.234.28:8080';
 const API_URL = 'http://localhost:8080';
@@ -46,7 +47,6 @@ export async function getTeamsByUserIdWithCountOfMembers(token: string): Promise
         team._links = teamInfo._links;
 
         teams.push(team);
-        
     }
     return teams;
 }
@@ -82,7 +82,7 @@ export async function getTeamByTeamMemberId(token: string, teamId: number): Prom
 }
 
 
-// Получение списка участников конкретной команды
+// Получение списка teamMember.id конкретной команды
 export async function getTeamMembers(token: string, teamId: number): Promise<TeamMembersResponse> {
     return fetchJson<TeamMembersResponse>(`${API_URL}/teamMembers?team.id=`+teamId, {
         method: 'GET',
@@ -93,6 +93,18 @@ export async function getTeamMembers(token: string, teamId: number): Promise<Tea
     });
 }
 
+// Получение списка участников конкретной команды (информация)
+export async function getTeamMembersInfo(token: string, teamId: number): Promise<TeamMembersResponse_TeamMember[]> {
+    return fetchJson<TeamMembersResponse_TeamMember[]>(`${API_URL}/teams/`+teamId+`/getTeamMembersInfoAndRoles`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+
 // Подсчёт количества членов команды
 function countTeamMembers(teamMembers: TeamMembersResponse): number {
     const count = 0; 
@@ -101,6 +113,18 @@ function countTeamMembers(teamMembers: TeamMembersResponse): number {
 
 
 // Получение списка спринтов конкретной команды
+export async function getSprintsByTeamId(token: string, teamId: number): Promise<Sprint[]> {
+
+    const sprints = await fetchJson<Sprint[]>(`${API_URL}/sprints?teamId=1`+teamId, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    return sprints;
+}
 
 // Получение спринтов обычного пользователя
 export async function getSprintsByUserId(token: string): Promise<Sprint[]> {

@@ -82,10 +82,6 @@ interface Team {
     memberCount?: number;
 }
 
-interface TeamWithCountOfMembers extends Team {
-    countOfMembers: number;
-}
-
 // Интерфейс для _embedded части ответа с командами
 interface EmbeddedTeams {
     teams: Team[];
@@ -126,7 +122,6 @@ interface TeamMember {
     name?: string;
     state: string;
     _links: TeamMemberLinks;
-    memberCount?: number;
 }
 
 
@@ -170,6 +165,13 @@ interface ScrumMaster {
     state: string;
 }
 
+interface SprintLinks {
+    self: Link;
+    sprint: Link;
+    team: Link;
+    scrumMaster: Link;
+}
+
 interface Sprint {
     id: number;
     team: Team_sprints;
@@ -179,7 +181,62 @@ interface Sprint {
     sp: number;
     name: string;
     state: string;
+    _links?: SprintLinks;
 }
 
+////////////////////////////////////////////////
+// Интерфейс для представления информации о профиле пользователя
+interface UserInfo_TeamMember {
+    id: number;
+    user: User;
+    fullName: string;
+    email: string;
+    phone_number: string | null;
+}
+
+// Интерфейс для представления роли пользователя
+interface Role {
+    id: number;
+    name: string;
+}
+
+// Интерфейс для представления информации о руководителе команды
+interface TeamLead {
+    id: number;
+    username: string;
+    password: string;
+}
+
+// Интерфейс для представления информации о команде
+interface Team_TeamMember {
+    id: number;
+    name: string;
+    state: string;
+    teamLead: TeamLead;
+}
+
+// Интерфейс для представления информации об участнике команды
+interface TeamMember_TeamMember {
+    id: number;
+    team: Team_TeamMember;
+    user: User;
+    state: string;
+}
+
+// Интерфейс для представления роли участника команды
+interface TeamMemberRole {
+    id: number;
+    teamMember: TeamMember_TeamMember;
+    role: Role;
+}
+
+// Основной интерфейс для представления участника команды с ролями
+interface TeamMembersResponse_TeamMember {
+    userInfo: UserInfo_TeamMember;
+    teamMemberRoles: TeamMemberRole[];
+}
+///////////////////////////////////////////////////////////////
+
+
 export type { UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, 
-    UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, Sprint, EmbeddedTeamMembers };
+    UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, Sprint, EmbeddedTeamMembers, TeamMembersResponse_TeamMember };
