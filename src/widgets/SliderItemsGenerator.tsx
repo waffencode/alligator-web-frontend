@@ -29,14 +29,14 @@ const SliderItemsGenerator = (): MenuItem[] => {
           setTeams(teams);
         })
         .catch((err) => {
-          console.error('Failed to fetch user profile', err);
+          console.error('Failed to fetch user teams', err);
         });
       getSprintsByUserId(token)
       .then((sprints) => {
         setSprints(sprints);
       })
       .catch((err) => {
-        console.error('Failed to fetch user profile', err);
+        console.error('Failed to fetch user sprints', err);
       });
     
     } else {

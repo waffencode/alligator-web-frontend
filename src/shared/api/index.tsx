@@ -1,4 +1,4 @@
-import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, Sprint} from './IResponses'
+import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, TeamMembersResponse, Team, Sprint, TeamResponse} from './IResponses'
 
 //const API_URL = 'http://194.87.234.28:8080';
 const API_URL = 'http://localhost:8080';
@@ -21,26 +21,58 @@ async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
 }
 
 
-// Получение команд, доступных для обычного пользователя
+// Получение команд, доступных для обычного пользователя по id
 export async function getTeamsByUserIdWithCountOfMembers(token: string): Promise<Team[]> {
     const whoamiResp = await whoami(token);
     const userId = whoamiResp.id;
 
-    const teamResp = await getTeamsByUserId(token, userId);
-    const teams = teamResp._embedded.teams;
+    const teamMemberResp = await getTeamsIdWhereUserIsMemberyUserId(token, userId);
+    
+    const teamMemberIds = teamMemberResp._embedded.teamMembers;
 
-    // для каждой команды вычисляем количество участников
-    for (const team of teams) {
+    const teams: Team[] = [];
+
+    // для каждого teamMember.id находим команду и вычисляем количество участников
+    for (const teamMember of teamMemberIds) {
+        const team = await getTeamByTeamMemberId(token, teamMember.id);
         const teamMembers = await getTeamMembers(token, team.id);
         const memberCount = countTeamMembers(teamMembers);
         team.memberCount = memberCount;
-    }
 
+        const teamInfo = await getTeamById(token, team.id);
+        team.id = teamInfo.id;
+        team.name = teamInfo.name;
+        team.state = teamInfo.state;
+        team._links = teamInfo._links;
+
+        teams.push(team);
+        
+    }
     return teams;
 }
 
-export async function getTeamsByUserId(token: string, userId: number): Promise<TeamResponse> {
-    return fetchJson<TeamResponse>(`${API_URL}/teams?user.id=`+userId, {
+export async function getTeamsIdWhereUserIsMemberyUserId(token: string, userId: number): Promise<TeamMembersResponse> {
+    return fetchJson<TeamMembersResponse>(`${API_URL}/teamMembers?user.id=`+userId, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export async function getTeamById(token: string, teamId: number): Promise<Team> {
+    return fetchJson<Team>(`${API_URL}/teams/`+teamId, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export async function getTeamByTeamMemberId(token: string, teamId: number): Promise<Team> {
+    return fetchJson<Team>(`${API_URL}/teamMembers/`+teamId+`/team`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,

@@ -66,7 +66,6 @@ interface UserInfoResponse {
     page: PageInfo;
 }
 
-
 // Интерфейс для ссылок в каждом элементе команды
 interface TeamLinks {
     self: Link;
@@ -124,13 +123,16 @@ interface TeamMemberLinks {
 // Интерфейс для элемента teamMember
 interface TeamMember {
     id: number;
+    name?: string;
     state: string;
     _links: TeamMemberLinks;
+    memberCount?: number;
 }
+
 
 // Интерфейс для _embedded части ответа
 interface EmbeddedTeamMembers {
-    teamMembers: TeamMember[];
+    teamMembers: Team[];
 }
 
 // Основной интерфейс для ответа от сервера
@@ -140,7 +142,7 @@ interface TeamMembersResponse {
     page: PageInfo;
 }
 
-// sprints
+// Интерфейсы для спринтов
 
 interface TeamLead {
     id: number;
@@ -179,6 +181,5 @@ interface Sprint {
     state: string;
 }
 
-
 export type { UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, 
-    UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, Sprint};
+    UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, Sprint, EmbeddedTeamMembers };
