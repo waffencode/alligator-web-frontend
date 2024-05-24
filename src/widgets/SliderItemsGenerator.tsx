@@ -4,7 +4,8 @@ import appsIcon from '../shared/ui/icons/apps.png';
 import profileIcon from '../shared/ui/icons/profile.png';
 import sprintIcon from '../shared/ui/icons/sprint.png';
 import { getTeamsByUserIdWithCountOfMembers } from '../shared/api';
-import { Team } from '../shared/api/IResponses';
+import { Sprint, Team } from '../shared/api/IResponses';
+import { getSprintsByUserId } from '../shared/api';
 
 export interface MenuItem {
   label: string;
@@ -18,6 +19,7 @@ const SliderItemsGenerator = (): MenuItem[] => {
   const location = useLocation();
   const [showAvailableTeams, setShowAvailableTeams] = useState(false);
   const [teams, setTeams] = useState<Team[]>([]);
+  const [sprints, setSprints] = useState<Sprint[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -29,6 +31,14 @@ const SliderItemsGenerator = (): MenuItem[] => {
         .catch((err) => {
           console.error('Failed to fetch user profile', err);
         });
+      getSprintsByUserId(token)
+      .then((sprints) => {
+        setSprints(sprints);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch user profile', err);
+      });
+    
     } else {
       console.log('No authentication token found');
     }
@@ -51,7 +61,7 @@ const SliderItemsGenerator = (): MenuItem[] => {
       {
         label: 'Спринты',
         icon: sprintIcon,
-        onClick: () => {},
+        onClick: () => { navigate('/sprints'); },
         subItems: [],
       },
       {
@@ -61,15 +71,6 @@ const SliderItemsGenerator = (): MenuItem[] => {
       },
     ];
   } else if (location.pathname === '/available-teams') {
-
-
-/*
-    const availableTeamsSubItems: MenuItem[] = [
-      { label: 'Team 1', onClick: () => alert('Team 1') },
-      { label: 'Team 2', onClick: () => alert('Team 2') },
-      { label: 'Team 3', onClick: () => alert('Team 3') }
-    ];
-*/
 
     const availableTeamsSubItems: MenuItem[] = teams.map((team) => ({
       label: team.name,
@@ -84,7 +85,7 @@ const SliderItemsGenerator = (): MenuItem[] => {
         subItems: [
           {
             label: 'Доступные',
-            onClick: () => {},
+            onClick: () => {navigate('/available-teams');},
             subItems: availableTeamsSubItems,
           },
           ...availableTeamsSubItems, // Добавляем команды прямо в основное меню
@@ -93,7 +94,7 @@ const SliderItemsGenerator = (): MenuItem[] => {
       {
         label: 'Спринты',
         icon: sprintIcon,
-        onClick: () => {},
+        onClick: () => { navigate('/sprints') },
         subItems: [],
       },
       {
@@ -102,6 +103,39 @@ const SliderItemsGenerator = (): MenuItem[] => {
         onClick: () => { navigate('/profile'); },
       },
     ];
+  } else if (location.pathname === '/sprints') {
+
+    const availableSprintsSubItems: MenuItem[] = sprints.map((sprint) => ({
+      label: sprint.name,
+      onClick: () => alert(`Team ${sprint.name}`),
+    }));
+
+    return [
+      {
+        label: 'Команды',
+        icon: appsIcon,
+        onClick: () => setShowAvailableTeams(!showAvailableTeams),
+        subItems: showAvailableTeams ? [
+          {
+            label: 'Доступные',
+            onClick: () => { navigate('/available-teams'); },
+            subItems: [],
+          },
+        ] : [],
+      },
+      {
+        label: 'Спринты',
+        icon: sprintIcon,
+        onClick: () => { navigate('/sprints') },
+        subItems: availableSprintsSubItems,
+      },
+      {
+        label: 'Профиль',
+        icon: profileIcon,
+        onClick: () => { navigate('/profile'); },
+      },
+    ];
+
   } else {
     return [
       {

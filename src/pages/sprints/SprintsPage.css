@@ -1,0 +1,33 @@
+.profile-page {
+    display: flex;
+}
+
+.profile-content {
+    margin-left: 250px; /* Ширина бокового меню */
+    padding: 0 2rem;
+    width: calc(100% - 250px);
+    background-color: #f9f9f9;
+    height: 100vh; /* Полная высота экрана */
+}
+
+.profile-content h1 {
+    margin-bottom: 1rem;
+}
+
+.profile-info {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 2rem 5rem;
+}
+
+.profile-info-row {
+    display: contents; /* This allows grid-template-columns to apply to children directly */
+}
+
+.profile-info-row label {
+    font-weight: bold;
+}
+
+.profile-info-row span {
+    text-align: left;
+}

@@ -5,6 +5,7 @@ import RegisterPage from './auth/RegisterPage';
 import ProfilePage from './profile/ProfilePage';
 import AvaliableTeamsPage from './teams/AvailableTeamsPage';
 import ChangePasswordPage from './auth/ChangePasswordPage';
+import SprintsPage from './sprints/SprintsPage';
 
 const AppRoutes: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -35,6 +36,7 @@ const AppRoutes: React.FC = () => {
           element={<Navigate to={token ? "/profile" : "/login"} replace />} 
         />
         <Route path="/available-teams" element={<AvaliableTeamsPage />} />
+        <Route path="/sprints" element={<SprintsPage />} />
 
       </Routes>
     </Router>
