@@ -6,6 +6,7 @@ import ProfilePage from './profile/ProfilePage';
 import AvaliableTeamsPage from './teams/AvailableTeamsPage';
 import ChangePasswordPage from './auth/ChangePasswordPage';
 import SprintsPage from './sprints/SprintsPage';
+import BacklogPage from './backlog/BacklogPage';
 
 const AppRoutes: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -38,6 +39,7 @@ const AppRoutes: React.FC = () => {
         {/*<Route path="/teams/team-members/:teamId" element={<TeamMembersPage />} /> */}
         <Route path="/available-teams" element={<AvaliableTeamsPage />} />
         <Route path="/sprints" element={<SprintsPage />} />
+        <Route path="/backlog" element={<BacklogPage />} />
 
       </Routes>
     </Router>

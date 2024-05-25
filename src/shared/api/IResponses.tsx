@@ -1,3 +1,53 @@
+// Интерфейс для ссылки
+interface Link {
+    href: string;
+}
+
+// Интерфейс для задачи
+interface Task {
+    id: number;
+    priority: string;
+    state: string;
+    headline: string;
+    description: string;
+    deadline?: string;
+    _links: TaskLinks;
+}
+
+// Интерфейс для ссылок в задаче
+interface TaskLinks {
+    self: Link;
+    task: Link;
+    deadline: Link;
+}
+
+// Интерфейс для _embedded части ответа с задачами
+interface EmbeddedTasks {
+    tasks: Task[];
+}
+
+// Интерфейс для верхнего уровня ссылок в ответе с задачами
+interface TasksTopLevelLinks {
+    self: Link;
+    profile: Link;
+}
+
+// Интерфейс для информации о странице в ответе с задачами
+interface TasksPageInfo {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+
+// Основной интерфейс для ответа с задачами
+interface TasksResponse {
+    _embedded: EmbeddedTasks;
+    _links: TasksTopLevelLinks;
+    page: TasksPageInfo;
+}
+
+// Существующие интерфейсы
 interface AuthResponse {
     token: string;
 }
@@ -17,11 +67,6 @@ interface UserProfile {
 
 interface UserProfileWithRoles extends UserProfile {
     roles: string[];
-}
-
-// Интерфейс для ссылки
-interface Link {
-    href: string;
 }
 
 // Интерфейс для вложенных ссылок в каждом элементе userInfo
@@ -124,7 +169,6 @@ interface TeamMember {
     _links: TeamMemberLinks;
 }
 
-
 // Интерфейс для _embedded части ответа
 interface EmbeddedTeamMembers {
     teamMembers: Team[];
@@ -184,7 +228,6 @@ interface Sprint {
     _links?: SprintLinks;
 }
 
-////////////////////////////////////////////////
 // Интерфейс для представления информации о профиле пользователя
 interface UserInfo_TeamMember {
     id: number;
@@ -235,8 +278,23 @@ interface TeamMembersResponse_TeamMember {
     userInfo: UserInfo_TeamMember;
     teamMemberRoles: TeamMemberRole[];
 }
-///////////////////////////////////////////////////////////////
 
-
-export type { UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, 
-    UserProfileWithRoles, TeamResponse, TeamMembersResponse, Team, Sprint, EmbeddedTeamMembers, TeamMembersResponse_TeamMember };
+export type { 
+    UserProfile, 
+    AuthResponse, 
+    whoamiResponse, 
+    UserInfoResponse, 
+    UserProfileWithRoles, 
+    TeamResponse, 
+    TeamMembersResponse, 
+    Team, 
+    Sprint, 
+    EmbeddedTeamMembers, 
+    TeamMembersResponse_TeamMember, 
+    TasksResponse, 
+    Task, 
+    TaskLinks, 
+    EmbeddedTasks, 
+    TasksTopLevelLinks, 
+    TasksPageInfo 
+};

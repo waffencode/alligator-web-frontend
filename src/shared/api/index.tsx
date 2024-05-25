@@ -1,5 +1,5 @@
 import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, 
-    TeamMembersResponse, Team, Sprint, TeamResponse, TeamMembersResponse_TeamMember} from './IResponses'
+    TeamMembersResponse, Team, Sprint, TeamResponse, TeamMembersResponse_TeamMember, TasksResponse, Task} from './IResponses'
 
 //const API_URL = 'http://194.87.234.28:8080';
 const API_URL = 'http://localhost:8080';
@@ -20,6 +20,19 @@ async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
         return response.text() as unknown as T; // Преобразование текста к типу T
     }
 }
+
+// Получение задач из backlog
+export async function getTasks(token: string): Promise<Task[]> {
+    const resp = fetchJson<TasksResponse>(`${API_URL}/tasks`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    return (await resp)._embedded.tasks;
+} 
 
 
 // Получение команд, доступных для обычного пользователя по id
