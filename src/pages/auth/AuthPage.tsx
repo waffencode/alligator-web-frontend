@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import './AuthPage.css';
 import ApiContext from "../../features/api-context";
-import {AuthenticationContextData} from "../../shared/lib/token";
+import {AuthenticationContextData} from "../../shared/lib/authentication";
 import {useNavigate} from "react-router-dom";
 import {RoutePaths} from "../../shared/config/routes";
 

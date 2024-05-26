@@ -1,5 +1,5 @@
 import {UserApi} from "./UserApi";
-import {AuthenticationContextData} from "../lib/token";
+import {AuthenticationContextData} from "../lib/authentication";
 import {BaseApi} from "./BaseApi";
 import {DeadlineResponse, Task, TasksResponse} from "./IResponses";
 

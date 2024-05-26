@@ -1,6 +1,6 @@
 import {BaseApi} from "./BaseApi";
 import {AuthResponse, UserInfoResponse, UserProfile, whoamiResponse} from "./IResponses";
-import {getAuthenticationContextData, AuthenticationContextData} from "../lib/token";
+import {getAuthenticationContextData, AuthenticationContextData} from "../lib/authentication";
 
 export class UserApi extends BaseApi {
     private authenticationContext: AuthenticationContextData

@@ -1,5 +1,5 @@
 import {BaseApi} from "./BaseApi";
-import {AuthenticationContextData} from "../lib/token";
+import {AuthenticationContextData} from "../lib/authentication";
 import {Sprint} from "./IResponses";
 
 export class SprintApi extends BaseApi {

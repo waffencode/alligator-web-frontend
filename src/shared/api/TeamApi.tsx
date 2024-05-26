@@ -1,5 +1,5 @@
 import {BaseApi} from "./BaseApi";
-import {AuthenticationContextData} from "../lib/token";
+import {AuthenticationContextData} from "../lib/authentication";
 import {Team, TeamMembersResponse, TeamMembersResponse_TeamMember} from "./IResponses";
 
 export class TeamApi extends BaseApi {

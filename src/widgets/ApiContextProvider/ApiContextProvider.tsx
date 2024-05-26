@@ -1,6 +1,6 @@
 import { Api } from '../../entities/Api';
 import ApiContext, { ApiContextValue } from '../../features/api-context';
-import { AuthenticationContextData, getAuthenticationContextData, setAuthenticationContextData } from '../../shared/lib/token';
+import { AuthenticationContextData, getAuthenticationContextData, setAuthenticationContextData } from '../../shared/lib/authentication';
 import { useState } from 'react';
 
 type Props = {

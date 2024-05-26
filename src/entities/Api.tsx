@@ -1,4 +1,4 @@
-import { AuthenticationContextData } from '../shared/lib/token';
+import { AuthenticationContextData } from '../shared/lib/authentication';
 import {AuthApi} from '../shared/api/AuthApi';
 import {ProfileApi} from "../shared/api/ProfileApi";
 import {UserApi} from "../shared/api/UserApi";

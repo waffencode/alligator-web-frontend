@@ -1,5 +1,5 @@
 import { Api } from '../entities/Api';
-import { AuthenticationContextData } from '../shared/lib/token';
+import { AuthenticationContextData } from '../shared/lib/authentication';
 import { createContext } from 'react';
 
 type ApiContextValue = {
