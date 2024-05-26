@@ -36,15 +36,17 @@ export class TaskApi extends BaseApi {
         });
     }
 
-    public async getTaskDeadline(task: Task) {
-        return this.fetchJson<DeadlineResponse>(task._links.deadline.href, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
-                'Content-Type': 'application/json'
-            }
-        });
-    }
+    //TODO: перейти на это
+
+    // public async getTaskDeadline(task: Task) {
+    //     return this.fetchJson<DeadlineResponse>(task._links.deadline.href, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+    //             'Content-Type': 'application/json'
+    //         }
+    //     });
+    // }
 
     public async getTasksForBacklog(): Promise<Task[]> {
         const tasks = await this.getTasks();
