@@ -1,3 +1,4 @@
+import { format, parse, parseISO } from 'date-fns';
 import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, 
     TeamMembersResponse, Team, Sprint, TeamResponse, TeamMembersResponse_TeamMember, TasksResponse, Task, DeadlineResponse} from './IResponses'
 
@@ -21,6 +22,60 @@ async function fetchJson<T>(url: string, options: RequestInit): Promise<T> {
     }
 }
 
+// Измененение задачи на сервере
+export async function updateTask(token: string, task: Task): Promise<TasksResponse> {
+    // обновляем дедлайн (при условии, что на 1 задачу - 1 дедлайн)
+    let newDeadline: DeadlineResponse;
+    let resp: Promise<TasksResponse>;
+
+    const id = task.id;
+    const description = task.description;
+    const headline = task.headline;
+    const priority = task.priority;
+    const state = task.state;
+
+    if (task.deadline_id && task.deadline_time && task.deadline_type) {
+        newDeadline = await updateDeadline(token, task.deadline_id, task.deadline_time, task.deadline_type);
+        const deadline = "http://localhost:8080/deadlines/"+newDeadline.id;
+        resp = fetchJson<TasksResponse>(`${API_URL}/tasks?id=`+task.id, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ deadline, id, description, headline, priority, state})
+        });
+    } else {
+        resp = fetchJson<TasksResponse>(`${API_URL}/tasks?id=`+task.id, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id, description, headline, priority, state})
+        });
+    } 
+     
+    return resp;
+}
+
+// обновление дедлайна
+export async function updateDeadline(token: string, id: number, timeNotFormatted: string, type: string): Promise<DeadlineResponse> { 
+
+    const dateObject = parseISO(timeNotFormatted);
+    const time = format(dateObject, "yyyy-MM-dd'T'HH:mm:ss.SSSX");
+    console.log(time);
+
+    return fetchJson<DeadlineResponse>(`${API_URL}/deadlines?id=`+id, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id, time, type})
+    });;
+} 
+
 // Получение задач из backlog
 export async function getTasks(token: string): Promise<Task[]> {
     const resp = fetchJson<TasksResponse>(`${API_URL}/tasks`, {
@@ -34,7 +89,7 @@ export async function getTasks(token: string): Promise<Task[]> {
     return (await resp)._embedded.tasks;
 } 
 
-// добавление дедлайна
+// получение дедлайна у задачи
 export async function getTaskDeadlineByTaskId(token: string, taskId: number): Promise<DeadlineResponse> {
     return fetchJson<DeadlineResponse>(`${API_URL}/tasks/`+taskId+`/deadline`, {
         method: 'GET',
@@ -50,8 +105,9 @@ export async function getTasksForBacklog(token: string): Promise<Task[]> {
 
     for (const task of tasks) {
         const deadlineResp = await getTaskDeadlineByTaskId(token, task.id);
-        task.deadline = deadlineResp.time;
-        task.deadlineType = deadlineResp.type;
+        task.deadline_id = deadlineResp.id;
+        task.deadline_time = deadlineResp.time;
+        task.deadline_type = deadlineResp.type;
     }
 
     // зависимости 

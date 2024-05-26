@@ -22,40 +22,51 @@
 
 .sprints-grid-header {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 50px repeat(7, 1fr);
   background-color: #ffffff; /* Цвет фона блока */
   font-weight: bold; /* Жирный текст */
   border-radius: 8px; /* Закругление углов */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
   padding: 10px; /* Внутренний отступ */
   gap: 0px; /* Увеличиваем расстояние между элементами */
-  text-align: center; /* Центрируем текст */
 }
 
 .sprint-tile {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* Так же, как и для основной сетки */
+  grid-template-columns: 50px repeat(7, 1fr); /* Так же, как и для основной сетки */
   background-color: #ffffff; /* Цвет фона блока */
   border-radius: 8px; /* Закругление углов */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
   padding: 10px; /* Внутренний отступ */
   gap: 0px; /* Увеличиваем расстояние между элементами */
   cursor: default; /* Изменение курсора при наведении */
-  align-items: center; /* Вертикальное выравнивание по центру */
-  text-align: center; /* Центрирование текста */
+  align-items: center; /* Выравнивание по вертикали */
+}
+
+.sprint-tile div, .sprints-grid-header div, .sprint-tile button {
+  display: flex;
+  justify-content: center; /* Выравнивание по горизонтали */
+  align-items: center; /* Выравнивание по вертикали */
 }
 
 .sprint-tile:hover {
   background-color: #f5f5f5; /* Изменение цвета фона при наведении */
 }
 
-.sprint-tile > div {
-  white-space: nowrap; /* Запрещаем перенос текста */
-  overflow: hidden; /* Обрезаем переполняющий текст */
-  text-overflow: ellipsis; /* Добавляем многоточие для переполняющего текста */
-  display: flex; /* Используем Flexbox */
-  align-items: center; /* Вертикальное выравнивание по центру */
-  justify-content: center; /* Горизонтальное выравнивание по центру */
+.edit-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center; /* Выравнивание по горизонтали */
+  align-items: center; /* Выравнивание по вертикали */
+}
+
+.edit-button:hover {
+  color: blue;
 }
 
 .task-description {

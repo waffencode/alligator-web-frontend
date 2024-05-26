@@ -3,7 +3,7 @@ import AuthPage from '../pages/auth/AuthPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import Profile from '../pages/profile/ProfilePage';
 
-import AppRoutes from '../pages/AppRoutes';
+import AppRoutes from '../shared/config/AppRoutes';
 
 const App: React.FC = () => {
   return (
