@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../widgets/Sidebar';
-import './BacklogPage.css';
+import styles from './BacklogPage.module.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
 import { getTasksForBacklog } from '../../shared/api';
@@ -13,6 +13,7 @@ const BacklogPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
+    // TODO: move getting item to key, maybe transform to hook
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -38,14 +39,16 @@ const BacklogPage: React.FC = () => {
     };
 
     return (
-        <div className="profile-page">
+        <div className={styles.profile_page}>
             <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
-            <div className="profile-content">
+            <div className={styles.profile_content}>
                 <h1>Задачи в бэклоге</h1>
+                {/*TODO: move "error" to widgets*/}
                 {error && <div className="error-message">{error}</div>}
+                {/*TODO: where is profile-info css?*/}
                 <div className="profile-info">
-                    <div className="sprints-grid">
-                        <div className="sprints-grid-header">
+                    <div className={styles.sprints_grid}>
+                        <div className={styles.sprints_grid_header}>
                             <div>Название</div>
                             <div>Описание</div>
                             <div>Приоритет</div>
@@ -55,9 +58,9 @@ const BacklogPage: React.FC = () => {
                             <div>Статус</div>
                         </div>
                         {tasks.map((task, index) => (
-                            <div key={index} className="sprint-tile">
+                            <div key={index} className={styles.sprint_tile}>
                                 <div>{task.headline}</div>
-                                <div onClick={() => handleDescriptionClick(task)} className="task-description">
+                                <div onClick={() => handleDescriptionClick(task)} className={styles.task_description}>
                                     {task.description.substring(0, 20)}...
                                 </div>
                                 <div>{task.priority}</div>
@@ -68,6 +71,7 @@ const BacklogPage: React.FC = () => {
                             </div>
                         ))}
                     </div>
+                    {/*TODO: move "modal" to widgets*/}
                     {selectedTask && (
                         <div className="modal">
                             <div className="modal-content">
