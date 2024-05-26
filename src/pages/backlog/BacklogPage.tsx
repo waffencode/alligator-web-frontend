@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './BacklogPage.module.css';
-import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { Task } from '../../shared/api/IResponses';
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
@@ -29,6 +28,7 @@ const BacklogPage: React.FC = () => {
         deadline_type: '',
         state: '',
     });
+    const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -127,6 +127,30 @@ const BacklogPage: React.FC = () => {
         }
     };
 
+    const handleTaskSelect = (taskId: number) => {
+        setSelectedTaskIds((prevSelectedTaskIds) =>
+            prevSelectedTaskIds.includes(taskId)
+                ? prevSelectedTaskIds.filter((id) => id !== taskId)
+                : [...prevSelectedTaskIds, taskId]
+        );
+    };
+
+    const handleDeleteSelectedTasks = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const promises = selectedTaskIds.map((taskId) => api.tasks.deleteTask(taskId));
+            Promise.all(promises)
+                .then(() => {
+                    setTasks(tasks.filter((task) => !selectedTaskIds.includes(task.id)));
+                    setSelectedTaskIds([]);
+                })
+                .catch((err) => {
+                    console.error('Failed to delete tasks', err);
+                    setError('Failed to delete tasks');
+                });
+        }
+    };
+
     const getValue = (value: string | undefined) => value !== undefined ? value : '';
 
     return (
@@ -140,6 +164,7 @@ const BacklogPage: React.FC = () => {
                     <div className="profile-info">
                         <div className={styles.sprints_grid}>
                             <div className={styles.sprints_grid_header}>
+                                <div>Выбрать</div>
                                 <div>Название</div>
                                 <div>Описание</div>
                                 <div>Приоритет</div>
@@ -151,6 +176,13 @@ const BacklogPage: React.FC = () => {
                             </div>
                             {tasks.map((task, index) => (
                                 <div key={index} className={styles.sprint_tile}>
+                                    <div>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedTaskIds.includes(task.id)}
+                                            onChange={() => handleTaskSelect(task.id)}
+                                        />
+                                    </div>
                                     <div className={styles.edit_button_container}>
                                         <button
                                             className={styles.edit_button}
@@ -210,6 +242,7 @@ const BacklogPage: React.FC = () => {
                             ))}
                             {isAddingNewTask && (
                                 <div className={styles.sprint_tile}>
+                                    <div></div>
                                     <div className={styles.edit_button_container}>
                                         <button
                                             className={styles.edit_button}
@@ -252,6 +285,7 @@ const BacklogPage: React.FC = () => {
                                 </div>
                             )}
                             <button onClick={handleAddNewTask}>Добавить задачу</button>
+                            <button onClick={handleDeleteSelectedTasks}>Удалить выбранные задачи</button>
                         </div>
                         {selectedTask && (
                             <div className="modal">
