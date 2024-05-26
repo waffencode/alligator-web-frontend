@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import AuthPage from '../../pages/auth/AuthPage';
-import RegisterPage from '../../pages/auth/RegisterPage';
-import ProfilePage from '../../pages/profile/ProfilePage';
-import AvaliableTeamsPage from '../../pages/teams/AvailableTeamsPage';
-import ChangePasswordPage from '../../pages/auth/ChangePasswordPage';
-import SprintsPage from '../../pages/sprints/SprintsPage';
-import BacklogPage from '../../pages/backlog/BacklogPage';
+import AuthPage from './auth/AuthPage';
+import RegisterPage from './auth/RegisterPage';
+import ProfilePage from './profile/ProfilePage';
+import AvailableTeamsPage from './teams/AvailableTeamsPage';
+import ChangePasswordPage from './auth/ChangePasswordPage';
+import SprintsPage from './sprints/SprintsPage';
+import BacklogPage from './backlog/BacklogPage';
 
 const AppRoutes: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -37,7 +37,7 @@ const AppRoutes: React.FC = () => {
           element={<Navigate to={token ? "/profile" : "/login"} replace />} 
         />
         {/*<Route path="/teams/team-members/:teamId" element={<TeamMembersPage />} /> */}
-        <Route path="/available-teams" element={<AvaliableTeamsPage />} />
+        <Route path="/available-teams" element={<AvailableTeamsPage />} />
         <Route path="/sprints" element={<SprintsPage />} />
         <Route path="/backlog" element={<BacklogPage />} />
 

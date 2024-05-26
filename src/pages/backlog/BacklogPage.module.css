@@ -1,8 +1,8 @@
-.profile-page {
+.profile_page {
   display: flex;
 }
 
-.profile-content {
+.profile_content {
   margin-left: 250px; /* Ширина бокового меню */
   padding: 0 2rem;
   width: calc(100% - 250px);
@@ -10,71 +10,60 @@
   height: 100vh; /* Полная высота экрана */
 }
 
-.profile-content h1 {
+.profile_content h1 {
   margin-bottom: 1rem;
 }
 
-.sprints-grid {
+.sprints_grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-gap: 10px; /* Отступ между блоками */
 }
 
-.sprints-grid-header {
+.sprints_grid_header {
   display: grid;
-  grid-template-columns: 50px repeat(7, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   background-color: #ffffff; /* Цвет фона блока */
   font-weight: bold; /* Жирный текст */
   border-radius: 8px; /* Закругление углов */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
   padding: 10px; /* Внутренний отступ */
   gap: 0px; /* Увеличиваем расстояние между элементами */
+  text-align: center; /* Центрируем текст */
 }
 
-.sprint-tile {
+.sprint_tile {
   display: grid;
-  grid-template-columns: 50px repeat(7, 1fr); /* Так же, как и для основной сетки */
+  grid-template-columns: repeat(7, 1fr); /* Так же, как и для основной сетки */
   background-color: #ffffff; /* Цвет фона блока */
   border-radius: 8px; /* Закругление углов */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
   padding: 10px; /* Внутренний отступ */
   gap: 0px; /* Увеличиваем расстояние между элементами */
   cursor: default; /* Изменение курсора при наведении */
-  align-items: center; /* Выравнивание по вертикали */
+  align-items: center; /* Вертикальное выравнивание по центру */
+  text-align: center; /* Центрирование текста */
 }
 
-.sprint-tile div, .sprints-grid-header div, .sprint-tile button {
-  display: flex;
-  justify-content: center; /* Выравнивание по горизонтали */
-  align-items: center; /* Выравнивание по вертикали */
-}
-
-.sprint-tile:hover {
+.sprint_tile:hover {
   background-color: #f5f5f5; /* Изменение цвета фона при наведении */
 }
 
-.edit-button {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center; /* Выравнивание по горизонтали */
-  align-items: center; /* Выравнивание по вертикали */
+.sprint_tile > div {
+  white-space: nowrap; /* Запрещаем перенос текста */
+  overflow: hidden; /* Обрезаем переполняющий текст */
+  text-overflow: ellipsis; /* Добавляем многоточие для переполняющего текста */
+  display: flex; /* Используем Flexbox */
+  align-items: center; /* Вертикальное выравнивание по центру */
+  justify-content: center; /* Горизонтальное выравнивание по центру */
 }
 
-.edit-button:hover {
-  color: blue;
-}
-
-.task-description {
+.task_description {
   cursor: pointer; /* Указатель при наведении на описание */
   text-decoration: underline; /* Подчёркивание для описания */
 }
 
-.task-description:hover {
+.task_description:hover {
   color: blue; /* Изменение цвета текста при наведении */
 }
 
@@ -93,7 +82,7 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content {
+.modal_content {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;

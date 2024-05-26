@@ -1,28 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import Sidebar from '../../widgets/Sidebar';
+import React, {useContext, useEffect, useState} from 'react';
 import './SprintsPage.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
-import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
-import { getSprintsByUserId } from '../../shared/api';
 import { Sprint } from '../../shared/api/IResponses';
 import { format } from 'date-fns';
+import ApiContext from "../../features/api-context";
+import SideBar from "../../widgets/SideBar/SideBar";
+import {RoutePaths} from "../../shared/config/routes";
 
 const SprintsPage: React.FC = () => {
-    const menuItems = SliderItemsGenerator(); // Получаем элементы меню
+    const {api} = useContext(ApiContext);
+
     const [sprints, setSprints] = useState<Sprint[]>([]);;
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            getSprintsByUserId(token).
-            then((sprints) => {
-                setSprints(sprints);
-            })
-            .catch((err) => {
-                console.error('Failed to fetch user profile', err);
-                setError('Failed to load user profile');
-            });
+            api.sprint.getSprintsOfCurrentUser()
+                .then((sprints) => {
+                    setSprints(sprints);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch user profile', err);
+                    setError('Failed to load user profile');
+                });
         } else {
             setError('No authentication token found');
         }
@@ -36,7 +37,7 @@ const SprintsPage: React.FC = () => {
 */
     return (
         <div className="profile-page">
-            <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
+            <SideBar currentPageURL={RoutePaths.sprints} />
             <div className="profile-content">
                 <h1>Спринты пользователя</h1>
                 {error && <div className="error-message">{error}</div>}
