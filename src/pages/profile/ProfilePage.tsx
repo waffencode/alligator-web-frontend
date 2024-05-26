@@ -11,6 +11,7 @@ import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
 import PageName from "../../widgets/PageName/PageName";
 import ApiContext from "../../features/api-context";
 import {RoutePaths} from "../../shared/config/routes";
+import { logout } from '../../shared/lib/authentication';
 
 const ProfilePage: React.FC = () => {
     const {api} = useContext(ApiContext);
@@ -37,6 +38,13 @@ const ProfilePage: React.FC = () => {
             });
     }, []);
 
+    const handleLogout = () => {
+        const confirmLogout = window.confirm('Вы уверены, что хотите выйти?');
+        if (confirmLogout) {
+            logout();
+        }
+      };
+
     return (
         <Layout
             topLeft={<BrandLogo />}
@@ -60,6 +68,9 @@ const ProfilePage: React.FC = () => {
                         </div>
                         <div className={styles.profile_info_row}>
                             <label>Смена пароля:</label><button onClick ={() => navigate("/change-password")}>Сменить пароль</button>
+                        </div>
+                        <div className={styles.profile_info_row}>
+                            <button onClick ={handleLogout}>Выйти из аккаунта</button>
                         </div>
                     </div>
                 </Content>

@@ -20,7 +20,7 @@ export class UserApi extends BaseApi {
         });
     }
 
-    public async  whoami(): Promise<whoamiResponse> {
+    public async whoami(): Promise<whoamiResponse> {
         // console.log("whoami");
         return this.fetchJson<whoamiResponse>(`/whoami`, {
             method: 'GET',
@@ -31,7 +31,7 @@ export class UserApi extends BaseApi {
         });
     }
 
-    public async  userinfoes(): Promise<UserInfoResponse> {
+    public async userinfoes(): Promise<UserInfoResponse> {
         return this.fetchJson<UserInfoResponse>(`/userinfoes`, {
             method: 'GET',
             headers: {

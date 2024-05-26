@@ -51,4 +51,10 @@ function setAuthenticationContextData(authenticationContext: AuthenticationConte
     localStorage.setItem(LocalStorageKeys.AUTH, data);
 }
 
-export { AuthenticationContextData, getAuthenticationContextData, setAuthenticationContextData };
+// выход из аккаунта
+function logout() {
+    localStorage.removeItem(LocalStorageKeys.AUTH);
+    window.location.href = '/login';
+}
+
+export { AuthenticationContextData, getAuthenticationContextData, setAuthenticationContextData, logout };

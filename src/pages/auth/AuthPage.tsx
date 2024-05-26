@@ -12,7 +12,6 @@ const AuthPage: React.FC = () => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [message, setMessage] = React.useState('');
-    const errorMessageText: string = "Неправильный email или пароль";
 
     const _fetchAuthenticationContextDataByToken = (token:string) => {
         return fetch("http://localhost:8080/whoami", {

@@ -1,8 +1,10 @@
 import _Sidebar, {SideBarTab} from './template';
-import {useState} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {sharedStart} from '../../shared/util';
 import {RoutePaths} from "../../shared/config/routes";
+
+import ApiContext from '../../features/api-context';
 
 type Props = {
     currentPageURL: string;
@@ -26,10 +28,29 @@ class SideBarTabE {
 
 const SideBar = (props: Props) => {
     const navigate = useNavigate();
+    const [role, setRole] = useState<string[]>([]);
+
+    const {api} = useContext(ApiContext);
+
+    useEffect(() => {
+        // получаем роли
+
+        api.user.whoami()
+            .then((user) => {
+                setRole(user.roles);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch user roles', err);
+            });
+      }, []);
+    
 
     const [tabs, setTabs] = useState<SideBarTabE[]>(_getAllTabs());
 
     function _getAllTabs() {
+
+
+
         return [
             // new SideBarTabE(
             //     new SideBarTab('Мероприятия', RoutePaths.eventList, <Menu />),
@@ -65,8 +86,9 @@ const SideBar = (props: Props) => {
             // ),
             // new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.userList, <Users />),),
             new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
-            new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
+            //new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
             new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
+            new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
         ];
     }
 
