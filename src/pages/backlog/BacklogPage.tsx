@@ -37,7 +37,6 @@ const BacklogPage: React.FC = () => {
         }
     }, []);
 
-
     const handleDescriptionClick = (task: Task) => {
         setSelectedTask(task);
     };
@@ -105,8 +104,8 @@ const BacklogPage: React.FC = () => {
                             {tasks.map((task, index) => (
                                 <div key={index} className={styles.sprint_tile}>
                                     <div className={styles.edit_button_container}>
-                                        <button 
-                                            className={styles.edit_button} 
+                                        <button
+                                            className={styles.edit_button}
                                             onClick={() => handleEditClick(task)}
                                         >
                                             {editingTaskId === task.id ? '✓' : '✎'}
@@ -114,31 +113,31 @@ const BacklogPage: React.FC = () => {
                                     </div>
                                     {editingTaskId === task.id ? (
                                         <>
-                                            <input 
-                                                type="text" 
-                                                value={editedTask?.headline || ''} 
+                                            <input
+                                                type="text"
+                                                value={editedTask?.headline || ''}
                                                 onChange={(e) => handleTaskChange('headline', e.target.value)}
                                             />
-                                            <input 
-                                                type="text" 
-                                                value={editedTask?.description || ''} 
+                                            <input
+                                                type="text"
+                                                value={editedTask?.description || ''}
                                                 onChange={(e) => handleTaskChange('description', e.target.value)}
                                             />
-                                            <input 
-                                                type="text" 
-                                                value={editedTask?.priority || ''} 
+                                            <input
+                                                type="text"
+                                                value={editedTask?.priority || ''}
                                                 onChange={(e) => handleTaskChange('priority', e.target.value)}
                                             />
-                                            <input 
-                                                type="date" 
-                                                value={editedTask?.deadline_time ? format(new Date(editedTask?.deadline_time), 'yyyy-MM-dd') : ''} 
+                                            <input
+                                                type="date"
+                                                value={editedTask?.deadline_time ? format(new Date(editedTask?.deadline_time), 'yyyy-MM-dd') : ''}
                                                 onChange={(e) => handleTaskChange('deadline_time', e.target.value)}
                                             />
                                             <div></div>
                                             <div></div>
-                                            <input 
-                                                type="text" 
-                                                value={editedTask?.state || ''} 
+                                            <input
+                                                type="text"
+                                                value={editedTask?.state || ''}
                                                 onChange={(e) => handleTaskChange('state', e.target.value)}
                                             />
                                         </>

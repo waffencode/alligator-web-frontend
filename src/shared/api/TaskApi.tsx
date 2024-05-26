@@ -36,6 +36,18 @@ export class TaskApi extends BaseApi {
         });
     }
 
+    //TODO: перейти на это
+
+    // public async getTaskDeadline(task: Task) {
+    //     return this.fetchJson<DeadlineResponse>(task._links.deadline.href, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+    //             'Content-Type': 'application/json'
+    //         }
+    //     });
+    // }
+
     public async getTasksForBacklog(): Promise<Task[]> {
         const tasks = await this.getTasks();
 
@@ -57,13 +69,13 @@ export class TaskApi extends BaseApi {
         // обновляем дедлайн (при условии, что на 1 задачу - 1 дедлайн)
         let newDeadline: DeadlineResponse;
         let resp: Promise<TasksResponse>;
-    
+
         const id = task.id;
         const description = task.description;
         const headline = task.headline;
         const priority = task.priority;
         const state = task.state;
-    
+
         if (task.deadline_id && task.deadline_time && task.deadline_type) {
             console.log("DEADLINES");
             newDeadline = await this.updateDeadline(task.deadline_id, task.deadline_time, task.deadline_type);
@@ -85,13 +97,13 @@ export class TaskApi extends BaseApi {
                 },
                 body: JSON.stringify({id, description, headline, priority, state})
             });
-        } 
-         
+        }
+
         return resp;
     }
 
     // обновление дедлайна
-    public async updateDeadline(id: number, timeNotFormatted: string, type: string): Promise<DeadlineResponse> { 
+    public async updateDeadline(id: number, timeNotFormatted: string, type: string): Promise<DeadlineResponse> {
 
         const dateObject = parseISO(timeNotFormatted);
         const time = format(dateObject, "yyyy-MM-dd'T'HH:mm:ss.SSSX");
@@ -105,6 +117,6 @@ export class TaskApi extends BaseApi {
             },
             body: JSON.stringify({ id, time, type})
         });;
-    } 
+    }
 
 }
