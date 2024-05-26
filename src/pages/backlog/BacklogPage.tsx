@@ -232,13 +232,13 @@ const BacklogPage: React.FC = () => {
                                                 value={getValue(editedTask?.state)}
                                                 onChange={(e) => handleTaskChange('state', e.target.value)}
                                             >
-                                                <option value="NEED_REWORK">NEED_REWORK</option>
-                                                <option value="TODO">TODO</option>
-                                                <option value="PICKED">PICKED</option>
-                                                <option value="IN_PROGRESS">IN_PROGRESS</option>
-                                                <option value="TESTING">TESTING</option>
-                                                <option value="DONE">DONE</option>
-                                                <option value="ABORTED">ABORTED</option>
+                                                <option value="NEED_REWORK">Требуется доработка</option>
+                                                <option value="TODO">Сделать</option>
+                                                <option value="PICKED">Выбрано</option>
+                                                <option value="IN_PROGRESS">В процессе</option>
+                                                <option value="TESTING">На тестировании</option>
+                                                <option value="DONE">Выполнено</option>
+                                                <option value="ABORTED">Прервано</option>
                                             </select>
                                         </>
                                     ) : (
@@ -307,13 +307,13 @@ const BacklogPage: React.FC = () => {
                                                                                     value={getValue(newTask.state)}
                                                                                     onChange={(e) => handleNewTaskChange('state', e.target.value)}
                                                                                 >
-                                                                                    <option value="NEED_REWORK">NEED_REWORK</option>
-                                                                                    <option value="TODO">TODO</option>
-                                                                                    <option value="PICKED">PICKED</option>
-                                                                                    <option value="IN_PROGRESS">IN_PROGRESS</option>
-                                                                                    <option value="TESTING">TESTING</option>
-                                                                                    <option value="DONE">DONE</option>
-                                                                                    <option value="ABORTED">ABORTED</option>
+                                                                                    <option value="NEED_REWORK">Требуется доработка</option>
+                                                                                    <option value="TODO">Сделать</option>
+                                                                                    <option value="PICKED">Выбрано</option>
+                                                                                    <option value="IN_PROGRESS">В процессе</option>
+                                                                                    <option value="TESTING">На тестировании</option>
+                                                                                    <option value="DONE">Выполнено</option>
+                                                                                    <option value="ABORTED">Прервано</option>
                                                                                 </select>
                                                                             </div>
                                                                         )}
