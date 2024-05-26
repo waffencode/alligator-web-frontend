@@ -73,7 +73,7 @@ const BacklogPage: React.FC = () => {
                                         {task.description.substring(0, 20)}...
                                     </div>
                                     <div>{task.priority}</div>
-                                    <div>{task.deadline ? format(new Date(task.deadline), 'dd.MM.yyyy') : ''}</div>
+                                    <div>{task.deadline? format(new Date(task.deadline.time), 'dd.MM.yyyy') : ''}</div>
                                     <div></div>
                                     <div></div>
                                     <div>{task.state}</div>

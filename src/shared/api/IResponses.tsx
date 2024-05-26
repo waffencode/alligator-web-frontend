@@ -23,9 +23,7 @@ interface Task {
     state: string;
     headline: string;
     description: string;
-    deadline_id?: number;
-    deadline_time?: string;
-    deadline_type?: string;
+    deadline?: DeadlineResponse
     _links: TaskLinks;
 }
 

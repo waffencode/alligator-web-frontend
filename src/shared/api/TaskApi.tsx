@@ -1,4 +1,3 @@
-import {UserApi} from "./UserApi";
 import {AuthenticationContextData} from "../lib/authentication";
 import {BaseApi} from "./BaseApi";
 import {DeadlineResponse, Task, TasksResponse} from "./IResponses";
@@ -35,18 +34,23 @@ export class TaskApi extends BaseApi {
         });
     }
 
+    public async getTaskDeadline(task: Task) {
+        return this.fetchJson<DeadlineResponse>(task._links.deadline.href, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
     public async getTasksForBacklog(): Promise<Task[]> {
         const tasks = await this.getTasks();
 
-        for (const task of tasks) {
-            const deadlineResp = await this.getTaskDeadlineByTaskId(task.id);
-            task.deadline = deadlineResp.time;
-            task.deadlineType = deadlineResp.type;
-        }
-
-        // зависимости
-
-        // ответственный (кому назначены задачи)
+        await Promise.all(tasks.map(async (task) => {
+            task.deadline = await this.getTaskDeadline(task);
+            return task;
+        }));
 
         return tasks;
     }
