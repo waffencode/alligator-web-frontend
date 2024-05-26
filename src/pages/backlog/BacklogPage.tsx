@@ -3,8 +3,8 @@ import Sidebar from '../../widgets/Sidebar';
 import './BacklogPage.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
-import { getSprintsByUserId, getTasks } from '../../shared/api';
-import { Sprint, Task } from '../../shared/api/IResponses';
+import { getTasksForBacklog } from '../../shared/api';
+import { Task } from '../../shared/api/IResponses';
 import { format } from 'date-fns';
 
 const BacklogPage: React.FC = () => {
@@ -16,7 +16,7 @@ const BacklogPage: React.FC = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            getTasks(token)
+            getTasksForBacklog(token)
             .then((tasks) => {
                 setTasks(tasks);
             })

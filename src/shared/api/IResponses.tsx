@@ -3,6 +3,19 @@ interface Link {
     href: string;
 }
 
+// Интерфейсы для ответа с дедлайном
+interface DeadlineLinks {
+    self: Link;
+    deadline: Link;
+}
+
+interface DeadlineResponse {
+    id: number;
+    time: string;
+    type: string;
+    _links: DeadlineLinks;
+}
+
 // Интерфейс для задачи
 interface Task {
     id: number;
@@ -11,6 +24,7 @@ interface Task {
     headline: string;
     description: string;
     deadline?: string;
+    deadlineType?: string;
     _links: TaskLinks;
 }
 
@@ -296,5 +310,7 @@ export type {
     TaskLinks, 
     EmbeddedTasks, 
     TasksTopLevelLinks, 
-    TasksPageInfo 
+    TasksPageInfo,
+    DeadlineLinks,
+    DeadlineResponse
 };

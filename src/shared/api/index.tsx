@@ -1,5 +1,5 @@
 import {UserProfile, AuthResponse, whoamiResponse, UserInfoResponse, UserProfileWithRoles, 
-    TeamMembersResponse, Team, Sprint, TeamResponse, TeamMembersResponse_TeamMember, TasksResponse, Task} from './IResponses'
+    TeamMembersResponse, Team, Sprint, TeamResponse, TeamMembersResponse_TeamMember, TasksResponse, Task, DeadlineResponse} from './IResponses'
 
 //const API_URL = 'http://194.87.234.28:8080';
 const API_URL = 'http://localhost:8080';
@@ -32,6 +32,33 @@ export async function getTasks(token: string): Promise<Task[]> {
     });
 
     return (await resp)._embedded.tasks;
+} 
+
+// добавление дедлайна
+export async function getTaskDeadlineByTaskId(token: string, taskId: number): Promise<DeadlineResponse> {
+    return fetchJson<DeadlineResponse>(`${API_URL}/tasks/`+taskId+`/deadline`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+} 
+
+export async function getTasksForBacklog(token: string): Promise<Task[]> {
+    const tasks = await getTasks(token);
+
+    for (const task of tasks) {
+        const deadlineResp = await getTaskDeadlineByTaskId(token, task.id);
+        task.deadline = deadlineResp.time;
+        task.deadlineType = deadlineResp.type;
+    }
+
+    // зависимости 
+
+    // ответственный (кому назначены задачи)
+
+    return tasks;
 } 
 
 
