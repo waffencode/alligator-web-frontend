@@ -67,6 +67,22 @@
   color: blue; /* Изменение цвета текста при наведении */
 }
 
+.edit_button_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit_button {
+  background: none; /* Убираем фон */
+  border: none; /* Убираем границу */
+  cursor: pointer; /* Курсор при наведении */
+  font-size: 1.2rem; /* Размер шрифта */
+  padding: 0; /* Убираем отступы */
+  margin-right: 10px; /* Отступ справа */
+}
+
+
 /* Styles for Modal */
 .modal {
   display: flex;

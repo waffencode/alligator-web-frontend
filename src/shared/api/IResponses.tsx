@@ -23,9 +23,10 @@ interface Task {
     state: string;
     headline: string;
     description: string;
-    deadline?: string;
-    deadlineType?: string;
-    _links: TaskLinks;
+    deadline_id?: number;
+    deadline_time?: string;
+    deadline_type?: string;
+    _links?: TaskLinks;
 }
 
 // Интерфейс для ссылок в задаче

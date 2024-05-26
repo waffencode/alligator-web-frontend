@@ -3,6 +3,10 @@ import {getAuthenticationContextData} from "../lib/authentication";
 export class BaseApi {
     private BASE_PATH = "http://localhost:8080";
 
+    protected getPath(): string {
+        return this.BASE_PATH;
+    }
+
     public async fetchJson<T>(path: string, options: RequestInit): Promise<T> {
         //console.log(options);
         const response = await fetch(this.BASE_PATH + path, options);
