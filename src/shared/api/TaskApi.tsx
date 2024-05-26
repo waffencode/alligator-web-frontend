@@ -79,7 +79,7 @@ export class TaskApi extends BaseApi {
         if (task.deadline_id && task.deadline_time && task.deadline_type) {
             console.log("DEADLINES");
             newDeadline = await this.updateDeadline(task.deadline_id, task.deadline_time, task.deadline_type);
-            const deadline = "http://localhost:8080/deadlines/"+newDeadline.id;
+            const deadline = this.getPath()+"/deadlines/"+newDeadline.id;
             resp = this.fetchJson<TasksResponse>(`/tasks?id=`+task.id, {
                 method: 'POST',
                 headers: {
@@ -116,6 +116,59 @@ export class TaskApi extends BaseApi {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ id, time, type})
+        });;
+    }
+
+    // добавление задачи
+    public async createTask(task: Task): Promise<Task> {
+        // обновляем дедлайн (при условии, что на 1 задачу - 1 дедлайн)
+        let newDeadline: DeadlineResponse;
+        let resp: Promise<Task>;
+
+        const description = task.description;
+        const headline = task.headline;
+        const priority = task.priority;
+        const state = task.state;
+
+        if (task.deadline_time && task.deadline_type) {
+            console.log("DEADLINES");
+            newDeadline = await this.createDeadline(task.deadline_time, task.deadline_type);
+            const deadline = this.getPath()+"/deadlines/"+newDeadline.id;
+            resp = this.fetchJson<Task>(`/tasks`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ deadline, description, headline, priority, state})
+            });
+        } else {
+            resp = this.fetchJson<Task>(`/tasks`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({description, headline, priority, state})
+            });
+        }
+
+        return resp;
+    }
+
+    // добавление дедлайна
+    public async createDeadline(timeNotFormatted: string, type: string): Promise<DeadlineResponse> {
+
+        const dateObject = parseISO(timeNotFormatted);
+        const time = format(dateObject, "yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+        return this.fetchJson<DeadlineResponse>(`/deadlines`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ time, type})
         });;
     }
 
