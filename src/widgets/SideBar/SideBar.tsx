@@ -28,68 +28,92 @@ class SideBarTabE {
 
 const SideBar = (props: Props) => {
     const navigate = useNavigate();
-    const [role, setRole] = useState<string[]>([]);
+    const [roles, setRoles] = useState<string[]>([]);
 
     const {api} = useContext(ApiContext);
 
     useEffect(() => {
         // получаем роли
-
         api.user.whoami()
             .then((user) => {
-                setRole(user.roles);
+                setRoles(user.roles);
             })
             .catch((err) => {
                 console.error('Failed to fetch user roles', err);
             });
-      }, []);
+    }, [api]);
+
+    useEffect(() => {
+        setTabs(_getAllTabs(roles));
+    }, [roles]);
+
     
 
-    const [tabs, setTabs] = useState<SideBarTabE[]>(_getAllTabs());
+    const [tabs, setTabs] = useState<SideBarTabE[]>([]);
 
-    function _getAllTabs() {
-
-
-
-        return [
-            // new SideBarTabE(
-            //     new SideBarTab('Мероприятия', RoutePaths.eventList, <Menu />),
-            //     anyPrivilege(new Set([new PrivilegeData(PrivilegeNames.VIEW_ALL_EVENTS)]))
-            // ),
-            // new SideBarTabE(
-            //     new SideBarTab('Задачи', RoutePaths.taskList, <Notebook />),
-            //     (_) => true
-            // ),
-            // new SideBarTabE(
-            //     new SideBarTab('Площадки', RoutePaths.placeList, <Home />),
-            //     anyPrivilege(new Set([new PrivilegeData(PrivilegeNames.VIEW_EVENT_PLACE)]))
-            // ),
-            // new SideBarTabE(new SideBarTab('Уведомления', RoutePaths.notifications, <Noted />)),
-            // new SideBarTabE(
-            //     new SideBarTab('Заявки на регистрацию', RoutePaths.requestList, <UserRead />),
-            //     anyPrivilege(
-            //         new Set([
-            //             new PrivilegeData(PrivilegeNames.APPROVE_REGISTRATION_REQUEST),
-            //             new PrivilegeData(PrivilegeNames.REJECT_REGISTRATION_REQUEST),
-            //         ])
-            //     )
-            // ),
-            // new SideBarTabE(
-            //     new SideBarTab('Роли', RoutePaths.roleList, <DocumentCheck />),
-            //     anyPrivilege(
-            //         new Set([
-            //             new PrivilegeData(PrivilegeNames.CREATE_ROLE),
-            //             new PrivilegeData(PrivilegeNames.EDIT_ROLE),
-            //             new PrivilegeData(PrivilegeNames.DELETE_ROLE),
-            //         ])
-            //     )
-            // ),
-            // new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.userList, <Users />),),
-            new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
-            //new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
-            new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
-            new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
-        ];
+    function _getAllTabs(roles: string[]) {
+        
+        if (roles.includes("USER")) {
+            console.log("USER");
+            return [
+                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
+                new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
+                new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
+            ];
+        } else if (roles.includes("BUSINESS_ANALYTIC")) {
+            return [
+                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
+                new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
+            ];
+        } else if (roles.includes("PROJECT_MANAGER")) {
+            return [
+                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
+                //new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
+                //new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
+                //new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
+            ];
+        } else {
+            console.log("other");
+            return [
+                // new SideBarTabE(
+                //     new SideBarTab('Мероприятия', RoutePaths.eventList, <Menu />),
+                //     anyPrivilege(new Set([new PrivilegeData(PrivilegeNames.VIEW_ALL_EVENTS)]))
+                // ),
+                // new SideBarTabE(
+                //     new SideBarTab('Задачи', RoutePaths.taskList, <Notebook />),
+                //     (_) => true
+                // ),
+                // new SideBarTabE(
+                //     new SideBarTab('Площадки', RoutePaths.placeList, <Home />),
+                //     anyPrivilege(new Set([new PrivilegeData(PrivilegeNames.VIEW_EVENT_PLACE)]))
+                // ),
+                // new SideBarTabE(new SideBarTab('Уведомления', RoutePaths.notifications, <Noted />)),
+                // new SideBarTabE(
+                //     new SideBarTab('Заявки на регистрацию', RoutePaths.requestList, <UserRead />),
+                //     anyPrivilege(
+                //         new Set([
+                //             new PrivilegeData(PrivilegeNames.APPROVE_REGISTRATION_REQUEST),
+                //             new PrivilegeData(PrivilegeNames.REJECT_REGISTRATION_REQUEST),
+                //         ])
+                //     )
+                // ),
+                // new SideBarTabE(
+                //     new SideBarTab('Роли', RoutePaths.roleList, <DocumentCheck />),
+                //     anyPrivilege(
+                //         new Set([
+                //             new PrivilegeData(PrivilegeNames.CREATE_ROLE),
+                //             new PrivilegeData(PrivilegeNames.EDIT_ROLE),
+                //             new PrivilegeData(PrivilegeNames.DELETE_ROLE),
+                //         ])
+                //     )
+                // ),
+                // new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.userList, <Users />),),
+                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
+                //new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
+                //new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
+                //new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
+            ];
+        }
     }
 
     function _processSelected(tabs: SideBarTabE[], url: string) {
