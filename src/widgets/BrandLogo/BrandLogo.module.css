@@ -5,7 +5,7 @@
 }
 
 .logo span {
-  font-size: 48px;
+  font-size: 40px;
   color: var(--alligator-green);
   font-family: monospace;
 }
@@ -15,6 +15,6 @@
 }
 
 .logo img {
-  width: 64px;
-  height: 64px;
+  width: 50px;
+  height: 50px;
 }

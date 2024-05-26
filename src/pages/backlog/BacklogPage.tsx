@@ -165,6 +165,7 @@ const BacklogPage: React.FC = () => {
                         <div className={styles.sprints_grid}>
                             <div className={styles.sprints_grid_header}>
                                 <div>Выбрать</div>
+                                <div>Редактировать</div>
                                 <div>Название</div>
                                 <div>Описание</div>
                                 <div>Приоритет</div>
@@ -219,6 +220,7 @@ const BacklogPage: React.FC = () => {
                                                 onChange={(e) => handleTaskChange('deadline_type', e.target.value)}
                                             />
                                             <div></div>
+                                            <div></div>
                                             <input
                                                 type="text"
                                                 value={getValue(editedTask?.state)}
@@ -234,6 +236,7 @@ const BacklogPage: React.FC = () => {
                                             <div>{task.priority}</div>
                                             <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{task.deadline_type ? task.deadline_type : ''}</div>
+                                            <div></div>
                                             <div></div>
                                             <div>{task.state}</div>
                                         </>
@@ -276,6 +279,7 @@ const BacklogPage: React.FC = () => {
                                         value={getValue(newTask.deadline_type)}
                                         onChange={(e) => handleNewTaskChange('deadline_type', e.target.value)}
                                     />
+                                    <div></div>
                                     <div></div>
                                     <input
                                         type="text"
