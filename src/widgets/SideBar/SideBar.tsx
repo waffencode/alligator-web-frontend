@@ -75,39 +75,6 @@ const SideBar = (props: Props) => {
         } else {
             console.log("other");
             return [
-                // new SideBarTabE(
-                //     new SideBarTab('Мероприятия', RoutePaths.eventList, <Menu />),
-                //     anyPrivilege(new Set([new PrivilegeData(PrivilegeNames.VIEW_ALL_EVENTS)]))
-                // ),
-                // new SideBarTabE(
-                //     new SideBarTab('Задачи', RoutePaths.taskList, <Notebook />),
-                //     (_) => true
-                // ),
-                // new SideBarTabE(
-                //     new SideBarTab('Площадки', RoutePaths.placeList, <Home />),
-                //     anyPrivilege(new Set([new PrivilegeData(PrivilegeNames.VIEW_EVENT_PLACE)]))
-                // ),
-                // new SideBarTabE(new SideBarTab('Уведомления', RoutePaths.notifications, <Noted />)),
-                // new SideBarTabE(
-                //     new SideBarTab('Заявки на регистрацию', RoutePaths.requestList, <UserRead />),
-                //     anyPrivilege(
-                //         new Set([
-                //             new PrivilegeData(PrivilegeNames.APPROVE_REGISTRATION_REQUEST),
-                //             new PrivilegeData(PrivilegeNames.REJECT_REGISTRATION_REQUEST),
-                //         ])
-                //     )
-                // ),
-                // new SideBarTabE(
-                //     new SideBarTab('Роли', RoutePaths.roleList, <DocumentCheck />),
-                //     anyPrivilege(
-                //         new Set([
-                //             new PrivilegeData(PrivilegeNames.CREATE_ROLE),
-                //             new PrivilegeData(PrivilegeNames.EDIT_ROLE),
-                //             new PrivilegeData(PrivilegeNames.DELETE_ROLE),
-                //         ])
-                //     )
-                // ),
-                // new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.userList, <Users />),),
                 new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
                 //new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
                 //new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
