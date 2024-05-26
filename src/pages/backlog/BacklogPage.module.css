@@ -1,8 +1,8 @@
-.profile-page {
+.profile_page {
   display: flex;
 }
 
-.profile-content {
+.profile_content {
   margin-left: 250px; /* Ширина бокового меню */
   padding: 0 2rem;
   width: calc(100% - 250px);
@@ -10,17 +10,17 @@
   height: 100vh; /* Полная высота экрана */
 }
 
-.profile-content h1 {
+.profile_content h1 {
   margin-bottom: 1rem;
 }
 
-.sprints-grid {
+.sprints_grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-gap: 10px; /* Отступ между блоками */
 }
 
-.sprints-grid-header {
+.sprints_grid_header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   background-color: #ffffff; /* Цвет фона блока */
@@ -32,7 +32,7 @@
   text-align: center; /* Центрируем текст */
 }
 
-.sprint-tile {
+.sprint_tile {
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* Так же, как и для основной сетки */
   background-color: #ffffff; /* Цвет фона блока */
@@ -45,11 +45,11 @@
   text-align: center; /* Центрирование текста */
 }
 
-.sprint-tile:hover {
+.sprint_tile:hover {
   background-color: #f5f5f5; /* Изменение цвета фона при наведении */
 }
 
-.sprint-tile > div {
+.sprint_tile > div {
   white-space: nowrap; /* Запрещаем перенос текста */
   overflow: hidden; /* Обрезаем переполняющий текст */
   text-overflow: ellipsis; /* Добавляем многоточие для переполняющего текста */
@@ -58,12 +58,12 @@
   justify-content: center; /* Горизонтальное выравнивание по центру */
 }
 
-.task-description {
+.task_description {
   cursor: pointer; /* Указатель при наведении на описание */
   text-decoration: underline; /* Подчёркивание для описания */
 }
 
-.task-description:hover {
+.task_description:hover {
   color: blue; /* Изменение цвета текста при наведении */
 }
 
@@ -82,7 +82,7 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content {
+.modal_content {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;

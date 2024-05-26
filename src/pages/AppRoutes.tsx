@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import AuthPage from './auth/AuthPage';
 import RegisterPage from './auth/RegisterPage';
 import ProfilePage from './profile/ProfilePage';
-import AvaliableTeamsPage from './teams/AvailableTeamsPage';
+import AvailableTeamsPage from './teams/AvailableTeamsPage';
 import ChangePasswordPage from './auth/ChangePasswordPage';
 import SprintsPage from './sprints/SprintsPage';
 import BacklogPage from './backlog/BacklogPage';
@@ -37,7 +37,7 @@ const AppRoutes: React.FC = () => {
           element={<Navigate to={token ? "/profile" : "/login"} replace />} 
         />
         {/*<Route path="/teams/team-members/:teamId" element={<TeamMembersPage />} /> */}
-        <Route path="/available-teams" element={<AvaliableTeamsPage />} />
+        <Route path="/available-teams" element={<AvailableTeamsPage />} />
         <Route path="/sprints" element={<SprintsPage />} />
         <Route path="/backlog" element={<BacklogPage />} />
 

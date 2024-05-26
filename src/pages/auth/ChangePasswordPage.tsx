@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './AuthPage.css';
-import { changePassword } from '../../shared/api/index';
+import ApiContext from "../../features/api-context";
 
 const ChangePasswordPage: React.FC = () => {
+    const {api} = useContext(ApiContext)
+
     const [oldPassword, setOldPassword] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [repPassword, setRepPassword] = React.useState('');
@@ -20,7 +22,7 @@ const ChangePasswordPage: React.FC = () => {
             setMessage(errorMessageTextNotEqual);
         } else {
             try {
-                const response = await changePassword((token ? token : ''), oldPassword, password);
+                const response = await api.user.changePassword(oldPassword, password);
                 //localStorage.setItem('token', response.toString()); // Сохранение токена в локальное хранилище
                 //window.location.href = '/profile'; // Перенаправление на защищенную страницу
             } catch (error) {

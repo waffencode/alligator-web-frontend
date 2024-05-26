@@ -1,0 +1,50 @@
+.sidebar {
+    padding-left: 25px;
+    padding-right: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 24px;
+}
+
+.tab {
+    cursor: pointer;
+}
+
+.tab_children {
+    padding-left: 34px;
+    padding-top: 10px;
+    flex-direction: column;
+    display: flex;
+    gap: 10px;
+}
+
+.tab_entry {
+    display: flex;
+    gap: 10px;
+    user-select: none;
+}
+
+.selected {
+    color: var(--alligator-green-selected);
+}
+
+.icon_cnt {
+    width: 24px;
+    height: 24px;
+}
+
+.text_cnt {
+    vertical-align: center;
+    height: 24px;
+    white-space: nowrap;
+}
+
+.arrow {
+    height: 24px;
+    width: 24px;
+}
+
+.arrow_up {
+    transform: rotate(180deg);
+}
