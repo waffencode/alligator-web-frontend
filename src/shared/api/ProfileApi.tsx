@@ -27,6 +27,8 @@ export class ProfileApi extends BaseApi {
         // добавление ролей к запросу
         const getUserInfoesByUserIdResp = await this.userApi.getUserInfoesByUserId(userId);
 
+        console.log(getUserInfoesByUserIdResp.fullName);
+
         const userProfileWithRoles: UserProfileWithRoles = {
             ...getUserInfoesByUserIdResp,
             roles

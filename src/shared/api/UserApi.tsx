@@ -11,7 +11,7 @@ export class UserApi extends BaseApi {
     }
 
     public async getUserInfoesByUserId(userId: number): Promise<UserProfile> {
-        return this.fetchJson<UserProfile>(`/userInfoes?userId=`+userId, {
+        return this.fetchJson<UserProfile>(`/userInfoes/search/getByUserId?userId=`+userId, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
