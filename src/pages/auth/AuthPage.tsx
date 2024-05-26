@@ -1,21 +1,61 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './AuthPage.css';
-import { login } from '../../shared/api/index';
+import ApiContext from "../../features/api-context";
+import {AuthenticationContextData} from "../../shared/lib/token";
+import {useNavigate} from "react-router-dom";
+import {RoutePaths} from "../../shared/config/routes";
 
 const AuthPage: React.FC = () => {
+    const { api, setAuthentication, resetAuthentication } = useContext(ApiContext);
+    const navigate = useNavigate();
+
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [message, setMessage] = React.useState('');
     const errorMessageText: string = "Неправильный email или пароль";
+
+    const _fetchAuthenticationContextDataByToken = (token:string) => {
+        return fetch("http://localhost:8080/whoami", {
+            method: "GET",
+            mode: "cors",
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(data => ({
+                username: data.username,
+                id: data.id,
+                roles: data.roles
+            }))
+            .catch(error => {
+                console.error('Failed to fetch user data:', error);
+                return null;
+            });
+    }
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setMessage(''); // Сброс сообщения об ошибке перед отправкой
 
         try {
-          const response = await login(username, password);
-          localStorage.setItem('token', response.toString()); // Сохранение токена в локальное хранилище
-          window.location.href = '/profile'; // Перенаправление на защищенную страницу
+          const tokenResponse = await api.auth.login(username, password);
+          const token = tokenResponse.toString();
+
+          const authData = await _fetchAuthenticationContextDataByToken(token);
+
+          const authenticationContext = new AuthenticationContextData(
+              token,
+              authData?.username,
+              authData?.id,
+              authData?.roles
+          );
+
+          console.log(authenticationContext);
+
+          setAuthentication(authenticationContext);
+
+          navigate(RoutePaths.profile);
       } catch (error) {
           if (error instanceof Error) {
               const [status, errorMessage] = error.message.split(': ', 2);

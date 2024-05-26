@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import Slider from "react-slick";
 import './AvaliableTeamsPage.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
-import { getTeamsByUserIdWithCountOfMembers } from '../../shared/api';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
 import { Team } from '../../shared/api/IResponses';
 import { useNavigate } from 'react-router-dom';
+import ApiContext from "../../features/api-context";
 
-const AvaliableTeamsPage: React.FC = () => {
+const AvailableTeamsPage: React.FC = () => {
+    const {api} = useContext(ApiContext);
+
     const menuItems = SliderItemsGenerator(); // Получаем элементы меню
     const navigate = useNavigate(); 
 
@@ -18,19 +20,14 @@ const AvaliableTeamsPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) { 
-            getTeamsByUserIdWithCountOfMembers(token).
-            then((teams) => {
-                setTeams(teams);
-            })
+        api.team.getTeamsOfCurrentUserWithMemberCount().
+        then((teams) => {
+            setTeams(teams);
+        })
             .catch((err) => {
-                console.error('Failed to fetch user profile', err);
-                setError('Failed to load user profile');
+                console.error('Failed to fetch user teams', err);
+                setError('Failed to load user teams');
             });
-        } else {
-            setError('No authentication token found');
-        }
     }, []);
 
     const settings = {
@@ -81,4 +78,4 @@ const AvaliableTeamsPage: React.FC = () => {
     );
 };
 
-export default AvaliableTeamsPage;
+export default AvailableTeamsPage;

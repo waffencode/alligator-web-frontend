@@ -1,0 +1,38 @@
+.root {
+    height: 100%;
+}
+
+.columns {
+    display: flex;
+    height: 100%;
+}
+
+.column_left {
+    height: 100%;
+    border-style: solid;
+    border-color: black;
+    border-width: 0px 1px 0px 0px;
+    position: sticky;
+}
+
+.column_right {
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.top_right {
+    z-index: 100;
+    position: sticky;
+    top: 0;
+    background-color: black;
+    display: flex;
+    align-items: center;
+}
+
+.bottom_left {
+    padding: 10px;
+}
+
+.bottom_right {
+    padding: 10px;
+}

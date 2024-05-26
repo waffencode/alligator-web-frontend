@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import './SprintsPage.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
-import { getSprintsByUserId } from '../../shared/api';
 import { Sprint } from '../../shared/api/IResponses';
 import { format } from 'date-fns';
+import ApiContext from "../../features/api-context";
 
 const SprintsPage: React.FC = () => {
+    const {api} = useContext(ApiContext);
+
     const menuItems = SliderItemsGenerator(); // Получаем элементы меню
     const [sprints, setSprints] = useState<Sprint[]>([]);;
     const [error, setError] = useState<string | null>(null);
@@ -15,14 +17,14 @@ const SprintsPage: React.FC = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            getSprintsByUserId(token).
-            then((sprints) => {
-                setSprints(sprints);
-            })
-            .catch((err) => {
-                console.error('Failed to fetch user profile', err);
-                setError('Failed to load user profile');
-            });
+            api.sprint.getSprintsOfCurrentUser()
+                .then((sprints) => {
+                    setSprints(sprints);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch user profile', err);
+                    setError('Failed to load user profile');
+                });
         } else {
             setError('No authentication token found');
         }

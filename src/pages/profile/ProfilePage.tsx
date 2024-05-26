@@ -1,15 +1,20 @@
 
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import styles from './ProfilePage.module.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
-import { getCurUserProfileInfo } from '../../shared/api';
 import { useNavigate } from 'react-router-dom';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
 import { rolesTranslator } from '../../entities/RolesTranslator';
+import Layout from "../../widgets/Layout/Layout";
+import Content from "../../widgets/Content/Content";
+import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
+import PageName from "../../widgets/PageName/PageName";
+import ApiContext from "../../features/api-context";
 
 const ProfilePage: React.FC = () => {
-   
+    const {api} = useContext(ApiContext);
+
     const menuItems = SliderItemsGenerator(); // Получаем элементы меню
     const navigate = useNavigate(); // используем useNavigate вместо navigator
 
@@ -21,30 +26,27 @@ const ProfilePage: React.FC = () => {
 
     // TODO: move out to api, maybe transform to hook
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            getCurUserProfileInfo(token)
-                .then((profile) => {
-                    setFullName(profile.fullName);
-                    setRole(rolesTranslator(profile.roles)); 
-                    setPhone(profile.phone_number);
-                    setEmail(profile.email);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch user profile', err);
-                    setError('Failed to load user profile');
-                });
-        } else {
-            setError('No authentication token found');
-        }
+        api.profile.getCurUserProfileInfo()
+            .then((profile) => {
+                setFullName(profile.fullName);
+                setRole(rolesTranslator(profile.roles));
+                setPhone(profile.phone_number);
+                setEmail(profile.email);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch user profile', err);
+                setError('Failed to load user profile');
+            });
     }, []);
 
     return (
-        <div className={styles.profile_page}>
-            <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
-            <div className={styles.profile_content}>
-                <h1>Профиль</h1>
-                {error ? ( <div className="error-message">{error}</div>) : ("")}
+        <Layout
+            topLeft={<BrandLogo />}
+            topRight={<PageName text="Профиль" />}
+            bottomLeft={<Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />}
+            bottomRight={
+                <Content>
+                    {error ? ( <div className="error-message">{error}</div>) : ("")}
                     <div className={styles.profile_info}>
                         <div className={styles.profile_info_row}>
                             <label>ФИО:</label><span>{fullName}</span>
@@ -62,8 +64,9 @@ const ProfilePage: React.FC = () => {
                             <label>Смена пароля:</label><button onClick ={() => navigate("/change-password")}>Сменить пароль</button>
                         </div>
                     </div>
-            </div>
-        </div>
+                </Content>
+            }
+        />
     );
 };
 

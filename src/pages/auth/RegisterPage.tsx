@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './AuthPage.css';
-import { register } from '../../shared/api/index';
+import {Api} from "../../entities/Api";
+import ApiContext from "../../features/api-context";
 
 const RegisterPage: React.FC = () => {
+    const {api} = useContext(ApiContext)
+
     const [name, setName] = React.useState('');
     const [surname, setSurname] = React.useState('');
     const [phone, setPhone] = React.useState('');
@@ -26,7 +29,7 @@ const RegisterPage: React.FC = () => {
             setMessage(errorMessageTextNotEqual);
         } else {
             try {
-                const response = await register(username, password, name+" "+surname, username, phone); // Получение AuthResponse из функции register
+                const response = await api.auth.register(username, password, name+" "+surname, username, phone); // Получение AuthResponse из функции register
                 localStorage.setItem('token', response.toString()); // Сохранение токена в локальное хранилище
                 window.location.href = '/profile'; // Перенаправление на защищенную страницу
             } catch (error) {

@@ -1,0 +1,8 @@
+.logo {
+  padding: 10px 25px;
+  height: calc(100% - 20px);
+}
+
+.logo:hover {
+  cursor: pointer;
+}

@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useContext} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import appsIcon from '../shared/ui/icons/apps.png';
 import profileIcon from '../shared/ui/icons/profile.png';
 import sprintIcon from '../shared/ui/icons/sprint.png';
-import { getTeamsByUserIdWithCountOfMembers } from '../shared/api';
 import { Sprint, Team } from '../shared/api/IResponses';
-import { getSprintsByUserId, whoami } from '../shared/api';
+import ApiContext from "../features/api-context";
 
 export interface MenuItem {
   label: string;
@@ -15,6 +14,8 @@ export interface MenuItem {
 }
 
 const SliderItemsGenerator = (): MenuItem[] => {
+  const {api} = useContext(ApiContext);
+
   const navigate = useNavigate();
   const location = useLocation();
   const [showAvailableTeams, setShowAvailableTeams] = useState(false);
@@ -26,7 +27,7 @@ const SliderItemsGenerator = (): MenuItem[] => {
     // получаем роли
     const token = localStorage.getItem('token');
     if (token) {
-        whoami(token)
+        api.user.whoami()
         .then((whoamiResp) => {
             setRoles(whoamiResp.roles);
         })
@@ -43,14 +44,14 @@ const SliderItemsGenerator = (): MenuItem[] => {
     if (token) {
       if (roles.includes("USER")) {
         // если USER
-        getTeamsByUserIdWithCountOfMembers(token)
+        api.team.getTeamsOfCurrentUserWithMemberCount()
           .then((teams) => {
             setTeams(teams); // список команд, доступных USER
           })
           .catch((err) => {
             console.error('Failed to fetch user teams', err);
           });
-        getSprintsByUserId(token)
+        api.sprint.getSprintsOfCurrentUser()
         .then((sprints) => {
           setSprints(sprints); // список спринтов, доступных USER
         })

@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Sidebar from '../../widgets/Sidebar';
 import styles from './BacklogPage.module.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
-import { getTasksForBacklog } from '../../shared/api';
 import { Task } from '../../shared/api/IResponses';
 import { format } from 'date-fns';
+import ApiContext from "../../features/api-context";
 
 const BacklogPage: React.FC = () => {
+    const {api} = useContext(ApiContext);
+
     const menuItems = SliderItemsGenerator(); // Получаем элементы меню
     const [tasks, setTasks] = useState<Task[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -17,7 +19,7 @@ const BacklogPage: React.FC = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            getTasksForBacklog(token)
+            api.tasks.getTasksForBacklog()
             .then((tasks) => {
                 setTasks(tasks);
             })
