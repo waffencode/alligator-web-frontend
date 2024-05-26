@@ -80,7 +80,7 @@ const BacklogPage: React.FC = () => {
     const handleTaskChange = (field: keyof Task, value: string | number) => {
         if (editedTask) {
             if (field === 'deadline_time') {
-                const editedDeadlineTime = new Date(value);
+                const editedDeadlineTime = new Date(value as string);
                 setEditedTask({ ...editedTask, deadline_time: editedDeadlineTime.toISOString() });
             } else {
                 setEditedTask({ ...editedTask, [field]: value });
@@ -90,7 +90,7 @@ const BacklogPage: React.FC = () => {
 
     const handleNewTaskChange = (field: keyof Task, value: string | number) => {
         if (field === 'deadline_time') {
-            const newDeadlineTime = new Date(value);
+            const newDeadlineTime = new Date(value as string);
             setNewTask({ ...newTask, deadline_time: newDeadlineTime.toISOString() });
         } else {
             setNewTask({ ...newTask, [field]: value });
@@ -204,28 +204,42 @@ const BacklogPage: React.FC = () => {
                                                 value={getValue(editedTask?.description)}
                                                 onChange={(e) => handleTaskChange('description', e.target.value)}
                                             />
-                                            <input
-                                                type="text"
+                                            <select
                                                 value={getValue(editedTask?.priority)}
                                                 onChange={(e) => handleTaskChange('priority', e.target.value)}
-                                            />
+                                            >
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
+                                            </select>
                                             <input
                                                 type="date"
                                                 value={editedTask?.deadline_time ? format(new Date(editedTask?.deadline_time), 'yyyy-MM-dd') : ''}
                                                 onChange={(e) => handleTaskChange('deadline_time', e.target.value)}
                                             />
-                                            <input
-                                                type="text"
+                                            <select
                                                 value={getValue(editedTask?.deadline_type)}
                                                 onChange={(e) => handleTaskChange('deadline_type', e.target.value)}
-                                            />
+                                            >
+                                                <option value="SOFT">SOFT</option>
+                                                <option value="HARD">HARD</option>
+                                            </select>
                                             <div></div>
                                             <div></div>
-                                            <input
-                                                type="text"
+                                            <select
                                                 value={getValue(editedTask?.state)}
                                                 onChange={(e) => handleTaskChange('state', e.target.value)}
-                                            />
+                                            >
+                                                <option value="NEED_REWORK">NEED_REWORK</option>
+                                                <option value="TODO">TODO</option>
+                                                <option value="PICKED">PICKED</option>
+                                                <option value="IN_PROGRESS">IN_PROGRESS</option>
+                                                <option value="TESTING">TESTING</option>
+                                                <option value="DONE">DONE</option>
+                                                <option value="ABORTED">ABORTED</option>
+                                            </select>
                                         </>
                                     ) : (
                                         <>
@@ -234,77 +248,93 @@ const BacklogPage: React.FC = () => {
                                                 {task.description.substring(0, 20)}...
                                             </div>
                                             <div>{task.priority}</div>
-                                            <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
-                                            <div>{task.deadline_type ? task.deadline_type : ''}</div>
-                                            <div></div>
-                                            <div></div>
-                                            <div>{task.state}</div>
-                                        </>
-                                    )}
-                                </div>
-                            ))}
-                            {isAddingNewTask && (
-                                <div className={styles.sprint_tile}>
-                                    <div></div>
-                                    <div className={styles.edit_button_container}>
-                                        <button
-                                            className={styles.edit_button}
-                                            onClick={handleSaveNewTask}
-                                        >
-                                            ✓
-                                        </button>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={getValue(newTask.headline)}
-                                        onChange={(e) => handleNewTaskChange('headline', e.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        value={getValue(newTask.description)}
-                                        onChange={(e) => handleNewTaskChange('description', e.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        value={getValue(newTask.priority)}
-                                        onChange={(e) => handleNewTaskChange('priority', e.target.value)}
-                                    />
-                                    <input
-                                        type="date"
-                                        value={newTask.deadline_time ? format(new Date(newTask.deadline_time), 'yyyy-MM-dd') : ''}
-                                        onChange={(e) => handleNewTaskChange('deadline_time', e.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        value={getValue(newTask.deadline_type)}
-                                        onChange={(e) => handleNewTaskChange('deadline_type', e.target.value)}
-                                    />
-                                    <div></div>
-                                    <div></div>
-                                    <input
-                                        type="text"
-                                        value={getValue(newTask.state)}
-                                        onChange={(e) => handleNewTaskChange('state', e.target.value)}
-                                    />
-                                </div>
-                            )}
-                            <button onClick={handleAddNewTask}>Добавить задачу</button>
-                            <button onClick={handleDeleteSelectedTasks}>Удалить выбранные задачи</button>
-                        </div>
-                        {selectedTask && (
-                            <div className="modal">
-                                <div className="modal-content">
-                                    <span className="close" onClick={closeModal}>&times;</span>
-                                    <h2>{selectedTask.headline}</h2>
-                                    <p>{selectedTask.description}</p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </Content>
-            }
-        />
-    );
-};
-
-export default BacklogPage;
+                                            <div>{task.deadline_time ? format(new Date(task
+                                                                                        .deadline_time), 'dd.MM.yyyy') : ''}</div>
+                                                                                        <div>{task.deadline_type ? task.deadline_type : ''}</div>
+                                                                                        <div></div>
+                                                                                        <div></div>
+                                                                                        <div>{task.state}</div>
+                                                                                    </>
+                                                                                )}
+                                                                            </div>
+                                                                        ))}
+                                                                        {isAddingNewTask && (
+                                                                            <div className={styles.sprint_tile}>
+                                                                                <div></div>
+                                                                                <div className={styles.edit_button_container}>
+                                                                                    <button
+                                                                                        className={styles.edit_button}
+                                                                                        onClick={handleSaveNewTask}
+                                                                                    >
+                                                                                        ✓
+                                                                                    </button>
+                                                                                </div>
+                                                                                <input
+                                                                                    type="text"
+                                                                                    value={getValue(newTask.headline)}
+                                                                                    onChange={(e) => handleNewTaskChange('headline', e.target.value)}
+                                                                                />
+                                                                                <input
+                                                                                    type="text"
+                                                                                    value={getValue(newTask.description)}
+                                                                                    onChange={(e) => handleNewTaskChange('description', e.target.value)}
+                                                                                />
+                                                                                <select
+                                                                                    value={getValue(newTask.priority)}
+                                                                                    onChange={(e) => handleNewTaskChange('priority', e.target.value)}
+                                                                                >
+                                                                                    <option value="A">A</option>
+                                                                                    <option value="B">B</option>
+                                                                                    <option value="C">C</option>
+                                                                                    <option value="D">D</option>
+                                                                                    <option value="E">E</option>
+                                                                                </select>
+                                                                                <input
+                                                                                    type="date"
+                                                                                    value={newTask.deadline_time ? format(new Date(newTask.deadline_time), 'yyyy-MM-dd') : ''}
+                                                                                    onChange={(e) => handleNewTaskChange('deadline_time', e.target.value)}
+                                                                                />
+                                                                                <select
+                                                                                    value={getValue(newTask.deadline_type)}
+                                                                                    onChange={(e) => handleNewTaskChange('deadline_type', e.target.value)}
+                                                                                >
+                                                                                    <option value="SOFT">SOFT</option>
+                                                                                    <option value="HARD">HARD</option>
+                                                                                </select>
+                                                                                <div></div>
+                                                                                <div></div>
+                                                                                <select
+                                                                                    value={getValue(newTask.state)}
+                                                                                    onChange={(e) => handleNewTaskChange('state', e.target.value)}
+                                                                                >
+                                                                                    <option value="NEED_REWORK">NEED_REWORK</option>
+                                                                                    <option value="TODO">TODO</option>
+                                                                                    <option value="PICKED">PICKED</option>
+                                                                                    <option value="IN_PROGRESS">IN_PROGRESS</option>
+                                                                                    <option value="TESTING">TESTING</option>
+                                                                                    <option value="DONE">DONE</option>
+                                                                                    <option value="ABORTED">ABORTED</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        )}
+                                                                        <button onClick={handleAddNewTask}>Добавить задачу</button>
+                                                                        <button onClick={handleDeleteSelectedTasks}>Удалить выбранные задачи</button>
+                                                                    </div>
+                                                                    {selectedTask && (
+                                                                        <div className="modal">
+                                                                            <div className="modal-content">
+                                                                                <span className="close" onClick={closeModal}>&times;</span>
+                                                                                <h2>{selectedTask.headline}</h2>
+                                                                                <p>{selectedTask.description}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </Content>
+                                                        }
+                                                    />
+                                                );
+                                            };
+                                            
+                                            export default BacklogPage;
+                                            
