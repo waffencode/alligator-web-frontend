@@ -64,6 +64,32 @@ const BacklogPage: React.FC = () => {
                             setTasks(tasks.map(t => t.id === editedTask.id ? editedTask : t));
                             setEditingTaskId(null);
                             setEditedTask(null);
+                            // Обновляем статус задачи на русский язык
+                            switch (editedTask?.state) {
+                                case "NEED_REWORK":
+                                    editedTask.state = "Требуется доработка";
+                                    break;
+                                case "TODO":
+                                    editedTask.state = "Сделать";
+                                    break;
+                                case "PICKED":
+                                    editedTask.state = "Выбрано";
+                                    break;
+                                case "IN_PROGRESS":
+                                    editedTask.state = "В процессе";
+                                    break;
+                                case "TESTING":
+                                    editedTask.state = "На тестировании";
+                                    break;
+                                case "DONE":
+                                    editedTask.state = "Выполнено";
+                                    break;
+                                case "ABORTED":
+                                    editedTask.state = "Прервано";
+                                    break;
+                                default:
+                                    break;
+                            }
                         })
                         .catch((err) => {
                             console.error('Failed to update task', err);
@@ -76,6 +102,7 @@ const BacklogPage: React.FC = () => {
             setEditedTask(task);
         }
     };
+    
 
     const handleTaskChange = (field: keyof Task, value: string | number) => {
         if (editedTask) {
@@ -119,6 +146,32 @@ const BacklogPage: React.FC = () => {
                         deadline_type: '',
                         state: '',
                     });
+                    // Обновляем статус задачи на русский язык
+                    switch (createdTask.state) {
+                        case "NEED_REWORK":
+                            createdTask.state = "Требуется доработка";
+                            break;
+                        case "TODO":
+                            createdTask.state = "Сделать";
+                            break;
+                        case "PICKED":
+                            createdTask.state = "Выбрано";
+                            break;
+                        case "IN_PROGRESS":
+                            createdTask.state = "В процессе";
+                            break;
+                        case "TESTING":
+                            createdTask.state = "На тестировании";
+                            break;
+                        case "DONE":
+                            createdTask.state = "Выполнено";
+                            break;
+                        case "ABORTED":
+                            createdTask.state = "Прервано";
+                            break;
+                        default:
+                            break;
+                    }
                 })
                 .catch((err) => {
                     console.error('Failed to create task', err);
@@ -126,6 +179,7 @@ const BacklogPage: React.FC = () => {
                 });
         }
     };
+    
 
     const handleTaskSelect = (taskId: number) => {
         setSelectedTaskIds((prevSelectedTaskIds) =>
@@ -196,7 +250,8 @@ const BacklogPage: React.FC = () => {
                                         <>
                                             <input
                                                 type="text"
-                                                value={getValue(editedTask?.headline)}
+                                                value={getValue(editedTask?.headline
+                                                )}
                                                 onChange={(e) => handleTaskChange('headline', e.target.value)}
                                             />
                                             <input
@@ -248,93 +303,92 @@ const BacklogPage: React.FC = () => {
                                                 {task.description.substring(0, 20)}...
                                             </div>
                                             <div>{task.priority}</div>
-                                            <div>{task.deadline_time ? format(new Date(task
-                                                                                        .deadline_time), 'dd.MM.yyyy') : ''}</div>
-                                                                                        <div>{task.deadline_type ? task.deadline_type : ''}</div>
-                                                                                        <div></div>
-                                                                                        <div></div>
-                                                                                        <div>{task.state}</div>
-                                                                                    </>
-                                                                                )}
-                                                                            </div>
-                                                                        ))}
-                                                                        {isAddingNewTask && (
-                                                                            <div className={styles.sprint_tile}>
-                                                                                <div></div>
-                                                                                <div className={styles.edit_button_container}>
-                                                                                    <button
-                                                                                        className={styles.edit_button}
-                                                                                        onClick={handleSaveNewTask}
-                                                                                    >
-                                                                                        ✓
-                                                                                    </button>
-                                                                                </div>
-                                                                                <input
-                                                                                    type="text"
-                                                                                    value={getValue(newTask.headline)}
-                                                                                    onChange={(e) => handleNewTaskChange('headline', e.target.value)}
-                                                                                />
-                                                                                <input
-                                                                                    type="text"
-                                                                                    value={getValue(newTask.description)}
-                                                                                    onChange={(e) => handleNewTaskChange('description', e.target.value)}
-                                                                                />
-                                                                                <select
-                                                                                    value={getValue(newTask.priority)}
-                                                                                    onChange={(e) => handleNewTaskChange('priority', e.target.value)}
-                                                                                >
-                                                                                    <option value="A">A</option>
-                                                                                    <option value="B">B</option>
-                                                                                    <option value="C">C</option>
-                                                                                    <option value="D">D</option>
-                                                                                    <option value="E">E</option>
-                                                                                </select>
-                                                                                <input
-                                                                                    type="date"
-                                                                                    value={newTask.deadline_time ? format(new Date(newTask.deadline_time), 'yyyy-MM-dd') : ''}
-                                                                                    onChange={(e) => handleNewTaskChange('deadline_time', e.target.value)}
-                                                                                />
-                                                                                <select
-                                                                                    value={getValue(newTask.deadline_type)}
-                                                                                    onChange={(e) => handleNewTaskChange('deadline_type', e.target.value)}
-                                                                                >
-                                                                                    <option value="SOFT">SOFT</option>
-                                                                                    <option value="HARD">HARD</option>
-                                                                                </select>
-                                                                                <div></div>
-                                                                                <div></div>
-                                                                                <select
-                                                                                    value={getValue(newTask.state)}
-                                                                                    onChange={(e) => handleNewTaskChange('state', e.target.value)}
-                                                                                >
-                                                                                    <option value="NEED_REWORK">Требуется доработка</option>
-                                                                                    <option value="TODO">Сделать</option>
-                                                                                    <option value="PICKED">Выбрано</option>
-                                                                                    <option value="IN_PROGRESS">В процессе</option>
-                                                                                    <option value="TESTING">На тестировании</option>
-                                                                                    <option value="DONE">Выполнено</option>
-                                                                                    <option value="ABORTED">Прервано</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        )}
-                                                                        <button onClick={handleAddNewTask}>Добавить задачу</button>
-                                                                        <button onClick={handleDeleteSelectedTasks}>Удалить выбранные задачи</button>
-                                                                    </div>
-                                                                    {selectedTask && (
-                                                                        <div className="modal">
-                                                                            <div className="modal-content">
-                                                                                <span className="close" onClick={closeModal}>&times;</span>
-                                                                                <h2>{selectedTask.headline}</h2>
-                                                                                <p>{selectedTask.description}</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </Content>
-                                                        }
-                                                    />
-                                                );
-                                            };
-                                            
-                                            export default BacklogPage;
-                                            
+                                            <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
+                                            <div>{task.deadline_type ? task.deadline_type : ''}</div>
+                                            <div></div>
+                                            <div></div>
+                                            <div>{task.state}</div>
+                                        </>
+                                    )}
+                                </div>
+                            ))}
+                            {isAddingNewTask && (
+                                <div className={styles.sprint_tile}>
+                                    <div></div>
+                                    <div className={styles.edit_button_container}>
+                                        <button
+                                            className={styles.edit_button}
+                                            onClick={handleSaveNewTask}
+                                        >
+                                            ✓
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={getValue(newTask.headline)}
+                                        onChange={(e) => handleNewTaskChange('headline', e.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        value={getValue(newTask.description)}
+                                        onChange={(e) => handleNewTaskChange('description', e.target.value)}
+                                    />
+                                    <select
+                                        value={getValue(newTask.priority)}
+                                        onChange={(e) => handleNewTaskChange('priority', e.target.value)}
+                                    >
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                    </select>
+                                    <input
+                                        type="date"
+                                        value={newTask.deadline_time ? format(new Date(newTask.deadline_time), 'yyyy-MM-dd') : ''}
+                                        onChange={(e) => handleNewTaskChange('deadline_time', e.target.value)}
+                                    />
+                                    <select
+                                        value={getValue(newTask.deadline_type)}
+                                        onChange={(e) => handleNewTaskChange('deadline_type', e.target.value)}
+                                    >
+                                        <option value="SOFT">SOFT</option>
+                                        <option value="HARD">HARD</option>
+                                    </select>
+                                    <div></div>
+                                    <div></div>
+                                    <select
+                                        value={getValue(newTask.state)}
+                                        onChange={(e) => handleNewTaskChange('state', e.target.value)}
+                                    >
+                                        <option value="NEED_REWORK">Требуется доработка</option>
+                                        <option value="TODO">Сделать</option>
+                                        <option value="PICKED">Выбрано</option>
+                                        <option value="IN_PROGRESS">В процессе</option>
+                                        <option value="TESTING">На тестировании</option>
+                                        <option value="DONE">Выполнено</option>
+                                        <option value="ABORTED">Прервано</option>
+                                    </select>
+                                </div>
+                            )}
+                            <button onClick={handleAddNewTask}>Добавить задачу</button>
+                            <button onClick={handleDeleteSelectedTasks}>Удалить выбранные задачи</button>
+                        </div>
+                        {selectedTask && (
+                            <div className="modal">
+                                <div className="modal-content">
+                                    <span className="close" onClick={closeModal}>&times;</span>
+                                    <h2>{selectedTask.headline}</h2>
+                                    <p>{selectedTask.description}</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </Content>
+            }
+        />
+    );
+};
+
+export default BacklogPage;
+
