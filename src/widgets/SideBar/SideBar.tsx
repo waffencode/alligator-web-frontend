@@ -68,6 +68,7 @@ const SideBar = (props: Props) => {
         } else if (roles.includes("PROJECT_MANAGER")) {
             return [
                 new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
+                new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.users)),
                 //new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
                 //new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
                 //new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),

@@ -9,6 +9,7 @@ import SprintsPage from "../pages/sprints/SprintsPage";
 import BacklogPage from "../pages/backlog/BacklogPage";
 import React from "react";
 import Authenticated from "../widgets/Authenticated/Authenticated";
+import UsersPage from '../pages/users/UsersPage';
 
 interface SecuredRouteProps {
     path?: string;
@@ -50,6 +51,10 @@ const routes: Record<AppRoutes, AppRouteProps> = {
     [AppRoutes.BACKLOG]: {
         path: RoutePaths.backlog,
         authenticated: true
+    },
+    [AppRoutes.USERS]: {
+        path: RoutePaths.users,
+        authenticated: true
     }
 };
 
@@ -78,6 +83,9 @@ const routeElements: Record<AppRoutes, AppRouteProps> = {
     },
     [AppRoutes.BACKLOG]: {
         element: <BacklogPage />
+    },
+    [AppRoutes.USERS]: {
+        element: <UsersPage />
     }
 };
 

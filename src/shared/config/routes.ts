@@ -7,7 +7,8 @@ export enum AppRoutes {
     PROFILE = 'profile',
     AVAILABLE_TEAMS = 'availableTeams',
     SPRINTS = 'sprints',
-    BACKLOG = 'backlog'
+    BACKLOG = 'backlog',
+    USERS = 'users'
 }
 
 // // чтобы не хардкодить шаблонную строку
@@ -26,5 +27,6 @@ export const RoutePaths: Record<AppRoutes, string> = {
     [AppRoutes.PROFILE]: '/profile',
     [AppRoutes.AVAILABLE_TEAMS]: '/available-teams',
     [AppRoutes.SPRINTS]: '/sprints',
-    [AppRoutes.BACKLOG]: '/backlog'
+    [AppRoutes.BACKLOG]: '/backlog',
+    [AppRoutes.USERS]: '/users'
 };

@@ -298,6 +298,7 @@ export type {
     UserProfile, 
     AuthResponse, 
     whoamiResponse, 
+    UserInfo,
     UserInfoResponse, 
     UserProfileWithRoles, 
     TeamResponse, 
