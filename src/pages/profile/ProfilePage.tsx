@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../widgets/Sidebar';
-import './ProfilePage.css';
+import styles from './ProfilePage.module.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { getCurUserProfileInfo } from '../../shared/api';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ const ProfilePage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
 
+    // TODO: move out to api, maybe transform to hook
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -39,25 +40,25 @@ const ProfilePage: React.FC = () => {
     }, []);
 
     return (
-        <div className="profile-page">
+        <div className={styles.profile_page}>
             <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
-            <div className="profile-content">
+            <div className={styles.profile_content}>
                 <h1>Профиль</h1>
                 {error ? ( <div className="error-message">{error}</div>) : ("")}
-                    <div className="profile-info">
-                        <div className="profile-info-row">
+                    <div className={styles.profile_info}>
+                        <div className={styles.profile_info_row}>
                             <label>ФИО:</label><span>{fullName}</span>
                         </div>
-                        <div className="profile-info-row">
+                        <div className={styles.profile_info_row}>
                             <label>Основная роль:</label><span>{role}</span>
                         </div>
-                        <div className="profile-info-row">
+                        <div className={styles.profile_info_row}>
                             <label>Email:</label><span>{email}</span>
                         </div>
-                        <div className="profile-info-row">
+                        <div className={styles.profile_info_row}>
                             <label>Номер телефона:</label><span>{phone}</span>
                         </div>
-                        <div className="profile-info-row">
+                        <div className={styles.profile_info_row}>
                             <label>Смена пароля:</label><button onClick ={() => navigate("/change-password")}>Сменить пароль</button>
                         </div>
                     </div>

@@ -1,8 +1,8 @@
-.profile-page {
+.profile_page {
     display: flex;
 }
 
-.profile-content {
+.profile_content {
     margin-left: 250px; /* Ширина бокового меню */
     padding: 0 2rem;
     width: calc(100% - 250px);
@@ -10,24 +10,24 @@
     height: 100vh; /* Полная высота экрана */
 }
 
-.profile-content h1 {
+.profile_content h1 {
     margin-bottom: 1rem;
 }
 
-.profile-info {
+.profile_info {
     display: grid;
     grid-template-columns: max-content 1fr;
     gap: 2rem 5rem;
 }
 
-.profile-info-row {
+.profile_info_row {
     display: contents; /* This allows grid-template-columns to apply to children directly */
 }
 
-.profile-info-row label {
+.profile_info_row label {
     font-weight: bold;
 }
 
-.profile-info-row span {
+.profile_info_row span {
     text-align: left;
 }
