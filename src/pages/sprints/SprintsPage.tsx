@@ -1,16 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
-import Sidebar from '../../widgets/Sidebar';
 import './SprintsPage.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
-import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
 import { Sprint } from '../../shared/api/IResponses';
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
+import SideBar from "../../widgets/SideBar/SideBar";
+import {RoutePaths} from "../../shared/config/routes";
 
 const SprintsPage: React.FC = () => {
     const {api} = useContext(ApiContext);
 
-    const menuItems = SliderItemsGenerator(); // Получаем элементы меню
     const [sprints, setSprints] = useState<Sprint[]>([]);;
     const [error, setError] = useState<string | null>(null);
 
@@ -38,7 +37,7 @@ const SprintsPage: React.FC = () => {
 */
     return (
         <div className="profile-page">
-            <Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />
+            <SideBar currentPageURL={RoutePaths.sprints} />
             <div className="profile-content">
                 <h1>Спринты пользователя</h1>
                 {error && <div className="error-message">{error}</div>}

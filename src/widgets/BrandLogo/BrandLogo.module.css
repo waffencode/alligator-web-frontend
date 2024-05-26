@@ -1,8 +1,20 @@
 .logo {
   padding: 10px 25px;
   height: calc(100% - 20px);
+  display: flex;
+}
+
+.logo span {
+  font-size: 48px;
+  color: var(--alligator-green);
+  font-family: monospace;
 }
 
 .logo:hover {
   cursor: pointer;
+}
+
+.logo img {
+  width: 64px;
+  height: 64px;
 }

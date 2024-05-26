@@ -21,5 +21,6 @@ code {
 }
 
 :root {
-  --alligator-color-green: #49C61D;
+  --alligator-green: #49C61D;
+  --alligator-green-selected: #49C61D;
 }

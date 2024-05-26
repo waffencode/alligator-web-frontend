@@ -1,21 +1,19 @@
 
 import React, {useContext, useEffect, useState} from 'react';
-import Sidebar from '../../widgets/Sidebar';
+import Sidebar from '../../widgets/SideBar/SideBar';
 import styles from './ProfilePage.module.css';
 import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { useNavigate } from 'react-router-dom';
-import { SliderItemsGenerator } from '../../widgets/SliderItemsGenerator';
 import { rolesTranslator } from '../../entities/RolesTranslator';
 import Layout from "../../widgets/Layout/Layout";
 import Content from "../../widgets/Content/Content";
 import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
 import PageName from "../../widgets/PageName/PageName";
 import ApiContext from "../../features/api-context";
+import {RoutePaths} from "../../shared/config/routes";
 
 const ProfilePage: React.FC = () => {
     const {api} = useContext(ApiContext);
-
-    const menuItems = SliderItemsGenerator(); // Получаем элементы меню
     const navigate = useNavigate(); // используем useNavigate вместо navigator
 
     const [fullName, setFullName] = useState('');
@@ -43,7 +41,7 @@ const ProfilePage: React.FC = () => {
         <Layout
             topLeft={<BrandLogo />}
             topRight={<PageName text="Профиль" />}
-            bottomLeft={<Sidebar menuItems={menuItems} headerIcon={alligatorIcon} />}
+            bottomLeft={<Sidebar currentPageURL={RoutePaths.profile} />}
             bottomRight={
                 <Content>
                     {error ? ( <div className="error-message">{error}</div>) : ("")}
