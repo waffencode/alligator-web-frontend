@@ -9,6 +9,8 @@ import Content from "../../widgets/Content/Content";
 import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
 import PageName from "../../widgets/PageName/PageName";
 import Sidebar from "../../widgets/SideBar/SideBar";
+import Modal from "../../widgets/Modal/Modal";
+import CreateNewTaskModalContent from "./CreateNewTaskModalContent";
 
 const BacklogPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -28,8 +30,9 @@ const BacklogPage: React.FC = () => {
         deadline_type: 'SOFT', // По умолчанию SOFT
         state: 'TODO', // По умолчанию задача в статусе TODO
     });
-    
     const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
+
+    const [taskCreateModalOpen, setTaskCreateModalOpen] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -216,6 +219,14 @@ const BacklogPage: React.FC = () => {
             bottomRight={
                 <Content>
                     {error && <div className="error-message">{error}</div>}
+                    {taskCreateModalOpen &&
+                        <Modal
+                            closeCallback={() => {setTaskCreateModalOpen(false)}}
+                            name={"Создание задачи"}
+                        >
+                            <CreateNewTaskModalContent />
+                        </Modal>
+                    }
                     <div className="profile-info">
                         <div className={styles.sprints_grid}>
                             <div className={styles.sprints_grid_header}>
