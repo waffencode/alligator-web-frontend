@@ -54,17 +54,21 @@ const SideBar = (props: Props) => {
         content.push(new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)));
 
         if (roles.includes("USER")) {
-            return content;
-        } else if (roles.includes("BUSINESS_ANALYTIC")) {
-            return content;
-        } else if (roles.includes("PROJECT_MANAGER")) {
+            
+        } 
+        if (roles.includes("BUSINESS_ANALYTIC")) {
+            
+        } 
+        if (roles.includes("PROJECT_MANAGER")) {
             content.push(new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.users)));
-            return content;
-        } else {
+        } 
+        if (!roles.includes("USER") || !roles.includes("BUSINESS_ANALYTIC") || !roles.includes("PROJECT_MANAGER")) {
             return [
                 new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile))
             ];
         }
+
+        return content;
     }
 
     function _processSelected(tabs: SideBarTabE[], url: string) {

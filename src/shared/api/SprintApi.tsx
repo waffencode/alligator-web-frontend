@@ -1,6 +1,6 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Sprint} from "./IResponses";
+import {Sprint, SprintsResponse} from "./IResponses";
 
 export class SprintApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -43,13 +43,16 @@ export class SprintApi extends BaseApi {
     }
 
     public async getSprints(): Promise<Sprint[]> {
-        const sprints = await this.fetchJson<Sprint[]>(`/sprints`, {
+        const resp = await this.fetchJson<SprintsResponse>(`/sprints`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             }
         });
+
+        const sprints = resp._embedded.sprints;
+
 
         return sprints;
     }

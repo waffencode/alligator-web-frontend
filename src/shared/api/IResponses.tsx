@@ -286,14 +286,41 @@ interface SprintLinks {
 
 interface Sprint {
     id: number;
-    team: Team_sprints;
-    scrumMaster: ScrumMaster;
     startTime: string;
     endTime: string;
     sp: number;
     name: string;
     state: string;
+    team?: Team_sprints;
+    scrumMaster?: ScrumMaster;
     _links?: SprintLinks;
+}
+
+// Интерфейсы для _embedded части ответа с спринтами
+interface EmbeddedSprints {
+    sprints: Sprint[];
+}
+
+
+// Интерфейсы для верхнего уровня ссылок в ответе с спринтами
+interface SprintsTopLevelLinks {
+    self: Link;
+    profile: Link;
+    search: Link;
+}
+
+// Интерфейсы для информации о странице в ответе с спринтами
+interface SprintsPageInfo {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+// Основной интерфейс для ответа с спринтами
+interface SprintsResponse {
+    _embedded: EmbeddedSprints;
+    _links: SprintsTopLevelLinks;
+    page: SprintsPageInfo;
 }
 
 // Интерфейс для представления информации о профиле пользователя
@@ -373,6 +400,7 @@ export type {
     Team, 
     Team_sprints,
     Sprint, 
+    SprintsResponse,
     EmbeddedTeamMembers, 
     TeamMembersResponse_TeamMember, 
     TasksResponse, 
