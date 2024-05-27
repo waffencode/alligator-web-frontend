@@ -14,6 +14,7 @@ const CreateTeamPage: React.FC = () => {
     const navigate = useNavigate();
 
     const [teamName, setTeamName] = useState<string>('');
+    const [teamLeadName, setTeamLeadName] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -21,20 +22,34 @@ const CreateTeamPage: React.FC = () => {
         setTeamName(event.target.value);
     };
 
+    const handleTeamLeadNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTeamLeadName(event.target.value);
+    };
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setError(null);
         setSuccessMessage(null);
 
-     /*   api.team.createTeam({ name: teamName })
-            .then(() => {
-                setSuccessMessage('Team created successfully!');
-                setTeamName('');
-            })
-            .catch((err: Error) => {
-                console.error('Failed to create team', err);
-                setError('Failed to create team');
-            });*/
+        
+        const teamLeadUserId = getUserIdFromTeamLeadName(teamLeadName);
+
+        // api.team.createTeam({ name: teamName, user_id: teamLeadUserId })
+        //     .then(() => {
+        //         setSuccessMessage('Team created successfully!');
+        //         setTeamName('');
+        //         setTeamLeadName('');
+        //     })
+        //     .catch((err: Error) => {
+        //         console.error('Failed to create team', err);
+        //         setError('Failed to create team');
+        //     });
+    };
+
+    
+    const getUserIdFromTeamLeadName = (name: string): string => {
+        
+        return '12345'; // Example user_id
     };
 
     return (
@@ -46,7 +61,6 @@ const CreateTeamPage: React.FC = () => {
                 <Content>
                     <div className="create-team-page">
                         <div className="team-form-content">
-                            <h1>Создание команды</h1>
                             {successMessage && <div className="success-message">{successMessage}</div>}
                             {error && <div className="error-message">{error}</div>}
                             <form onSubmit={handleSubmit}>
@@ -57,6 +71,16 @@ const CreateTeamPage: React.FC = () => {
                                         id="teamName"
                                         value={teamName}
                                         onChange={handleTeamNameChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="teamLeadName">ФИО тимлида:</label>
+                                    <input
+                                        type="text"
+                                        id="teamLeadName"
+                                        value={teamLeadName}
+                                        onChange={handleTeamLeadNameChange}
                                         required
                                     />
                                 </div>
