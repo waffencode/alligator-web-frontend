@@ -116,7 +116,7 @@ export class TeamApi extends BaseApi {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             },
-            
+
         });
         return (await resp)._embedded.teams;
     }
