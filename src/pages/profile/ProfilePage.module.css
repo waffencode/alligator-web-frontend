@@ -31,3 +31,8 @@
 .profile_info_row span {
     text-align: left;
 }
+
+.button {
+    margin-right: 10px;
+    margin-top: 20px;
+}

@@ -1,0 +1,30 @@
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.content input {
+    font-size: xx-large;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.content textarea {
+    resize: vertical;
+    font-size: x-large;
+    max-height: 300px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.content select {
+    border-radius: 5px;
+    font-size: x-large;
+    border: 1px solid black;
+}
+
+.content .create_button {
+   width: fit-content;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}

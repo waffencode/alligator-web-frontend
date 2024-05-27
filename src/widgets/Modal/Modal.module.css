@@ -1,0 +1,30 @@
+.modal_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.modal {
+    position: absolute;
+    width: 50%;
+    min-height: 200px;
+    top: 10%;
+    left: 25%;
+    background-color: var(--alligator-white);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.headline {
+    color: var(--alligator-green);
+    font-size: x-large;
+    font-weight: normal;
+    border-bottom: 1px solid black;
+    height: 45px;
+    margin-bottom: 10px;
+}

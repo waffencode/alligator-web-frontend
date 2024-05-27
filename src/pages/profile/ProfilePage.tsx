@@ -1,8 +1,6 @@
-
 import React, {useContext, useEffect, useState} from 'react';
 import Sidebar from '../../widgets/SideBar/SideBar';
 import styles from './ProfilePage.module.css';
-import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { useNavigate } from 'react-router-dom';
 import { rolesTranslator } from '../../entities/RolesTranslator';
 import Layout from "../../widgets/Layout/Layout";
@@ -12,6 +10,7 @@ import PageName from "../../widgets/PageName/PageName";
 import ApiContext from "../../features/api-context";
 import {RoutePaths} from "../../shared/config/routes";
 import { logout } from '../../shared/lib/authentication';
+import Button from "../../widgets/Button/Button";
 
 const ProfilePage: React.FC = () => {
     const {api} = useContext(ApiContext);
@@ -43,7 +42,11 @@ const ProfilePage: React.FC = () => {
         if (confirmLogout) {
             logout();
         }
-      };
+    };
+
+    const handlePasswordChange = () => {
+        navigate(RoutePaths.changePassword)
+    }
 
     return (
         <Layout
@@ -66,13 +69,9 @@ const ProfilePage: React.FC = () => {
                         <div className={styles.profile_info_row}>
                             <label>Номер телефона:</label><span>{phone}</span>
                         </div>
-                        <div className={styles.profile_info_row}>
-                            <label>Смена пароля:</label><button onClick ={() => navigate("/change-password")}>Сменить пароль</button>
-                        </div>
-                        <div className={styles.profile_info_row}>
-                            <button onClick ={handleLogout}>Выйти из аккаунта</button>
-                        </div>
                     </div>
+                    <Button className={styles.button} onClick ={handleLogout}>Выйти из аккаунта</Button>
+                    <Button className={styles.button} onClick ={handlePasswordChange}>Сменить пароль</Button>
                 </Content>
             }
         />
