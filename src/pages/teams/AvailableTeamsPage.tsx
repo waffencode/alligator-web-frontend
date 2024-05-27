@@ -71,7 +71,6 @@ const AvailableTeamsPage: React.FC = () => {
                 <Content>
                     <div className="avaliable-teams-page">
                         <div className="teams-content">
-                            <h1>Доступные команды</h1>
                             {error ? (<div className="error-message">{error}</div>) : ('')}
                             <div className="teams-list">
                                 {teams.map((team) => (
