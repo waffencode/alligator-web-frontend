@@ -291,8 +291,8 @@ interface Sprint {
     sp: number;
     name: string;
     state: string;
-    team?: Team_sprints;
-    scrumMaster?: ScrumMaster;
+    team: Team_sprints;
+    scrumMaster: ScrumMaster;
     _links?: SprintLinks;
 }
 
