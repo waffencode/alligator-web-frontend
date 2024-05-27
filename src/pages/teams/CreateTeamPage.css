@@ -31,7 +31,7 @@
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #6cc24a;
     color: white;
     border: none;
     cursor: pointer;
@@ -39,7 +39,7 @@
 }
 
 .create-button:hover {
-    background-color: #0056b3;
+    background-color: #5aa83e;
 }
 
 .success-message, .error-message {

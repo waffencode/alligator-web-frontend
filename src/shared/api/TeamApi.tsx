@@ -96,7 +96,11 @@ export class TeamApi extends BaseApi {
 
     
     public async createTeam(team: Team): Promise<Team> {
+<<<<<<< HEAD
         const team_lead_id = this.getPath()+team.team_lead_id;
+=======
+        const teamLead = this.getPath() + '/users/' + team.team_lead_id;
+>>>>>>> 60f2edeb5184ee5c9adea24f9cf7f911e1e30797
         const name = team.name;
         const state = team.state;
         return this.fetchJson<Team>('/teams', {
@@ -105,9 +109,10 @@ export class TeamApi extends BaseApi {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({team_lead_id, name, state})
+            body: JSON.stringify({teamLead, name, state})
         });
     }
+    
 
     public async getTeams(): Promise<Team[]> {
         const resp = this.fetchJson<TeamResponse>('/teams', {
@@ -117,6 +122,26 @@ export class TeamApi extends BaseApi {
                 'Content-Type': 'application/json'
             },
         });
+        return (await resp)._embedded.teams;
+    }
+
+    public async getTeamsWithMemberCount(): Promise<Team[]> {
+        const resp = this.fetchJson<TeamResponse>('/teams', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+        });
+
+        let teams = (await resp)._embedded.teams;
+
+        for (const team of teams) {
+            const teamMembers = await this.getTeamMembers(team.id);
+            const memberCount = this.countTeamMembers(teamMembers);
+            team.memberCount = memberCount;
+        }
+
         return (await resp)._embedded.teams;
     }
 }
