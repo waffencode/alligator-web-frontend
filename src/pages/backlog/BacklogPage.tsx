@@ -9,6 +9,8 @@ import Content from "../../widgets/Content/Content";
 import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
 import PageName from "../../widgets/PageName/PageName";
 import Sidebar from "../../widgets/SideBar/SideBar";
+import Modal from "../../widgets/Modal/Modal";
+import CreateNewTaskModalContent from "./CreateNewTaskModalContent";
 
 const BacklogPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -23,12 +25,14 @@ const BacklogPage: React.FC = () => {
         id: 0,
         headline: '',
         description: '',
-        priority: '',
-        deadline_time: '',
-        deadline_type: '',
-        state: '',
+        priority: 'A', // По умолчанию приоритет A
+        deadline_time: format(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'), // Дедлайн через неделю
+        deadline_type: 'SOFT', // По умолчанию SOFT
+        state: 'TODO', // По умолчанию задача в статусе TODO
     });
     const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
+
+    const [taskCreateModalOpen, setTaskCreateModalOpen] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -215,6 +219,14 @@ const BacklogPage: React.FC = () => {
             bottomRight={
                 <Content>
                     {error && <div className="error-message">{error}</div>}
+                    {taskCreateModalOpen &&
+                        <Modal
+                            closeCallback={() => {setTaskCreateModalOpen(false)}}
+                            name={"Создание задачи"}
+                        >
+                            <CreateNewTaskModalContent />
+                        </Modal>
+                    }
                     <div className="profile-info">
                         <div className={styles.sprints_grid}>
                             <div className={styles.sprints_grid_header}>

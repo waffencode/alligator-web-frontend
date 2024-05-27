@@ -33,14 +33,7 @@ const SideBar = (props: Props) => {
     const {api} = useContext(ApiContext);
 
     useEffect(() => {
-        // получаем роли
-        api.user.whoami()
-            .then((user) => {
-                setRoles(user.roles);
-            })
-            .catch((err) => {
-                console.error('Failed to fetch user roles', err);
-            });
+        if(api._authenticationContext.roles) setRoles(api._authenticationContext.roles);
     }, [api]);
 
     useEffect(() => {
@@ -69,9 +62,9 @@ const SideBar = (props: Props) => {
             return [
                 new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
                 new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.users)),
-                //new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
-                //new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
-                //new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
+                new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
+                new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
+                new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
             ];
         } else {
             console.log("other");
