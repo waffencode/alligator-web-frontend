@@ -40,8 +40,6 @@ export class TeamApi extends BaseApi {
         });
     }
 
-
-// Получение списка teamMember.id конкретной команды
     public async getTeamMembers(teamId: number): Promise<TeamMembersResponse> {
         return this.fetchJson<TeamMembersResponse>(`/teamMembers?team.id=`+teamId, {
             method: 'GET',
@@ -52,7 +50,6 @@ export class TeamApi extends BaseApi {
         });
     }
 
-// Получение списка участников конкретной команды (информация)
     public async getTeamMembersInfo(teamId: number): Promise<TeamMembersResponse_TeamMember[]> {
         return this.fetchJson<TeamMembersResponse_TeamMember[]>(`/teams/`+teamId+`/getTeamMembersInfoAndRoles`, {
             method: 'GET',
@@ -63,22 +60,15 @@ export class TeamApi extends BaseApi {
         });
     }
 
-
-// Подсчёт количества членов команды
     public countTeamMembers(teamMembers: TeamMembersResponse): number {
-        const count = 0;
         return teamMembers.page.totalElements;
     }
 
-    // Получение команд, доступных для обычного пользователя по id
-    //TODO: wtF? basically getting for current - so renamed like that, but somewhere must be checking for all teams idk
-    // нет понятия "доступных для обычного пользователя" - проект ПРОЗРАЧЕН, любой может чекнуть что угодно
-    // соответственно тут скорее понятие "покажите мне команды, в которых учавствую я?? ладно все потом"
     public async getTeamsOfCurrentUserWithMemberCount(): Promise<Team[]> {
         const userId = this.authenticationContext.userId;
 
         if(userId === undefined) {
-            throw Error("getTeamsByUserIdWithCountOfMembers: Authentication error")
+            throw Error("getTeamsByUserIdWithCountOfMembers: Authentication error");
         }
 
         const teamMemberResp = await this.getTeamsIdWhereUserIsMemberyUserId(userId);
@@ -87,7 +77,6 @@ export class TeamApi extends BaseApi {
 
         const teams: Team[] = [];
 
-        // для каждого teamMember.id находим команду и вычисляем количество участников
         for (const teamMember of teamMemberIds) {
             const team = await this.getTeamByTeamMemberId(teamMember.id);
             const teamMembers = await this.getTeamMembers(team.id);
@@ -103,5 +92,17 @@ export class TeamApi extends BaseApi {
             teams.push(team);
         }
         return teams;
+    }
+
+    
+    public async createTeam(team: { name: string }): Promise<void> {
+        return this.fetchJson<void>('/teams', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(team)
+        });
     }
 }

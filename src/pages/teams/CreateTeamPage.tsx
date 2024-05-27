@@ -1,9 +1,7 @@
 import React, { useContext, useState } from 'react';
 import './CreateTeamPage.css';
-import alligatorIcon from '../../shared/ui/icons/alligator.png';
 import { useNavigate } from 'react-router-dom';
 import ApiContext from "../../features/api-context";
-import SideBar from "../../widgets/SideBar/SideBar";
 import { RoutePaths } from "../../shared/config/routes";
 import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
 import PageName from "../../widgets/PageName/PageName";
@@ -32,10 +30,8 @@ const CreateTeamPage: React.FC = () => {
             .then(() => {
                 setSuccessMessage('Team created successfully!');
                 setTeamName('');
-                // можно добавить переход на страницу команды
-                // navigate('/teams/team-members/${newTeam.id}');
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 console.error('Failed to create team', err);
                 setError('Failed to create team');
             });
