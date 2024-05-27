@@ -8,12 +8,7 @@ import PageName from "../../widgets/PageName/PageName";
 import Sidebar from "../../widgets/SideBar/SideBar";
 import Content from "../../widgets/Content/Content";
 import Layout from "../../widgets/Layout/Layout";
-
-interface User {
-    id: string;
-    name: string;
-    fullName: string;
-}
+import { UserInfo } from '../../shared/api/IResponses';
 
 const CreateTeamPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -21,25 +16,30 @@ const CreateTeamPage: React.FC = () => {
 
     const [teamName, setTeamName] = useState<string>('');
     const [teamLeadUserId, setTeamLeadUserId] = useState<string>('');
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<UserInfo[]>([]);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // useEffect(() => {
-    //     if (api.users) {
-    //         api.users.getAllUsersInfoWithRoles()
-    //             .then((response: User[]) => {
-    //                 const mappedUsers = response.map(user => ({
-    //                     id: user.id.toString(),
-    //                     name: user.fullName
-    //                 }));
-    //                 setUsers(mappedUsers);
-    //             })
-    //             .catch((err: Error) => {
-    //                 console.error('Failed to fetch users with roles', err);
-    //             });
-    //     }
-    // }, [api.users]);
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            api.user.getAllUsersInfoWithRoles()
+                .then((response: UserInfo[]) => {
+                    const mappedUsers = response.map(user => ({
+                        id: user.id,
+                        fullName: user.fullName,
+                        email: user.email,
+                        phone_number: user.phone_number,
+                        _links: user._links
+
+                    }));
+                    setUsers(mappedUsers);
+                })
+                .catch((err: Error) => {
+                    console.error('Failed to fetch users with roles', err);
+                });
+        }
+    }, [api.user]);
     
 
     const handleTeamNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +100,7 @@ const CreateTeamPage: React.FC = () => {
                                         <option value="">Выберите тимлида</option>
                                         {users.map(user => (
                                             <option key={user.id} value={user.id}>
-                                                {user.name}
+                                                {user.fullName}
                                             </option>
                                         ))}
                                     </select>
