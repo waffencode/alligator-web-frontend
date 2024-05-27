@@ -23,11 +23,12 @@ const BacklogPage: React.FC = () => {
         id: 0,
         headline: '',
         description: '',
-        priority: '',
-        deadline_time: '',
-        deadline_type: '',
-        state: '',
+        priority: 'A', // По умолчанию приоритет A
+        deadline_time: format(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'), // Дедлайн через неделю
+        deadline_type: 'SOFT', // По умолчанию SOFT
+        state: 'TODO', // По умолчанию задача в статусе TODO
     });
+    
     const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
 
     useEffect(() => {
