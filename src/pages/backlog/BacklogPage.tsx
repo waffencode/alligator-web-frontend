@@ -334,7 +334,7 @@ const BacklogPage: React.FC = () => {
                                         onChange={(e) => handleNewTaskChange('description', e.target.value)}
                                     />
                                     <select
-                                        value={getValue(newTask.priority)}
+                                        value={(getValue(newTask.priority) ? getValue(newTask.priority) : "A")}
                                         onChange={(e) => handleNewTaskChange('priority', e.target.value)}
                                     >
                                         <option value="A">A</option>
@@ -349,7 +349,7 @@ const BacklogPage: React.FC = () => {
                                         onChange={(e) => handleNewTaskChange('deadline_time', e.target.value)}
                                     />
                                     <select
-                                        value={getValue(newTask.deadline_type)}
+                                        value={getValue(newTask.deadline_type) ? getValue(newTask.deadline_type) : "SOFT"}
                                         onChange={(e) => handleNewTaskChange('deadline_type', e.target.value)}
                                     >
                                         <option value="SOFT">SOFT</option>
@@ -358,7 +358,7 @@ const BacklogPage: React.FC = () => {
                                     <div></div>
                                     <div></div>
                                     <select
-                                        value={getValue(newTask.state)}
+                                        value={getValue(newTask.state) ? getValue(newTask.state) : "TODO"}
                                         onChange={(e) => handleNewTaskChange('state', e.target.value)}
                                     >
                                         <option value="NEED_REWORK">Требуется доработка</option>
