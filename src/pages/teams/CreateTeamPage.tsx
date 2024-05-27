@@ -15,7 +15,7 @@ const CreateTeamPage: React.FC = () => {
     const navigate = useNavigate();
 
     const [teamName, setTeamName] = useState<string>('');
-    const [teamLeadUserId, setTeamLeadUserId] = useState<string>('');
+    const [teamLeadUserId, setTeamLeadUserId] = useState<number>();
     const [users, setUsers] = useState<UserInfo[]>([]);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -47,7 +47,7 @@ const CreateTeamPage: React.FC = () => {
     };
 
     const handleTeamLeadChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setTeamLeadUserId(event.target.value);
+        setTeamLeadUserId(Number(event.target.value));
     };
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,11 +55,11 @@ const CreateTeamPage: React.FC = () => {
         setError(null);
         setSuccessMessage(null);
 
-        api.team.createTeam({ name: teamName, team_lead_id: teamLeadUserId })
+        api.team.createTeam({ id: 0, name: teamName, team_lead_id: teamLeadUserId, state: "ACTIVE" })
             .then(() => {
                 setSuccessMessage('Team created successfully!');
-                setTeamName('');
-                setTeamLeadUserId('');
+                setTeamName(teamName);
+                setTeamLeadUserId(teamLeadUserId);
             })
             .catch((err: Error) => {
                 console.error('Failed to create team', err);
