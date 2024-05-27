@@ -382,6 +382,7 @@ interface TeamMemberRole {
 
 // Основной интерфейс для представления участника команды с ролями
 interface TeamMembersResponse_TeamMember {
+    teamMemberId: number;
     userInfo: UserInfo_TeamMember;
     teamMemberRoles: TeamMemberRole[];
 }

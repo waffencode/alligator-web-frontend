@@ -8,7 +8,7 @@ import Sidebar from "../../widgets/SideBar/SideBar";
 import Content from "../../widgets/Content/Content";
 import { RoutePaths } from "../../shared/config/routes";
 import './TeamMembersPage.css';
-import {Team, TeamMember, UserInfo} from '../../shared/api/IResponses';
+import {Team, TeamMember, TeamMembersResponse_TeamMember, UserInfo} from '../../shared/api/IResponses';
 
 const TeamMembersPage: React.FC = () => {
     const id = useParams<{ id: string }>();
@@ -20,6 +20,7 @@ const TeamMembersPage: React.FC = () => {
     const [newMemberId, setNewMemberId] = useState<number>();
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [teamMembersInfo, setTeamMembersInfo] = useState<TeamMembersResponse_TeamMember[]>([]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -50,6 +51,14 @@ const TeamMembersPage: React.FC = () => {
                 })
                 .catch((err: Error) => {
                     console.error('Failed to fetch users with roles', err);
+                });
+
+            api.team.getTeamMembersInfo(pageId)
+                .then((response: TeamMembersResponse_TeamMember[]) => {
+                    setTeamMembersInfo(response);
+                })
+                .catch((err: Error) => {
+                    console.error('Failed to fetch team members info', err);
                 });
         }
     }, [api.team, api.user, id]);
@@ -117,8 +126,7 @@ const TeamMembersPage: React.FC = () => {
                         <div className="members-list">
                             {members.map(member => (
                                 <div key={member.id} className={`member-tile ${team.team_lead_id === member.id ? 'team-lead' : ''}`}>
-                                    {/*TODO: Replace user ID with user name. */}
-                                    <span>User ID {member.id}</span>
+                                    <span>{teamMembersInfo.find((teamMember) => teamMember.teamMemberId === member.id)?.userInfo.fullName}</span>
                                     <button onClick={() => handleRemoveMember(member.id)}>Удалить</button>
                                 </div>
                             ))}
