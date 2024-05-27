@@ -178,7 +178,8 @@ interface Team {
     id: number;
     name: string;
     state: string;
-    _links: TeamLinks;
+    team_lead_id?: number;
+    _links?: TeamLinks;
     memberCount?: number;
 }
 
