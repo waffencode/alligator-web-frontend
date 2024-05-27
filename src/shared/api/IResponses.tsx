@@ -291,8 +291,12 @@ interface Sprint {
     sp: number;
     name: string;
     state: string;
-    team: Team_sprints;
-    scrumMaster: ScrumMaster;
+    team_id?: number;
+    team_name?: string;
+    scrumMaster_id?: number;
+    scrumMaster_fullName?: string;
+    //team: Team_sprints;
+    //scrumMaster: ScrumMaster;
     _links?: SprintLinks;
 }
 
@@ -397,6 +401,7 @@ export type {
     UserResponse,
     TeamResponse, 
     TeamMembersResponse, 
+    TeamMember,
     Team, 
     Team_sprints,
     Sprint, 

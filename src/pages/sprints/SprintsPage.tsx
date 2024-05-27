@@ -39,8 +39,8 @@ const SprintsPage: React.FC = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            api.sprint.getSprintsOfCurrentUser()
-            //api.sprint.getSprints()
+            //api.sprint.getSprintsOfCurrentUser()
+            api.sprint.getSprints()
                 .then((sprints) => {
                     setSprints(sprints);
                 })
@@ -123,8 +123,8 @@ const SprintsPage: React.FC = () => {
                                             ) : (
                                                 <>
                                                     <div>{sprint.name}</div>
-                                                    <div>{sprint.team.name}</div>
-                                                    <div>{sprint.scrumMaster.user.username}</div>
+                                                    <div>{sprint.team_name}</div>
+                                                    <div>{sprint.scrumMaster_fullName}</div>
                                                     <div>{format(new Date(sprint.startTime), 'dd.MM.yyyy')}</div>
                                                     <div>{format(new Date(sprint.endTime), 'dd.MM.yyyy')}</div>
                                                     <div>{sprint.sp}</div>
