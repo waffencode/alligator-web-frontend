@@ -33,14 +33,7 @@ const SideBar = (props: Props) => {
     const {api} = useContext(ApiContext);
 
     useEffect(() => {
-        // получаем роли
-        api.user.whoami()
-            .then((user) => {
-                setRoles(user.roles);
-            })
-            .catch((err) => {
-                console.error('Failed to fetch user roles', err);
-            });
+        if(api._authenticationContext.roles) setRoles(api._authenticationContext.roles);
     }, [api]);
 
     useEffect(() => {
