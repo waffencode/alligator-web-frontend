@@ -107,7 +107,7 @@ const BacklogPage: React.FC = () => {
     const handleTaskChange = (field: keyof Task, value: string | number) => {
         if (editedTask) {
             if (field === 'deadline_time') {
-                const editedDeadlineTime = new Date(value as string);
+                const editedDeadlineTime = new Date(value);
                 setEditedTask({ ...editedTask, deadline_time: editedDeadlineTime.toISOString() });
             } else {
                 setEditedTask({ ...editedTask, [field]: value });
