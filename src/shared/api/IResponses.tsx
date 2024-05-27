@@ -3,6 +3,36 @@ interface Link {
     href: string;
 }
 
+// Интерфейс для ролей пользователя
+interface UserRoleLinks {
+    self: Link;
+    userRole: Link;
+    user: Link;
+    role: Link;
+}
+
+interface UserRole {
+    id: number;
+    name?: string;
+    _links: UserRoleLinks;
+}
+
+// Интерфейс для _embedded части ответа с ролями пользователя
+interface EmbeddedUserRoles {
+    userRoles: UserRole[];
+}
+
+// Интерфейс для верхнего уровня ссылок в ответе с ролями пользователя
+interface UserRolesTopLevelLinks {
+    self: Link;
+}
+
+// Основной интерфейс для ответа с ролями пользователя
+interface UserRolesResponse {
+    _embedded: EmbeddedUserRoles;
+    _links: UserRolesTopLevelLinks;
+}
+
 // Интерфейсы для ответа с дедлайном
 interface DeadlineLinks {
     self: Link;
@@ -74,14 +104,19 @@ interface whoamiResponse {
 }
 
 interface UserProfile {
+    id: number;
     fullName: string;
     email: string;
     phone_number: string;
-    _links: Link;
+    _links?: Link;
 }
 
 interface UserProfileWithRoles extends UserProfile {
     roles: string[];
+}
+
+interface UserProfileWithRolesInterfaces extends UserProfile {
+    roles: Role[];
 }
 
 // Интерфейс для вложенных ссылок в каждом элементе userInfo
@@ -93,10 +128,15 @@ interface UserInfoLinks {
 
 // Интерфейс для элемента userInfo
 interface UserInfo {
+    id: number;
     fullName: string;
     email: string;
     phone_number: string | null;
     _links: UserInfoLinks;
+}
+
+interface UserInfoWithRolesInterfaces extends UserInfo {
+    roles: Role[];
 }
 
 // Интерфейс для _embedded части ответа
@@ -217,6 +257,18 @@ interface User {
     password: string;
 }
 
+interface UserResponse {
+    id: number;
+    username: string;
+    password: string;
+    _links: UserLinks
+}
+
+interface UserLinks {
+    self: Link;
+    user: Link;
+}
+
 interface ScrumMaster {
     id: number;
     team: Team_sprints;
@@ -253,10 +305,18 @@ interface UserInfo_TeamMember {
 }
 
 // Интерфейс для представления роли пользователя
+interface UserRoleLinks {
+    self: Link;
+    role: Link;
+}
+
 interface Role {
     id: number;
     name: string;
+    _links?: UserRoleLinks;
+
 }
+
 
 // Интерфейс для представления информации о руководителе команды
 interface TeamLead {
@@ -298,9 +358,15 @@ export type {
     UserProfile, 
     AuthResponse, 
     whoamiResponse, 
+    UserRolesResponse,
+    UserRole,
+    Role,
     UserInfo,
     UserInfoResponse, 
     UserProfileWithRoles, 
+    UserProfileWithRolesInterfaces,
+    UserInfoWithRolesInterfaces,
+    UserResponse,
     TeamResponse, 
     TeamMembersResponse, 
     Team, 
