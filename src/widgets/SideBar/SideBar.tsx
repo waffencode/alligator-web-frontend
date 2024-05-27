@@ -62,7 +62,7 @@ const SideBar = (props: Props) => {
         if (roles.includes("PROJECT_MANAGER")) {
             content.push(new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.users)));
         } 
-        if (!roles.includes("USER") || !roles.includes("BUSINESS_ANALYTIC") || !roles.includes("PROJECT_MANAGER")) {
+        if (!roles.includes("USER") && !roles.includes("BUSINESS_ANALYTIC") && !roles.includes("PROJECT_MANAGER")) {
             return [
                 new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile))
             ];
