@@ -1,6 +1,6 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Team, TeamMembersResponse, TeamMembersResponse_TeamMember} from "./IResponses";
+import {Team, TeamMembersResponse, TeamMembersResponse_TeamMember, TeamResponse} from "./IResponses";
 
 export class TeamApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -107,5 +107,17 @@ export class TeamApi extends BaseApi {
             },
             body: JSON.stringify({team_lead_id, name, state})
         });
+    }
+
+    public async getTeams(): Promise<Team[]> {
+        const resp = this.fetchJson<TeamResponse>('/teams', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            
+        });
+        return (await resp)._embedded.teams;
     }
 }

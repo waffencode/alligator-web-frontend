@@ -26,7 +26,7 @@ const CreateTeamPage: React.FC = () => {
         setError(null);
         setSuccessMessage(null);
 
-        api.team.createTeam({ name: teamName })
+     /*   api.team.createTeam({ name: teamName })
             .then(() => {
                 setSuccessMessage('Team created successfully!');
                 setTeamName('');
@@ -34,7 +34,7 @@ const CreateTeamPage: React.FC = () => {
             .catch((err: Error) => {
                 console.error('Failed to create team', err);
                 setError('Failed to create team');
-            });
+            });*/
     };
 
     return (

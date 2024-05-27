@@ -10,6 +10,7 @@ import BacklogPage from "../pages/backlog/BacklogPage";
 import React from "react";
 import Authenticated from "../widgets/Authenticated/Authenticated";
 import UsersPage from '../pages/users/UsersPage';
+import CreateTeamPage from '../pages/teams/CreateTeamPage';
 
 interface SecuredRouteProps {
     path?: string;
@@ -55,6 +56,10 @@ const routes: Record<AppRoutes, AppRouteProps> = {
     [AppRoutes.USERS]: {
         path: RoutePaths.users,
         authenticated: true
+    },
+    [AppRoutes.CREATE_TEAM]: {
+        path: RoutePaths.createTeam,
+        authenticated: true
     }
 };
 
@@ -86,6 +91,9 @@ const routeElements: Record<AppRoutes, AppRouteProps> = {
     },
     [AppRoutes.USERS]: {
         element: <UsersPage />
+    },
+    [AppRoutes.CREATE_TEAM]: {
+        element: <CreateTeamPage />
     }
 };
 
