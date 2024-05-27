@@ -54,3 +54,27 @@
 .navigate-button:hover {
     background-color: #5aa83e;
 }
+
+.available-teams-page .create-team-button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.available-teams-page .create-team-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.available-teams-page .create-team-button:hover {
+    background-color: #45a049;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
