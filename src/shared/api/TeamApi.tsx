@@ -96,7 +96,7 @@ export class TeamApi extends BaseApi {
 
     
     public async createTeam(team: Team): Promise<Team> {
-        const team_lead_id = this.getPath()+team.team_lead_id;
+        const teamLead = this.getPath() + '/users/' + team.team_lead_id;
         const name = team.name;
         const state = team.state;
         return this.fetchJson<Team>('/teams', {
@@ -105,7 +105,7 @@ export class TeamApi extends BaseApi {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({team_lead_id, name, state})
+            body: JSON.stringify({teamLead, name, state})
         });
     }
     
