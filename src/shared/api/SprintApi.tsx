@@ -41,4 +41,16 @@ export class SprintApi extends BaseApi {
 
         return sprints;
     }
+
+    public async getSprints(): Promise<Sprint[]> {
+        const sprints = await this.fetchJson<Sprint[]>(`/sprints`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return sprints;
+    }
 }

@@ -132,7 +132,7 @@ interface UserInfo {
     fullName: string;
     email: string;
     phone_number: string | null;
-    _links: UserInfoLinks;
+    _links?: UserInfoLinks;
 }
 
 interface UserInfoWithRolesInterfaces extends UserInfo {
@@ -371,6 +371,7 @@ export type {
     TeamResponse, 
     TeamMembersResponse, 
     Team, 
+    Team_sprints,
     Sprint, 
     EmbeddedTeamMembers, 
     TeamMembersResponse_TeamMember, 

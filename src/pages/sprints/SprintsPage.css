@@ -21,7 +21,7 @@
 
   .sprints-grid-header {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     background-color: #ffffff; /* Цвет фона блока */
     font-weight: bold; /* Жирный текст */
     border-radius: 8px; /* Закругление углов */
@@ -32,7 +32,7 @@
   
   .sprint-tile {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* Так же, как и для основной сетки */
+    grid-template-columns: repeat(8, 1fr); /* Так же, как и для основной сетки */
     background-color: #ffffff; /* Цвет фона блока */
     border-radius: 8px; /* Закругление углов */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
@@ -43,4 +43,25 @@
   
   .sprint-tile:hover {
     background-color: #f5f5f5; /* Изменение цвета фона при наведении */
+  }
+
+  .edit_button_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .edit_button_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .edit_button {
+    background: none; /* Убираем фон */
+    border: none; /* Убираем границу */
+    cursor: pointer; /* Курсор при наведении */
+    font-size: 1.2rem; /* Размер шрифта */
+    padding: 0; /* Убираем отступы */
+    margin-right: 10px; /* Отступ справа */
   }
