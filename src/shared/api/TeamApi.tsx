@@ -120,4 +120,24 @@ export class TeamApi extends BaseApi {
         });
         return (await resp)._embedded.teams;
     }
+
+    public async getTeamsWithMemberCount(): Promise<Team[]> {
+        const resp = this.fetchJson<TeamResponse>('/teams', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+        });
+
+        let teams = (await resp)._embedded.teams;
+
+        for (const team of teams) {
+            const teamMembers = await this.getTeamMembers(team.id);
+            const memberCount = this.countTeamMembers(teamMembers);
+            team.memberCount = memberCount;
+        }
+
+        return (await resp)._embedded.teams;
+    }
 }
