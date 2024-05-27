@@ -52,6 +52,9 @@ export class SprintApi extends BaseApi {
         });
 
         const sprints = resp._embedded.sprints;
+        for (const sprint of sprints) {
+            
+        }
 
 
         return sprints;
