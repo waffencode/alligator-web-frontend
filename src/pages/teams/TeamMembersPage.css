@@ -1,0 +1,33 @@
+.team-members-page {
+    padding: 20px;
+}
+
+.team-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.members-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.member-tile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.member-tile.team-lead {
+    background-color: #ffeb3b;
+}
+
+.add-member-container {
+    margin-top: 20px;
+}
