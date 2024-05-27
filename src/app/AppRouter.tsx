@@ -11,7 +11,7 @@ import React from "react";
 import Authenticated from "../widgets/Authenticated/Authenticated";
 import UsersPage from '../pages/users/UsersPage';
 import CreateTeamPage from '../pages/teams/CreateTeamPage';
-
+import TeamMembersPage from '../pages/teams/TeamMembersPage';
 interface SecuredRouteProps {
     path?: string;
     authenticated?: boolean;
@@ -60,6 +60,10 @@ const routes: Record<AppRoutes, AppRouteProps> = {
     [AppRoutes.CREATE_TEAM]: {
         path: RoutePaths.createTeam,
         authenticated: true
+    },
+    [AppRoutes.TEAM_MEMBERS]: {
+        path: RoutePaths.createTeam,
+        authenticated: true
     }
 };
 
@@ -94,6 +98,9 @@ const routeElements: Record<AppRoutes, AppRouteProps> = {
     },
     [AppRoutes.CREATE_TEAM]: {
         element: <CreateTeamPage />
+    },
+    [AppRoutes.TEAM_MEMBERS]: {
+        element: <TeamMembersPage />
     }
 };
 
