@@ -1,22 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Slider from "react-slick";
-
-import './AvaliableTeamsPage.css';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import alligatorIcon from '../../shared/ui/icons/alligator.png';
-import { Team } from '../../shared/api/IResponses';
 import { useNavigate } from 'react-router-dom';
 import ApiContext from "../../features/api-context";
-import SideBar from "../../widgets/SideBar/SideBar";
-import { RoutePaths } from "../../shared/config/routes";
+import Layout from "../../widgets/Layout/Layout";
 import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
 import PageName from "../../widgets/PageName/PageName";
 import Sidebar from "../../widgets/SideBar/SideBar";
 import Content from "../../widgets/Content/Content";
-import styles from "../backlog/BacklogPage.module.css";
-import { format } from "date-fns";
-import Layout from "../../widgets/Layout/Layout";
+import { RoutePaths } from "../../shared/config/routes";
+import { Team } from '../../shared/api/IResponses';
+import './AvaliableTeamsPage.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const AvailableTeamsPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -34,32 +28,6 @@ const AvailableTeamsPage: React.FC = () => {
                 setError('Failed to load user teams');
             });
     }, []);
-
-    const settings = {
-        dots: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
-    };
 
     return (
         <Layout
