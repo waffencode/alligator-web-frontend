@@ -1,6 +1,6 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Team, TeamMembersResponse, TeamMembersResponse_TeamMember, TeamResponse} from "./IResponses";
+import {Team, TeamMembersResponse, TeamMembersResponse_TeamMember, TeamResponse, TeamMember} from "./IResponses";
 
 export class TeamApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -139,5 +139,33 @@ export class TeamApi extends BaseApi {
         }
 
         return (await resp)._embedded.teams;
+    }
+
+    public async addMemberToTeam(teamId?: number, memberId?: number): Promise<TeamMember> {
+        const team = this.getPath() + /teams/ + teamId?.toString();
+        const user = this.getPath() + /users/ + memberId?.toString();
+
+        const responseData = this.fetchJson<TeamMember>('/teamMembers', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({team, user})
+        });
+
+        return await responseData;
+    }
+
+    public async removeMemberFromTeam(memberId: number): Promise<TeamMember> {
+        const responseData = this.fetchJson<TeamMember>('/teamMembers/' + memberId.toString(), {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+        });
+
+        return await responseData;
     }
 }

@@ -62,7 +62,7 @@ const routes: Record<AppRoutes, AppRouteProps> = {
         authenticated: true
     },
     [AppRoutes.TEAM_MEMBERS]: {
-        path: RoutePaths.createTeam,
+        path: RoutePaths.teamMembers + '/:id',
         authenticated: true
     }
 };

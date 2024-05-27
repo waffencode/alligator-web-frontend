@@ -8,30 +8,40 @@ import Sidebar from "../../widgets/SideBar/SideBar";
 import Content from "../../widgets/Content/Content";
 import { RoutePaths } from "../../shared/config/routes";
 import './TeamMembersPage.css';
-import { UserInfo } from '../../shared/api/IResponses';
+import {Team, TeamMember, UserInfo} from '../../shared/api/IResponses';
 
 const TeamMembersPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const id = useParams<{ id: string }>();
     const { api } = useContext(ApiContext);
     const navigate = useNavigate();
-    const [team, setTeam] = useState<any>(null);
-    const [members, setMembers] = useState<UserInfo[]>([]);
+    const [team, setTeam] = useState<Team | null>(null);
+    const [members, setMembers] = useState<TeamMember[]>([]);
     const [allUsers, setAllUsers] = useState<UserInfo[]>([]);
-    const [newMemberId, setNewMemberId] = useState<string>('');
+    const [newMemberId, setNewMemberId] = useState<number>();
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            api.team.getTeamById(id)
+            const pageId = Number(id.id);
+
+            api.team.getTeamById(pageId)
                 .then((team) => {
                     setTeam(team);
-                    setMembers(team.members);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch team details', err);
                     setError('Failed to load team details');
+                });
+
+            api.team.getTeamMembers(pageId)
+                .then((teamMembers) => {
+                    setMembers(teamMembers._embedded.teamMembers);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch team members', err);
+                    setError('Failed to load team members');
                 });
 
             api.user.getAllUsersInfoWithRoles()
@@ -49,13 +59,14 @@ const TeamMembersPage: React.FC = () => {
         setError(null);
         setSuccessMessage(null);
 
-        api.team.addMemberToTeam(id, newMemberId)
-            .then(() => {
-                const newMember = allUsers.find(user => user.id === newMemberId);
+        const pageId = Number(id.id);
+        api.team.addMemberToTeam(pageId, newMemberId)
+            .then((response: TeamMember) => {
+                const newMember = response;
                 if (newMember) {
                     setMembers([...members, newMember]);
                     setSuccessMessage('Member added successfully!');
-                    setNewMemberId('');
+                    setNewMemberId(undefined);
                 }
             })
             .catch((err) => {
@@ -64,11 +75,11 @@ const TeamMembersPage: React.FC = () => {
             });
     };
 
-    const handleRemoveMember = (memberId: string) => {
+    const handleRemoveMember = (memberId: number) => {
         setError(null);
         setSuccessMessage(null);
 
-        api.team.removeMemberFromTeam(id, memberId)
+        api.team.removeMemberFromTeam(memberId)
             .then(() => {
                 setMembers(members.filter(member => member.id !== memberId));
                 setSuccessMessage('Member removed successfully!');
@@ -105,8 +116,9 @@ const TeamMembersPage: React.FC = () => {
                         </div>
                         <div className="members-list">
                             {members.map(member => (
-                                <div key={member.id} className={`member-tile ${member.isTeamLead ? 'team-lead' : ''}`}>
-                                    <span>{member.fullName}</span>
+                                <div key={member.id} className={`member-tile ${team.team_lead_id === member.id ? 'team-lead' : ''}`}>
+                                    {/*TODO: Replace user ID with user name. */}
+                                    <span>User ID {member.id}</span>
                                     <button onClick={() => handleRemoveMember(member.id)}>Удалить</button>
                                 </div>
                             ))}
@@ -120,7 +132,7 @@ const TeamMembersPage: React.FC = () => {
                                     <select
                                         id="newMember"
                                         value={newMemberId}
-                                        onChange={(e) => setNewMemberId(e.target.value)}
+                                        onChange={(e) => setNewMemberId(Number(e.target.value))}
                                         required
                                     >
                                         <option value="">Выберите участника</option>
