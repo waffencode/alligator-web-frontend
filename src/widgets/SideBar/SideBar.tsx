@@ -45,34 +45,24 @@ const SideBar = (props: Props) => {
     const [tabs, setTabs] = useState<SideBarTabE[]>([]);
 
     function _getAllTabs(roles: string[]) {
-        
+
+        let content: SideBarTabE[] = [];
+
+        content.push(new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)));
+        content.push(new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)));
+        content.push(new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)));
+        content.push(new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)));
+
         if (roles.includes("USER")) {
-            console.log("USER");
-            return [
-                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
-                new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
-                new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
-            ];
+            return content;
         } else if (roles.includes("BUSINESS_ANALYTIC")) {
-            return [
-                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
-                new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
-            ];
+            return content;
         } else if (roles.includes("PROJECT_MANAGER")) {
-            return [
-                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
-                new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.users)),
-                new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
-                new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
-                new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
-            ];
+            content.push(new SideBarTabE(new SideBarTab('Пользователи', RoutePaths.users)));
+            return content;
         } else {
-            console.log("other");
             return [
-                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile)),
-                //new SideBarTabE(new SideBarTab('Бэклог', RoutePaths.backlog)),
-                //new SideBarTabE(new SideBarTab('Команды', RoutePaths.availableTeams)),
-                //new SideBarTabE(new SideBarTab('Спринты', RoutePaths.sprints)),
+                new SideBarTabE(new SideBarTab('Профиль', RoutePaths.profile))
             ];
         }
     }
