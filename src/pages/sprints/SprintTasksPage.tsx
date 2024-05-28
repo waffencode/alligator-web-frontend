@@ -151,7 +151,7 @@ const SprintTasksPage: React.FC = () => {
                                             <div></div>
                                             <div></div>
                                             <div>{task.sp}</div>
-                                            <div></div>
+                                            <div>{task.team_member_fullName}</div>
                                             <select
                                                 value={editedTask?.team_member_id || 0}
                                                 onChange={(e) => handleTaskChange('team_member_id', parseInt(e.target.value))}
@@ -188,7 +188,7 @@ const SprintTasksPage: React.FC = () => {
                                             <div></div>
                                             <div></div>
                                             <div>{task.sp}</div>
-                                            <div></div>
+                                            <div>{task.team_member_fullName}</div>
                                             <div>{task.state}</div>
                                         </>
                                     )}
