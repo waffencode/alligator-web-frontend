@@ -88,37 +88,14 @@ const BacklogPage: React.FC = () => {
             if (editedTask) {
                 const token = localStorage.getItem('token');
                 if (token) {
+                    // Получаем английский эквивалент статуса задачи
+                    const englishState = translateStatusToEnglish(editedTask.state);
+                    editedTask.state = englishState; // Присваиваем английский эквивалент статуса
                     api.tasks.updateTask(editedTask)
                         .then(() => {
                             setTasks(tasks.map(t => t.id === editedTask.id ? editedTask : t));
                             setEditingTaskId(null);
                             setEditedTask(null);
-                            // Обновляем статус задачи на русский язык
-                            switch (editedTask?.state) {
-                                case "NEED_REWORK":
-                                    editedTask.state = "Требуется доработка";
-                                    break;
-                                case "TODO":
-                                    editedTask.state = "Сделать";
-                                    break;
-                                case "PICKED":
-                                    editedTask.state = "Выбрано";
-                                    break;
-                                case "IN_PROGRESS":
-                                    editedTask.state = "В процессе";
-                                    break;
-                                case "TESTING":
-                                    editedTask.state = "На тестировании";
-                                    break;
-                                case "DONE":
-                                    editedTask.state = "Выполнено";
-                                    break;
-                                case "ABORTED":
-                                    editedTask.state = "Прервано";
-                                    break;
-                                default:
-                                    break;
-                            }
                         })
                         .catch((err) => {
                             console.error('Failed to update task', err);
@@ -131,7 +108,29 @@ const BacklogPage: React.FC = () => {
             setEditedTask(task);
         }
     };
-
+    
+    // Функция для перевода статуса задачи на английский
+    const translateStatusToEnglish = (status: string) => {
+        switch (status) {
+            case "Требуется доработка":
+                return "NEED_REWORK";
+            case "Сделать":
+                return "TODO";
+            case "Выбрано":
+                return "PICKED";
+            case "В процессе":
+                return "IN_PROGRESS";
+            case "На тестировании":
+                return "TESTING";
+            case "Выполнено":
+                return "DONE";
+            case "Прервано":
+                return "ABORTED";
+            default:
+                return status;
+        }
+    };
+    
     const handleTaskChange = (field: keyof Task, value: string | number) => {
         if (editedTask) {
             if (field === 'deadline_time') {
@@ -142,16 +141,23 @@ const BacklogPage: React.FC = () => {
             }
         }
     };
-
     const handleNewTaskChange = (field: keyof Task, value: string | number) => {
-        if (field === 'deadline_time') {
+        if (field === 'description') {
+            const newValue = value.toString().slice(0, 250); // Ограничиваем длину описания до 250 символов
+            setNewTask((prevTask) => ({ ...prevTask, [field]: newValue }));
+        } else if (field === 'deadline_time') {
             const newDeadlineTime = new Date(value as string);
-            setNewTask({ ...newTask, deadline_time: newDeadlineTime.toISOString() });
+            setNewTask((prevTask) => ({ ...prevTask, deadline_time: newDeadlineTime.toISOString() }));
         } else {
-            setNewTask({ ...newTask, [field]: value });
+            setNewTask((prevTask) => ({ ...prevTask, [field]: value }));
         }
     };
-
+    
+    
+    
+    
+    
+    
     const handleAddNewTask = () => {
         setIsAddingNewTask(true);
     };
@@ -288,9 +294,10 @@ const BacklogPage: React.FC = () => {
                                             <button className={styles.close_button} onClick={() => handleDescriptionClick(task.id)}>
                                                 &times;
                                             </button>
-                                            <p>{task.description}</p>
+                                            <p style={{ whiteSpace: "pre-wrap" }}>{task.description}</p>
                                         </div>
                                     )}
+
                                     {editingTaskId === task.id ? (
                                         <>
                                             <input
@@ -376,9 +383,11 @@ const BacklogPage: React.FC = () => {
                                     />
                                     <input
                                         type="text"
-                                        value={getValue(newTask.description)}
-                                        onChange={(e) => handleNewTaskChange('description', e.target.value)}
+                                        value={getValue(editedTask?.description)}
+                                        onChange={(e) => handleTaskChange('description', e.target.value.slice(0, 250))}
+                                        maxLength={250}
                                     />
+
                                     <select
                                         value={(getValue(newTask.priority) ? getValue(newTask.priority) : "A")}
                                         onChange={(e) => handleNewTaskChange('priority', e.target.value)}

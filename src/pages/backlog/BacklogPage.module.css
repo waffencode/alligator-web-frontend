@@ -92,7 +92,7 @@
 }
 
 .task_description:hover {
-  color: blue; /* Изменение цвета текста при наведении */
+  color: #6cc24a; /* Изменение цвета текста при наведении */
 }
 
 .edit_button_container {
@@ -169,3 +169,21 @@
   font-size: 16px;
   color: #999;
 }
+.task_description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2; /* Ограничиваем количество строк до 2 */
+}
+.task_description {
+  max-width: 100%;
+  display: inline-block;
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* Для поддержки старых версий браузеров */
+  max-width: 100%;
+  white-space: pre-line;
+  width: 100%;
+  max-height: 2.6em; /* Переход на вторую строку после 2.6 строк */
+  text-overflow: ellipsis; /* Добавление многоточия, если текст обрезается */
+}
+
