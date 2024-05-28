@@ -116,7 +116,7 @@ const SprintsPage: React.FC = () => {
         <Layout
             topLeft={<BrandLogo />}
             topRight={<PageName text="Список спринтов" />}
-            bottomLeft={<Sidebar currentPageURL={RoutePaths.backlog} />}
+            bottomLeft={<Sidebar currentPageURL={RoutePaths.sprints} />}
             bottomRight={
                 <Content>
                     {error && <div className="error-message">{error}</div>}

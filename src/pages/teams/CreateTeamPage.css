@@ -21,10 +21,27 @@
     margin-bottom: 5px;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.form-group select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='gray'><polygon points='0,0 10,10 20,0'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 98%;
+    background-position-y: 50%;
+    padding-right: 30px;
 }
 
 .create-button {
@@ -36,6 +53,8 @@
     border: none;
     cursor: pointer;
     text-align: center;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
 .create-button:hover {

@@ -9,6 +9,7 @@ import Sidebar from "../../widgets/SideBar/SideBar";
 import Content from "../../widgets/Content/Content";
 import Layout from "../../widgets/Layout/Layout";
 import { UserInfo } from '../../shared/api/IResponses';
+import Button from "../../widgets/Button/Button";
 
 const CreateTeamPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -105,7 +106,8 @@ const CreateTeamPage: React.FC = () => {
                                         ))}
                                     </select>
                                 </div>
-                                <button type="submit" className="create-button">Создать</button>
+                              
+                                <Button type="submit" className="button">Создать</Button>
                             </form>
                         </div>
                     </div>
