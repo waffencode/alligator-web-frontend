@@ -121,19 +121,46 @@ export class SprintApi extends BaseApi {
         const id = sprint.id;
 
         // установка новой команды
-        const team = this.getPath()+'/teams/'+sprint.team_id;
+        //const team = this.getPath()+'/teams/'+sprint.team_id;
         
-        // установка нового scrum master
-        //const scrumMasterPath = this.getPath()+'/sprints/'+sprint.id+'/scrumMaster';
-        //const scrumMaster = this.getPath()+'http://localhost:8080/teamMembers/1';
+        // установка нового scrum master (из членов команды)
+        const scrumMaster = this.getPath()+'/teamMembers/'+sprint.scrumMaster_id;
 
         const sprintsResp = await this.fetchJson<Sprint>(`/sprints/`+sprint.id, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({id, startTime, endTime, sp, name, state})
+            body: JSON.stringify({id, startTime, endTime, sp, name, state, scrumMaster})
+        });
+
+        const sprints = sprintsResp;
+        
+        return sprints;
+    }
+
+    public async createSprint(sprint: Sprint): Promise<Sprint> {
+        const startTime = sprint.startTime;
+        const endTime = sprint.endTime;
+        const sp = sprint.sp;
+        const name = sprint.name;
+        const state = sprint.state;
+        const id = sprint.id;
+
+        // установка команды
+        const team = this.getPath()+'/teams/'+sprint.team_id;
+        
+        // установка scrum master (из членов команды)
+        const scrumMaster = this.getPath()+'/teamMembers/'+sprint.scrumMaster_id;
+
+        const sprintsResp = await this.fetchJson<Sprint>(`/sprints`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id, startTime, endTime, sp, name, state, team, scrumMaster})
         });
 
         const sprints = sprintsResp;
