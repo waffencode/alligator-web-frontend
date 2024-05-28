@@ -1,6 +1,6 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Sprint, SprintsResponse, Team, TeamMember, TeamResponse, UserInfo, UserInfoResponse} from "./IResponses";
+import {Sprint, SprintsResponse, Team, TeamMember, TeamMembersResponse, UserInfo, UserInfoResponse, UserProfile} from "./IResponses";
 
 export class SprintApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -82,6 +82,39 @@ export class SprintApi extends BaseApi {
 
     public async getTeamBySprintId(sprintId: number): Promise<Team> {
         return this.fetchJson<Team>(`/sprints/`+sprintId+`/team`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    public async getTeamMembersBySprintId(sprintId: number): Promise<TeamMember[]> {
+        const teamResp = await this.getTeamBySprintId(sprintId);
+
+        const teamMembersResp = await this.fetchJson<TeamMembersResponse>(`/teamMembers?team.id=`+teamResp.id, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        // получаем список id team member
+        const teamMembers = teamMembersResp._embedded.teamMembers;
+        for (const teamMember of teamMembers) {
+            // user id
+            const user = await this.getUserByTeamMemberId(teamMember.id);
+            // fullName
+            const userInfo = await this.getUserInfoesByUserId(user.id);
+            teamMember.fullName = userInfo.fullName;
+            console.log(teamMember.fullName);
+        }
+        return teamMembers;
+    }
+
+    public async getUserInfoesByUserId(userId: number): Promise<UserProfile> {
+        return this.fetchJson<UserProfile>(`/userInfoes/search/getByUserId?userId=`+userId, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
