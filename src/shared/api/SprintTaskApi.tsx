@@ -55,7 +55,7 @@ export class SprintTaskApi extends BaseApi {
 
         for (let sprintTask of sprintTasks) {
             //http://localhost:8080/sprintTasks/1/task "id": 1, "priority": "A", "state": "TODO", "headline": "вапва", "description": "ваав",
-            const task = await this.fetchJson<Task>(`/sprintTasks/`+sprintTask.id+`/task`, {
+            const task = await this.fetchJson<Task>(`/sprintTasks/` + sprintTask.id + `/task`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
@@ -84,15 +84,14 @@ export class SprintTaskApi extends BaseApi {
 
             //team_member_id, team_member_fullName
             //http://localhost:8080/assignedTasks?taskId=1 получаем assignedTasks_id
-            const assignedTaskResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks?taskId=`+task.id, {
+            const assignedTaskResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks?task.id=` + sprintTask.id , {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                     'Content-Type': 'application/json'
                 }
             });
-
-
+            
             if (assignedTaskResp._embedded.assignedTasks.length > 0)
             {
                 //http://localhost:8080/assignedTasks/1/teamMember получаем team member
@@ -107,7 +106,7 @@ export class SprintTaskApi extends BaseApi {
                 sprintTask.team_member_id = teamMemberResp.id;
 
                 //http://localhost:8080/teamMembers/1/user получаем id ответственного пользователя
-                const userResp = await this.fetchJson<UserResponse>(`/teamMembers/`+teamMemberResp.id+`/user`, {
+                const userResp = await this.fetchJson<UserResponse>(`/teamMembers/` + teamMemberResp.id + `/user`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
@@ -116,7 +115,7 @@ export class SprintTaskApi extends BaseApi {
                 });
 
                 //http://localhost:8080/userInfoes?user.Id=1 получаем информацию об ответственном пользователе
-                const userInfoResp = await this.fetchJson<UserInfoResponse>(`/userInfoes?user.Id=`+userResp.id, {
+                const userInfoResp = await this.fetchJson<UserInfoResponse>(`/userInfoes?user.Id=` + userResp.id, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
