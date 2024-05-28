@@ -2,14 +2,6 @@
   display: flex;
 }
 
-.profile-content {
-  width: calc(100%);
-  height: 100vh; /* Полная высота экрана */
-}
-
-.profile-content h1 {
-  margin-bottom: 1rem;
-}
 
 .smallButton {
   font-size: 12px; /* Adjust font size */
@@ -30,7 +22,7 @@
   border-radius: 8px; /* Закругление углов */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
   padding: 10px; /* Внутренний отступ */
-  gap: 30px; /* Увеличиваем расстояние между элементами */
+  gap: 0; /* Увеличиваем расстояние между элементами */
   text-align: center; /* Центрируем текст по горизонтали */
 }
 
@@ -41,8 +33,9 @@
   border-radius: 8px; /* Закругление углов */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
   padding: 10px; /* Внутренний отступ */
-  gap: 30px; /* Увеличиваем расстояние между элементами */
+  gap: 0; /* Увеличиваем расстояние между элементами */
   cursor: default; /* Изменение курсора при наведении */
+  align-items: center; /* Вертикальное выравнивание по центру */
   text-align: center; /* Центрируем текст по горизонтали */
 }
 

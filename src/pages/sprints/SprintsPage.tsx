@@ -253,7 +253,7 @@ const SprintsPage: React.FC = () => {
                                                 <option value="STOPPED">STOPPED</option>
                                                 <option value="ENDED">ENDED</option>
                                             </select>
-                                            <div></div>
+                                            <Button>Удалить</Button>
                                         </>
                                     ) : (
                                         <>
@@ -264,9 +264,9 @@ const SprintsPage: React.FC = () => {
                                             <div>{format(new Date(sprint.endTime), 'dd.MM.yyyy')}</div>
                                             <div>{sprint.sp}</div>
                                             <div>{sprint.state}</div>
-                                            <div><Button className="button" onClick={() => navigate(RoutePaths.sprintTasks + '/' + sprint.id)}>
+                                            <Button className="button" onClick={() => navigate(RoutePaths.sprintTasks + '/' + sprint.id)}>
                                                 Перейти
-                                            </Button></div>
+                                            </Button>
                                         </>
                                     )}
                                 </div>

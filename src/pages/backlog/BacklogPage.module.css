@@ -2,23 +2,12 @@
   display: flex;
 }
 
-.profile_content {
-  margin-left: 250px; /* Ширина бокового меню */
-  padding: 0 2rem;
-  width: calc(100% - 250px);
-  background-color: #f9f9f9;
-  height: 100vh; /* Полная высота экрана */
-}
+
 
 .profile_content h1 {
   margin-bottom: 1rem;
 }
 
-.sprints_grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-gap: 10px; /* Отступ между блоками */
-}
 
 /* Dropdown Menu Styles */
 .selectDropdown {
@@ -47,6 +36,13 @@
   font-size: 12px; /* Adjust font size */
   padding: 5px 10px; /* Adjust padding */
 }
+
+.sprints_grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 10px; /* Отступ между блоками */
+}
+
 
 .sprints_grid_header {
   display: grid;
