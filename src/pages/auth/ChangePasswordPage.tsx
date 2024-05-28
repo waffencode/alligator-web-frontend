@@ -46,7 +46,7 @@ const ChangePasswordPage: React.FC = () => {
         <div className="container">
             <div className="form-container">
                 <h2>Смена пароля</h2>
-                <label className="error-message">{message}</label>
+                {message && <label className="error-message">{message}</label>}
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">
                         <label htmlFor="oldPassword">Старый пароль</label><br />

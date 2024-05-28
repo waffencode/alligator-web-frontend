@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './SprintTasksPage.css';
-import { Sprint, UserInfo_TeamMember, SprintTask } from '../../shared/api/IResponses'; // SprintTask
+import { Sprint, UserInfo_TeamMember, SprintTask, TeamMember } from '../../shared/api/IResponses'; // SprintTask
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
 import { RoutePaths } from "../../shared/config/routes";
@@ -24,7 +24,7 @@ const SprintTasksPage: React.FC = () => {
     const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
     const [editedTask, setEditedTask] = useState<SprintTask | null>(null);
     const [isAddingNewTask, setIsAddingNewTask] = useState<boolean>(false);
-    const [teamMembers, setTeamMembers] = useState<UserInfo_TeamMember[]>([]);
+    const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -86,6 +86,7 @@ const SprintTasksPage: React.FC = () => {
         } else {
             setEditingTaskId(task.id);
             setEditedTask(task);
+            loadTeamMembers();
         }
     };
 
@@ -106,13 +107,10 @@ const SprintTasksPage: React.FC = () => {
 
     const getValue = (value: string | undefined) => value !== undefined ? value : '';
 
-    const loadTeamMembers = (teamId: number) => {
-        if (!teamId) return; // Не загружать участников, если команда не выбрана
-        
-        api.team.getTeamMembersInfo(teamId)
+    const loadTeamMembers = () => {        
+        api.sprint.getTeamMembersBySprintId(sprintId)
             .then((members) => {
-                const userInfos = members.map(member => member.userInfo);
-                setTeamMembers(userInfos);
+                setTeamMembers(members);
             })
             .catch((err) => {
                 console.error('Failed to load team members', err);
@@ -175,7 +173,6 @@ const SprintTasksPage: React.FC = () => {
                                             <div></div>
                                             <div></div>
                                             <div>{task.sp}</div>
-                                            <div>{task.team_member_fullName}</div>
                                             <select
                                                 value={editedTask?.team_member_id || 0}
                                                 onChange={(e) => handleTaskChange('team_member_id', parseInt(e.target.value))}
@@ -183,7 +180,7 @@ const SprintTasksPage: React.FC = () => {
                                                 <option value="">Назначьте ответственного</option>
                                                 {teamMembers.map((member) => (
                                                     <option key={member.id} value={member.id}>
-                                                        {member. fullName}
+                                                        {member.fullName}
                                                     </option>
                                                 ))}
                                             </select>

@@ -222,7 +222,7 @@ interface TeamMemberLinks {
 // Интерфейс для элемента teamMember
 interface TeamMember {
     id: number;
-    //name?: string;
+    fullName?: string;
     state: string;
     _links: TeamMemberLinks;
 }

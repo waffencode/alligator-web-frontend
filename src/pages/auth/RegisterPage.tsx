@@ -51,7 +51,7 @@ const RegisterPage: React.FC = () => {
         <div className="container">
             <div className="form-container">
                 <h2>Регистрация</h2>
-                <label className="error-message">{message}</label>
+                {message && <label className="error-message">{message}</label>}
                 <form onSubmit={handleRegisterSubmit}>
                     <div className="input-group">
                         <label>Имя</label><br />
