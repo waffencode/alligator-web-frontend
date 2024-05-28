@@ -26,13 +26,12 @@ const BacklogPage: React.FC = () => {
         id: 0,
         headline: '',
         description: '',
-        priority: 'A', // По умолчанию приоритет A
-        deadline_time: format(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'), // Дедлайн через неделю
-        deadline_type: 'SOFT', // По умолчанию SOFT
-        state: 'TODO', // По умолчанию задача в статусе TODO
+        priority: 'A', 
+        deadline_time: format(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
+        deadline_type: 'SOFT', 
+        state: 'TODO', 
     });
     const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
-
     const [taskCreateModalOpen, setTaskCreateModalOpen] = useState(false);
 
     useEffect(() => {
@@ -40,7 +39,11 @@ const BacklogPage: React.FC = () => {
         if (token) {
             api.tasks.getTasksForBacklog()
                 .then((tasks) => {
-                    setTasks(tasks);
+                    const translatedTasks = tasks.map(task => ({
+                        ...task,
+                        state: translateStatus(task.state)
+                    }));
+                    setTasks(translatedTasks);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch tasks', err);
@@ -51,6 +54,27 @@ const BacklogPage: React.FC = () => {
         }
     }, [api.tasks]);
 
+    const translateStatus = (status: string) => {
+        switch (status) {
+            case "NEED_REWORK":
+                return "Требуется доработка";
+            case "TODO":
+                return "Сделать";
+            case "PICKED":
+                return "Выбрано";
+            case "IN_PROGRESS":
+                return "В процессе";
+            case "TESTING":
+                return "На тестировании";
+            case "DONE":
+                return "Выполнено";
+            case "ABORTED":
+                return "Прервано";
+            default:
+                return status;
+        }
+    };
+    
     const handleDescriptionClick = (task: Task) => {
         setSelectedTask(task);
     };
