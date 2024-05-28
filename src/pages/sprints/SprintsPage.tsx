@@ -139,7 +139,7 @@ const SprintsPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to create sprint', err);
-                    setError('Failed to create sprint');
+                    setError(translateErrorMessage(err.message));
                 });
         }
     };
@@ -163,6 +163,17 @@ const SprintsPage: React.FC = () => {
                 console.error('Failed to load team members', err);
                 setError('Failed to load team members');
             });
+    };
+
+    const translateErrorMessage = (message: string) => {
+        if (message.includes('Only one sprint can be active in team')) {
+            let activeSprintName = message.match(/Currently active sprint name: (.+)/)?.[1];
+            if (activeSprintName) {
+                activeSprintName = activeSprintName.slice(0, -2);
+            }
+            return `В команде может быть только один активный спринт. В данный момент активен спринт с названием: ${activeSprintName}`;
+        }
+        return 'Произошла ошибка';
     };
 
     return (
@@ -230,11 +241,15 @@ const SprintsPage: React.FC = () => {
                                                 value={editedSprint?.sp || 0}
                                                 onChange={(e) => handleSprintChange('sp', e.target.value)}
                                             />
-                                            <input
-                                                type="text"
+                                            <select
                                                 value={editedSprint?.state || ''}
                                                 onChange={(e) => handleSprintChange('state', e.target.value)}
-                                            />
+                                            >
+                                                <option value="PLANNING">PLANNING</option>
+                                                <option value="ACTIVE">ACTIVE</option>
+                                                <option value="STOPPED">STOPPED</option>
+                                                <option value="ENDED">ENDED</option>
+                                            </select>
                                             <div></div>
                                         </>
                                     ) : (
@@ -303,11 +318,15 @@ const SprintsPage: React.FC = () => {
                                         value={newSprint.sp}
                                         onChange={(e) => handleNewSprintChange('sp', e.target.value)}
                                     />
-                                    <input
-                                        type="text"
+                                    <select
                                         value={newSprint.state}
                                         onChange={(e) => handleNewSprintChange('state', e.target.value)}
-                                    />
+                                    >
+                                        <option value="PLANNING">PLANNING</option>
+                                        <option value="ACTIVE">ACTIVE</option>
+                                        <option value="STOPPED">STOPPED</option>
+                                        <option value="ENDED">ENDED</option>
+                                    </select>
                                     <div></div>
                                 </div>
                             )}
