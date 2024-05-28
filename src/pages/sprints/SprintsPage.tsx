@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './SprintsPage.css';
-import { Sprint } from '../../shared/api/IResponses';
+import { Sprint, Team, UserInfo_TeamMember } from '../../shared/api/IResponses';
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
 import { RoutePaths } from "../../shared/config/routes";
@@ -14,6 +14,8 @@ const SprintsPage: React.FC = () => {
     const { api } = useContext(ApiContext);
 
     const [sprints, setSprints] = useState<Sprint[]>([]);
+    const [teams, setTeams] = useState<Team[]>([]);
+    const [teamMembers, setTeamMembers] = useState<UserInfo_TeamMember[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [editingSprintId, setEditingSprintId] = useState<number | null>(null);
     const [editedSprint, setEditedSprint] = useState<Sprint | null>(null);
@@ -42,10 +44,19 @@ const SprintsPage: React.FC = () => {
                     console.error('Failed to fetch sprints', err);
                     setError('Failed to load sprints');
                 });
+
+            api.team.getTeams()
+                .then((teams) => {
+                    setTeams(teams);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch teams', err);
+                    setError('Failed to load teams');
+                });
         } else {
             setError('No authentication token found');
         }
-    }, [api.sprint]);
+    }, [api.sprint, api.team]);
 
     const handleAddNewSprint = () => {
         setIsAddingNewSprint(true);
@@ -54,6 +65,16 @@ const SprintsPage: React.FC = () => {
     const handleEditClick = (sprint: Sprint) => {
         if (editingSprintId === sprint.id) {
             if (editedSprint) {
+                if (!editedSprint.team_id) {
+                    setError('Выберите команду');
+                    return;
+                }
+
+                if (!editedSprint.scrumMaster_id) {
+                    setError('Выберите Scrum-мастера');
+                    return;
+                }
+
                 const token = localStorage.getItem('token');
                 if (token) {
                     api.sprint.updateSprint(editedSprint)
@@ -71,6 +92,7 @@ const SprintsPage: React.FC = () => {
         } else {
             setEditingSprintId(sprint.id);
             setEditedSprint({ ...sprint });
+            loadTeamMembers(sprint.team_id || 1);
         }
     };
 
@@ -86,6 +108,16 @@ const SprintsPage: React.FC = () => {
     };
 
     const handleSaveNewSprint = () => {
+        if (!newSprint.team_id) {
+            setError('Выберите команду');
+            return;
+        }
+
+        if (!newSprint.scrumMaster_id) {
+            setError('Выберите Scrum-мастера');
+            return;
+        }
+
         const token = localStorage.getItem('token');
         if (token) {
             api.sprint.createSprint(newSprint)
@@ -106,10 +138,31 @@ const SprintsPage: React.FC = () => {
                     });
                 })
                 .catch((err) => {
-                    console.error('Failed to create task', err);
-                    setError('Failed to create task');
+                    console.error('Failed to create sprint', err);
+                    setError('Failed to create sprint');
                 });
         }
+    };
+
+    const handleNewSprintChange = (field: keyof Sprint, value: string | number) => {
+        setNewSprint({ ...newSprint, [field]: value });
+        if (field === 'team_id') {
+            loadTeamMembers(value as number);
+        }
+    };
+
+    const loadTeamMembers = (teamId: number) => {
+        if (!teamId) return; // Не загружать участников, если команда не выбрана
+        
+        api.team.getTeamMembersInfo(teamId)
+            .then((members) => {
+                const userInfos = members.map(member => member.userInfo);
+                setTeamMembers(userInfos);
+            })
+            .catch((err) => {
+                console.error('Failed to load team members', err);
+                setError('Failed to load team members');
+            });
     };
 
     return (
@@ -150,17 +203,18 @@ const SprintsPage: React.FC = () => {
                                                 value={editedSprint?.name || ''}
                                                 onChange={(e) => handleSprintChange('name', e.target.value)}
                                             />
-                                            {/*<input
-                                                type="text"
-                                                value={editedSprint?.team_name || ''}
-                                                onChange={(e) => handleSprintChange('team_name', e.target.value)}
-                                            />*/}
                                             <div>{sprint.team_name}</div>
-                                            <input
-                                                type="text"
-                                                value={editedSprint?.scrumMaster_fullName || ''}
-                                                onChange={(e) => handleSprintChange('scrumMaster_fullName', e.target.value)}
-                                            />
+                                            <select
+                                                value={editedSprint?.scrumMaster_id || 0}
+                                                onChange={(e) => handleSprintChange('scrumMaster_id', parseInt(e.target.value))}
+                                            >
+                                                <option value="">Выберите Scrum-мастера</option>
+                                                {teamMembers.map((member) => (
+                                                    <option key={member.id} value={member.id}>
+                                                        {member. fullName}
+                                                    </option>
+                                                ))}
+                                            </select>
                                             <input
                                                 type="date"
                                                 value={editedSprint ? format(new Date(editedSprint.startTime), 'yyyy-MM-dd') : ''}
@@ -202,45 +256,57 @@ const SprintsPage: React.FC = () => {
                                     <div className="edit_button_container">
                                         <button
                                             className="edit_button"
-                                            onClick={() => handleSaveNewSprint}
+                                            onClick={handleSaveNewSprint}
                                         >
                                             ✓
                                         </button>
                                     </div>
                                     <input
                                         type="text"
-                                        value={editedSprint?.name || ''}
-                                        onChange={(e) => handleSprintChange('name', e.target.value)}
+                                        value={newSprint.name}
+                                        onChange={(e) => handleNewSprintChange('name', e.target.value)}
                                     />
+                                    <select
+                                        value={newSprint.team_id}
+                                        onChange={(e) => handleNewSprintChange('team_id', parseInt(e.target.value))}
+                                    >
+                                        <option value="">Выберите команду</option>
+                                        {teams.map((team) => (
+                                            <option key={team.id} value={team.id}>
+                                                {team.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <select
+                                        value={newSprint.scrumMaster_id}
+                                        onChange={(e) => handleNewSprintChange('scrumMaster_id', parseInt(e.target.value))}
+                                    >
+                                        <option value="">Выберите Scrum-мастера</option>
+                                        {teamMembers.map((member) => (
+                                            <option key={member.id} value={member.id}>
+                                                {member.fullName}
+                                            </option>
+                                        ))}
+                                    </select>
                                     <input
-                                        type="text"
-                                        value={editedSprint?.team_name || ''}
-                                        onChange={(e) => handleSprintChange('team_name', e.target.value)}
-                                    />
-                                    <input
-                                        type="text"
-                                        value={editedSprint?.scrumMaster_fullName || ''}
-                                        onChange={(e) => handleSprintChange('scrumMaster_fullName', e.target.value)}
+                                        type="date"
+                                        value={newSprint.startTime}
+                                        onChange={(e) => handleNewSprintChange('startTime', e.target.value)}
                                     />
                                     <input
                                         type="date"
-                                        value={editedSprint ? format(new Date(editedSprint.startTime), 'yyyy-MM-dd') : ''}
-                                        onChange={(e) => handleSprintChange('startTime', e.target.value)}
-                                    />
-                                    <input
-                                        type="date"
-                                        value={editedSprint ? format(new Date(editedSprint.endTime), 'yyyy-MM-dd') : ''}
-                                        onChange={(e) => handleSprintChange('endTime', e.target.value)}
+                                        value={newSprint.endTime}
+                                        onChange={(e) => handleNewSprintChange('endTime', e.target.value)}
                                     />
                                     <input
                                         type="number"
-                                        value={editedSprint?.sp || 0}
-                                        onChange={(e) => handleSprintChange('sp', e.target.value)}
+                                        value={newSprint.sp}
+                                        onChange={(e) => handleNewSprintChange('sp', e.target.value)}
                                     />
                                     <input
                                         type="text"
-                                        value={editedSprint?.state || ''}
-                                        onChange={(e) => handleSprintChange('state', e.target.value)}
+                                        value={newSprint.state}
+                                        onChange={(e) => handleNewSprintChange('state', e.target.value)}
                                     />
                                     <div></div>
                                 </div>
