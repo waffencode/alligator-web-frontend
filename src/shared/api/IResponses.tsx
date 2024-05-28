@@ -387,6 +387,61 @@ interface TeamMembersResponse_TeamMember {
     teamMemberRoles: TeamMemberRole[];
 }
 
+// Интерфейс для ссылок в sprintTask
+interface SprintTaskLinks {
+    self: Link;
+    sprintTask: Link;
+    task: Link;
+    sprint: Link;
+}
+
+// Интерфейс для элемента sprintTask
+interface SprintTask {
+    id: number;
+    sp: number; // sp
+    _links: SprintTaskLinks;
+    priority?: string; // приоритет
+    state?: string; // статус
+    headline?: string; // название
+    description?: string; // описание
+    deadline_id?: number;
+    deadline_time?: string; // дедлайн
+    deadline_type?: string; // тип дедлана
+    assignation_time?: string;
+    assigned_task_id?: number; 
+    task_id?: number;
+    team_member_id?: number; 
+    team_member_fullName?: string; // ответственный
+    // роли
+}
+
+// Интерфейс для _embedded части ответа с sprintTasks
+interface EmbeddedSprintTasks {
+    sprintTasks: SprintTask[];
+}
+
+// Интерфейс для верхнего уровня ссылок в ответе с sprintTasks
+interface SprintTasksTopLevelLinks {
+    self: Link;
+    profile: Link;
+    search: Link;
+}
+
+// Интерфейс для информации о странице в ответе с sprintTasks
+interface SprintTasksPageInfo {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+
+// Основной интерфейс для ответа с sprintTasks
+interface SprintTasksResponse {
+    _embedded: EmbeddedSprintTasks;
+    _links: SprintTasksTopLevelLinks;
+    page: SprintTasksPageInfo;
+}
+
 export type { 
     UserProfile, 
     AuthResponse, 
@@ -417,5 +472,11 @@ export type {
     TasksTopLevelLinks, 
     TasksPageInfo,
     DeadlineLinks,
-    DeadlineResponse
+    DeadlineResponse,
+    SprintTask,
+    SprintTaskLinks,
+    EmbeddedSprintTasks,
+    SprintTasksTopLevelLinks,
+    SprintTasksPageInfo,
+    SprintTasksResponse
 };

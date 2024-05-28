@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './SprintTasksPage.css';
-import { Sprint, Task, UserInfo_TeamMember } from '../../shared/api/IResponses'; // SprintTask
+import { Sprint, UserInfo_TeamMember, SprintTask } from '../../shared/api/IResponses'; // SprintTask
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
 import { RoutePaths } from "../../shared/config/routes";
@@ -19,16 +19,16 @@ const SprintTasksPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [spCur, setSpCur] = useState<number>(0);
     const [spLimit, setSpLimit] = useState<number>(0);
-    const [tasks, setTasks] = useState<Task[]>([]); // SprintTask[]
-    const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+    const [tasks, setTasks] = useState<SprintTask[]>([]); // SprintTask[]
+    const [selectedTask, setSelectedTask] = useState<SprintTask | null>(null);
     const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
-    const [editedTask, setEditedTask] = useState<Task | null>(null);
+    const [editedTask, setEditedTask] = useState<SprintTask | null>(null);
     const [isAddingNewTask, setIsAddingNewTask] = useState<boolean>(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            api.tasks.getTasksForBacklog()
+            api.sprintTask.getSprintTasksWithAllInfoBySprintId(sprintId)
                 .then((tasks) => {
                     setTasks(tasks);
                 })
@@ -41,7 +41,7 @@ const SprintTasksPage: React.FC = () => {
         }
     }, [api.tasks]);
 
-    const handleEditClick = (task: Task) => {
+    const handleEditClick = (task: SprintTask) => {
         if (editingTaskId === task.id) {
             if (editedTask) {
                 const token = localStorage.getItem('token');
@@ -64,7 +64,7 @@ const SprintTasksPage: React.FC = () => {
         }
     };
 
-    const handleTaskChange = (field: keyof Task, value: string | number) => {
+    const handleTaskChange = (field: keyof SprintTask, value: string | number) => {
         if (editedTask) {
             if (field === 'deadline_time') {
                 const editedDeadlineTime = new Date(value);
@@ -75,7 +75,7 @@ const SprintTasksPage: React.FC = () => {
         }
     };
 
-    const handleDescriptionClick = (task: Task) => {
+    const handleDescriptionClick = (task: SprintTask) => {
         setSelectedTask(task);
     };
 
@@ -176,9 +176,9 @@ const SprintTasksPage: React.FC = () => {
                                     ) : (
                                         <>
                                             <div>{task.headline}</div>
-                                            <div onClick={() => handleDescriptionClick(task)} className="task_description">
+                                            {task.description ? <div onClick={() => handleDescriptionClick(task)} className="task_description">
                                                 {task.description.substring(0, 20)}...
-                                            </div>
+                                            </div> : ''}
                                             <div>{task.priority}</div>
                                             <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{task.deadline_type ? task.deadline_type : ''}</div>
