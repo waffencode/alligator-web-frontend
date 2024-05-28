@@ -165,6 +165,27 @@ const SprintTasksPage: React.FC = () => {
         }
     };
 
+    const translateStatus = (status?: string) => {
+        switch (status) {
+            case "NEED_REWORK":
+                return "Требуется доработка";
+            case "TODO":
+                return "Сделать";
+            case "PICKED":
+                return "Выбрано";
+            case "IN_PROGRESS":
+                return "В процессе";
+            case "TESTING":
+                return "На тестировании";
+            case "DONE":
+                return "Выполнено";
+            case "ABORTED":
+                return "Прервано";
+            default:
+                return status;
+        }
+    };
+
     return (
         <Layout
             topLeft={<BrandLogo />}
@@ -215,11 +236,11 @@ const SprintTasksPage: React.FC = () => {
                                     {editingTaskId === sprintTask.id ? (
                                         <>
                                             <div>{sprintTask.headline}</div>
-                                            {sprintTask.description ?
+                                            {sprintTask.description ? (
                                                 <div onClick={() => handleDescriptionClick(sprintTask)}
-                                                     className="task_description">
+                                                     className={styles.task_description}>
                                                     {sprintTask.description.substring(0, 20)}...
-                                                </div> : ''}
+                                                </div>) : <div></div>}
                                             <div>{sprintTask.priority}</div>
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
@@ -257,7 +278,7 @@ const SprintTasksPage: React.FC = () => {
                                                 <div onClick={() => handleDescriptionClick(sprintTask)}
                                                      className="task_description">
                                                     {sprintTask.description.substring(0, 20)}...
-                                                </div> : ''}
+                                                </div> : <div></div>}
                                             <div>{sprintTask.priority}</div>
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
@@ -265,7 +286,7 @@ const SprintTasksPage: React.FC = () => {
                                             <div></div>
                                             <div>{sprintTask.sp}</div>
                                             <div>{sprintTask.team_member_fullName ? sprintTask.team_member_fullName : 'Не назначен'}</div>
-                                            <div>{sprintTask.state}</div>
+                                            <div>{translateStatus(sprintTask.state)}</div>
                                         </>
                                     )}
                                 </div>

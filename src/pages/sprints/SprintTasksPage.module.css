@@ -17,7 +17,8 @@
     border-radius: 8px; /* Закругление углов */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
     padding: 10px; /* Внутренний отступ */
-    gap: 30px; /* Увеличиваем расстояние между элементами */
+    gap: 0px; /* Увеличиваем расстояние между элементами */
+    text-align: center; /* Центрируем текст */
 }
 
 .sprint_tile {
@@ -27,12 +28,32 @@
     border-radius: 8px; /* Закругление углов */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
     padding: 10px; /* Внутренний отступ */
-    gap: 30px; /* Увеличиваем расстояние между элементами */
+    gap: 0px; /* Увеличиваем расстояние между элементами */
     cursor: default; /* Изменение курсора при наведении */
+    align-items: center; /* Вертикальное выравнивание по центру */
+    text-align: center; /* Центрирование текста */
+}
+
+.sprint_tile > div {
+    white-space: nowrap; /* Запрещаем перенос текста */
+    overflow: hidden; /* Обрезаем переполняющий текст */
+    text-overflow: ellipsis; /* Добавляем многоточие для переполняющего текста */
+    display: flex; /* Используем Flexbox */
+    align-items: center; /* Вертикальное выравнивание по центру */
+    justify-content: center; /* Горизонтальное выравнивание по центру */
 }
 
 .sprint_tile:hover {
     background-color: #f5f5f5; /* Изменение цвета фона при наведении */
+}
+
+.task_description {
+    cursor: pointer; /* Указатель при наведении на описание */
+    text-decoration: underline; /* Подчёркивание для описания */
+}
+
+.task_description:hover {
+    color: #6cc24a; /* Изменение цвета текста при наведении */
 }
 
 .edit_button_container {
