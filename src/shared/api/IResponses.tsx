@@ -397,6 +397,12 @@ interface SprintTaskLinks {
     sprint: Link;
 }
 
+interface SprintTaskDto {
+    sp: number;
+    sprint_id: number;
+    task_id: number;
+}
+
 // Интерфейс для элемента sprintTask
 interface SprintTask {
     id: number;
@@ -528,5 +534,6 @@ export type {
     EmbeddedAssignedTasks,
     AssignedTasksTopLevelLinks,
     AssignedTasksPageInfo,
-    AssignedTasksResponse
+    AssignedTasksResponse,
+    SprintTaskDto
 };
