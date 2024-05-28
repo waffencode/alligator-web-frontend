@@ -9,7 +9,7 @@ import Content from '../../widgets/Content/Content';
 import BrandLogo from '../../widgets/BrandLogo/BrandLogo';
 import PageName from '../../widgets/PageName/PageName';
 import Sidebar from '../../widgets/SideBar/SideBar';
-
+import Button from "../../widgets/Button/Button";
 const SprintsPage: React.FC = () => {
     const { api } = useContext(ApiContext);
 
@@ -245,7 +245,8 @@ const SprintsPage: React.FC = () => {
                                     <div></div>
                                 </div>
                             )}
-                            <button onClick={handleAddNewSprint}>Добавить спринт</button>
+                            <Button className="smallButton button" onClick={handleAddNewSprint}>Добавить спринт</Button>
+
                         </div>
                     </div>
                 </Content>

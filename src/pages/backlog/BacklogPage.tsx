@@ -11,6 +11,7 @@ import PageName from "../../widgets/PageName/PageName";
 import Sidebar from "../../widgets/SideBar/SideBar";
 import Modal from "../../widgets/Modal/Modal";
 import CreateNewTaskModalContent from "./CreateNewTaskModalContent";
+import Button from "../../widgets/Button/Button";
 
 const BacklogPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -383,8 +384,13 @@ const BacklogPage: React.FC = () => {
                                     </select>
                                 </div>
                             )}
-                            <button onClick={handleAddNewTask}>Добавить задачу</button>
-                            <button onClick={handleDeleteSelectedTasks}>Удалить выбранные задачи</button>
+                            <Button className={`${styles.smallButton} button`} onClick={handleAddNewTask}>
+                            Добавить задачу
+                        </Button>
+                        <Button className={`${styles.smallButton} button`} onClick={handleDeleteSelectedTasks}>
+                            Удалить выбранные задачи
+                        </Button>
+
                         </div>
                         {selectedTask && (
                             <div className="modal">

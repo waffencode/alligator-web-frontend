@@ -31,3 +31,12 @@
 .add-member-container {
     margin-top: 20px;
 }
+
+.add-member-container label {
+    font-weight: bold;
+}
+
+.button-small {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}

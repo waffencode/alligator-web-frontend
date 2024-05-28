@@ -20,6 +20,34 @@
   grid-gap: 10px; /* Отступ между блоками */
 }
 
+/* Dropdown Menu Styles */
+.selectDropdown {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  appearance: none; /* Removes the default arrow in some browsers */
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.selectDropdown:hover {
+  border-color: #888;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.selectDropdown:focus {
+  outline: none;
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.smallButton {
+  font-size: 12px; /* Adjust font size */
+  padding: 5px 10px; /* Adjust padding */
+}
+
 .sprints_grid_header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);

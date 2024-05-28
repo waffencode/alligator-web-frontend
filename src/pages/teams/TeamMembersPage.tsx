@@ -8,7 +8,8 @@ import Sidebar from "../../widgets/SideBar/SideBar";
 import Content from "../../widgets/Content/Content";
 import { RoutePaths } from "../../shared/config/routes";
 import './TeamMembersPage.css';
-import {Team, TeamMember, TeamMembersResponse_TeamMember, UserInfo} from '../../shared/api/IResponses';
+import Button from "../../widgets/Button/Button";
+import { Team, TeamMember, TeamMembersResponse_TeamMember, UserInfo } from '../../shared/api/IResponses';
 
 const TeamMembersPage: React.FC = () => {
     const id = useParams<{ id: string }>();
@@ -129,13 +130,13 @@ const TeamMembersPage: React.FC = () => {
                     <div className="team-members-page">
                         <div className="team-info">
                             <h2>{team.name}</h2>
-                            <button onClick={handleEditTeamName}>Редактировать название</button>
+                            <Button className="button" onClick={handleEditTeamName}>Редактировать название</Button>
                         </div>
                         <div className="members-list">
                             {members.map(member => (
                                 <div key={member.id} className={`member-tile ${team.team_lead_id === member.id ? 'team-lead' : ''}`}>
                                     <span>{teamMembersInfo.find((teamMember) => teamMember.teamMemberId === member.id)?.userInfo.fullName}</span>
-                                    <button onClick={() => handleRemoveMember(member.id)}>Удалить</button>
+                                    <Button className="button-small" onClick={() => handleRemoveMember(member.id)}>Удалить</Button>
                                 </div>
                             ))}
                         </div>
@@ -159,7 +160,7 @@ const TeamMembersPage: React.FC = () => {
                                         ))}
                                     </select>
                                 </div>
-                                <button type="submit" className="add-button">Добавить</button>
+                                <Button  type="submit" className="button">Добавить</Button>
                             </form>
                         </div>
                     </div>
