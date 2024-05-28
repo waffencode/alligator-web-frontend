@@ -157,8 +157,8 @@ const SprintTasksPage: React.FC = () => {
                 if (token) {
                    // api.sprintTask.addTaskToSprint(selectedProposedTaskId, sprintId)
                     //    .then((newTask) => {
-                   //         setTasks([...tasks, newTask]);
-                   //         setSelectedProposedTaskId(null);
+                            setSprintTasksList([...sprintTasksList, newTask]);
+                            setSelectedProposedTaskId(null);
                    //     })
                    //     .catch((err) => {
                    //         console.error('Failed to add proposed task', err);
