@@ -41,15 +41,7 @@ const SprintTasksPage: React.FC = () => {
         const token = localStorage.getItem('token');
         if (token) {
             console.log('useEffect call with sprintId: ', sprintId);
-
-            api.sprintTask.getSprintTasksWithAllInfoBySprintId(sprintId)
-                .then((tasks) => {
-                    setSprintTasksList(tasks);
-                })
-                .catch((err) => {
-                    console.error('Failed to load sprint tasks', err);
-                    setError('Ошибка при загрузке задач!');
-                });
+            loadSprintTasks();
 
             api.sprint.getSprintBySprintId(sprintId)
                 .then((sprint) => {
@@ -85,10 +77,22 @@ const SprintTasksPage: React.FC = () => {
 
     }, [sprintTasksList]);
 
+    const loadSprintTasks = ()  => {
+        api.sprintTask.getSprintTasksWithAllInfoBySprintId(sprintId)
+            .then((tasks) => {
+                setSprintTasksList(tasks);
+            })
+            .catch((err) => {
+                console.error('Failed to load sprint tasks', err);
+                setError('Ошибка при загрузке задач!');
+            });
+    }
+
     const handleEditClick = (task: SprintTask) => {
         if (editingTaskId === task.id) {
             if (editedTask) {
                 const token = localStorage.getItem('token');
+
                 if (token) {
                     // api.tasks.updateTask(editedTask)
                     //    .then(() => {
@@ -133,6 +137,8 @@ const SprintTasksPage: React.FC = () => {
                 console.error('Failed to assign tasks', err);
                 setError('Ошибка при назначении задач!');
             });
+
+        loadSprintTasks();
     }
 
     const getValue = (value: string | undefined) => value !== undefined ? value : '';
