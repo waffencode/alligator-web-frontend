@@ -33,6 +33,7 @@ interface UserRolesTopLevelLinks {
 interface UserRolesResponse {
     _embedded: EmbeddedUserRoles;
     _links: UserRolesTopLevelLinks;
+    page: TasksPageInfo;
 }
 
 // Интерфейсы для ответа с дедлайном
@@ -345,10 +346,29 @@ interface UserRoleLinks {
 }
 
 interface Role {
+    selected?: any;
     id: number;
+    role_id?: number; // настоящий id роли (от 1 до 3)
     name: string;
     _links?: UserRoleLinks;
 
+}
+
+// Интерфейс для _embedded части ответа с ролями пользователя
+interface EmbeddedRoles {
+    roles: Role[];
+}
+
+// Интерфейс для верхнего уровня ссылок в ответе с ролями пользователя
+interface RolesTopLevelLinks {
+    self: Link;
+}
+
+// Основной интерфейс для ответа с ролями пользователя
+interface RolesResponse {
+    _embedded: EmbeddedRoles;
+    _links: RolesTopLevelLinks;
+    page: TasksPageInfo;
 }
 
 
@@ -499,6 +519,7 @@ export type {
     UserRolesResponse,
     UserRole,
     Role,
+    RolesResponse,
     UserInfo,
     UserInfoResponse, 
     UserProfileWithRoles, 

@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './UsersPage.module.css';
-import { Task } from '../../shared/api/IResponses';
-import { UserProfileWithRoles, UserInfoWithRolesInterfaces } from '../../shared/api/IResponses';
-import { format } from 'date-fns';
+import { UserInfoWithRolesInterfaces, Role } from '../../shared/api/IResponses';
 import ApiContext from "../../features/api-context";
 import { RoutePaths } from "../../shared/config/routes";
 import Layout from "../../widgets/Layout/Layout";
@@ -12,40 +10,18 @@ import PageName from "../../widgets/PageName/PageName";
 import Sidebar from "../../widgets/SideBar/SideBar";
 import { rolesTranslator } from '../../entities/RolesTranslator';
 
-
 const UsersPage: React.FC = () => {
     const { api } = useContext(ApiContext);
 
     const [users, setUsers] = useState<UserInfoWithRolesInterfaces[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [editingUserId, setEditingUserId] = useState<number | null>(null);
-    const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
-/*
-    const users: UserProfileWithRoles[] =[
-        {
-            id: 1,
-            fullName: "John Doe",
-            email: "john.doe@example.com",
-            phone_number: "123-456-7890",
-            roles: ["USER"]
-        },
-        {
-            id: 2,
-            fullName: "Jane Smith",
-            email: "jane.smith@example.com",
-            phone_number: "098-765-4321",
-            roles: ["USER"]
-        },
-        {
-            id: 3,
-            fullName: "Emily Johnson",
-            email: "emily.johnson@example.com",
-            phone_number: "456-789-0123",
-            roles: ["USER"]
-        }
-    ];
+    const [editedUser, setEditedUser] = useState<UserInfoWithRolesInterfaces | null>(null);
+    const [editedRoles, setEditedRoles] = useState<Role[]>([]);
+    const [roles, setRoles] = useState<Role[]>([]);
+    const [showRoleDropdown, setShowRoleDropdown] = useState<boolean>(false);
 
-*/
+    // Получение списка пользователей
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -54,44 +30,69 @@ const UsersPage: React.FC = () => {
                     setUsers(users);
                 })
                 .catch((err) => {
-                    console.error('Failed to fetch tasks', err);
-                    setError('Failed to load tasks');
+                    console.error('Failed to fetch users', err);
+                    setError('Failed to load users');
                 });
         } else {
             setError('No authentication token found');
         }
-    }, [api.tasks]);
+    }, [api.user]);
 
- const handleEditClick = (user: UserProfileWithRoles) => {
- /*   if (editingTaskId === task.id) {
-        if (editedTask) {
-            const token = localStorage.getItem('token');
-            if (token) {
-                api.tasks.updateTask(editedTask)
-                    .then(() => {
-                        setTasks(tasks.map(t => t.id === editedTask.id ? editedTask : t));
-                        setEditingTaskId(null);
-                        setEditedTask(null);
-                    })
-                    .catch((err) => {
-                        console.error('Failed to update task', err);
-                        setError('Failed to update task');
-                    });
-            }
+    // Получение списка ролей
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            api.user.getRoles()
+                .then((roles) => {
+                    const rolesWithSelected = roles.map(role => ({ ...role, selected: false }));
+                    setRoles(rolesWithSelected);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch roles', err);
+                    setError('Failed to load roles');
+                });
+        } else {
+            setError('No authentication token found');
         }
-    } else {
-        setEditingTaskId(task.id);
-        setEditedTask(task);
-    }*/
-};
+    }, [api.user]);
 
-const handleUserSelect = (userId: number) => {
-    setSelectedUserIds((prevSelectedUserIds) =>
-        prevSelectedUserIds.includes(userId)
-            ? prevSelectedUserIds.filter((id) => id !== userId)
-            : [...prevSelectedUserIds, userId]
-    );
-};
+    const handleEditClick = (user: UserInfoWithRolesInterfaces) => {
+        if (editingUserId === user.id) {
+            if (editedUser) {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    // updateUser
+                    setUsers(users.map(t => t.id === editedUser.id ? editedUser : t));
+                    setEditingUserId(null);
+                    setEditedUser(null);
+                    setEditedRoles([]);
+                }
+            }
+        } else {
+            setEditingUserId(user.id);
+            setEditedUser(user);
+            const markedRoles = roles.map(role => {
+                const foundRole = user.roles.find(userRole => userRole.role_id === role.id);
+                return foundRole ? { ...role, selected: true } : { ...role, selected: false };
+            });
+            setEditedRoles(markedRoles);
+            console.log(markedRoles); // если у пользователя есть роль, то она помечена
+        }
+    };
+
+    const handleRoleEdit = (roleId: number) => {
+        console.log(roleId);
+        console.log(editedRoles);
+        const updatedRoles = editedRoles.map(role => // editedRoles -- список всех ролей (тек. пользователя) с выбором 
+            role.id === roleId ? { ...role, selected: !role.selected } : role
+        );
+        console.log(updatedRoles);
+        setEditedRoles(updatedRoles);
+    };
+
+    const toggleRoleDropdown = () => {
+        setShowRoleDropdown(!showRoleDropdown);
+    };
 
     return (
         <Layout
@@ -115,7 +116,7 @@ const handleUserSelect = (userId: number) => {
                                     <div className={styles.edit_button_container}>
                                         <button
                                             className={styles.edit_button}
-                                            //onClick={}
+                                            onClick={() => handleEditClick(user)}
                                         >
                                             {editingUserId === user.id ? '✓' : '✎'}
                                         </button>
@@ -123,7 +124,33 @@ const handleUserSelect = (userId: number) => {
                                     <div>{user.fullName}</div>
                                     <div>{user.email}</div>
                                     <div>{user.phone_number}</div>
-                                    <div>{rolesTranslator(user.roles.filter(role => role.name !== undefined).map(role => role.name!))}</div>
+                                    <div>
+                                        {editingUserId === user.id ? (
+                                            // Render role dropdown when editing
+                                            <div className={styles.roleDropdown}>
+                                                <div className={styles.roleField} onClick={toggleRoleDropdown}>
+                                                    {showRoleDropdown ? '▲' : '▼'}
+                                                    Роль
+                                                </div>
+                                                {showRoleDropdown && (
+                                                    <div className={styles.roleOptions}>
+                                                        {roles.map(role => (
+                                                            <label key={role.id}>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={editedRoles.some(r => r.id === role.id && r.selected)}
+                                                                    onChange={() => handleRoleEdit(role.id)}
+                                                                />
+                                                                {role.name}
+                                                            </label>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            rolesTranslator(user.roles.filter(role => role.name !== undefined).map(role => role.name!))
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>

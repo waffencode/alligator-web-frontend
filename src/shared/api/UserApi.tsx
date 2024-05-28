@@ -1,5 +1,5 @@
 import {BaseApi} from "./BaseApi";
-import {AuthResponse, UserInfoResponse, UserProfile, whoamiResponse, UserInfoWithRolesInterfaces, UserProfileWithRolesInterfaces, UserResponse, UserRole, UserRolesResponse, Role} from "./IResponses";
+import {AuthResponse, UserInfoResponse, UserProfile, whoamiResponse, UserInfoWithRolesInterfaces, RolesResponse, UserRole, UserRolesResponse, Role} from "./IResponses";
 import {getAuthenticationContextData, AuthenticationContextData} from "../lib/authentication";
 
 export class UserApi extends BaseApi {
@@ -37,6 +37,7 @@ export class UserApi extends BaseApi {
             let userRoleWithName: Role[] = [];
             for (const userRole of userRoles) {
                 let role = await this.getRoleByUserRolesId(userRole.id);
+                role.role_id = role.id; // id роли сохраняем в другое поле
                 role.id = userRole.id; // id сохраняем как в user_roles, чтобы можно было удалить запись при необходимости
                 userRoleWithName.push(role); // добавляем в массив
             }
@@ -108,5 +109,17 @@ export class UserApi extends BaseApi {
             },
             body: JSON.stringify({ oldPassword, newPassword})
         });
+    }
+
+    public async getRoles(): Promise<Role[]> {
+        const resp = await this.fetchJson<RolesResponse>(`/roles`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        return resp._embedded.roles;
+
     }
 }
