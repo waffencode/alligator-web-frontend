@@ -168,7 +168,7 @@ export class TaskApi extends BaseApi {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ time, type })
-        });;
+        });
     }
 
     // удаление задачи

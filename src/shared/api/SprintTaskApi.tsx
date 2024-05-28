@@ -124,8 +124,6 @@ export class SprintTaskApi extends BaseApi {
                     }
                 });
                 sprintTask.team_member_fullName = userInfoResp._embedded.userInfoes[0].fullName;
-
-                console.log(sprintTask.team_member_fullName);
             }
         }
 

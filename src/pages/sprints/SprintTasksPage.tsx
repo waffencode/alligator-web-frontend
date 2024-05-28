@@ -41,7 +41,6 @@ const SprintTasksPage: React.FC = () => {
         const token = localStorage.getItem('token');
 
         if (token) {
-            console.log('useEffect call with sprintId: ', sprintId);
             loadSprintTasks();
 
             api.sprint.getSprintBySprintId(sprintId)
@@ -200,14 +199,15 @@ const SprintTasksPage: React.FC = () => {
                                 <div>SP</div>
                                 <div>Ответственный</div>
                                 <div>Статус</div>
-                           </div>
+                            </div>
                             {sprintTasksList.map((sprintTask, index) => (
                                 <div key={index} className="sprint-tile">
                                     <div className="edit_button_container">
-                                        <button 
+                                        <button
                                             className="edit_button"
                                             onClick={() => handleEditClick(sprintTask)}
-                                        >✕</button>
+                                        >✕
+                                        </button>
                                     </div>
                                     <div className="edit_button_container">
                                         <button
@@ -220,9 +220,11 @@ const SprintTasksPage: React.FC = () => {
                                     {editingTaskId === sprintTask.id ? (
                                         <>
                                             <div>{sprintTask.headline}</div>
-                                            {sprintTask.description ? <div onClick={() => handleDescriptionClick(sprintTask)} className="task_description">
-                                                {sprintTask.description.substring(0, 20)}...
-                                            </div> : ''}
+                                            {sprintTask.description ?
+                                                <div onClick={() => handleDescriptionClick(sprintTask)}
+                                                     className="task_description">
+                                                    {sprintTask.description.substring(0, 20)}...
+                                                </div> : ''}
                                             <div>{sprintTask.priority}</div>
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
@@ -256,9 +258,11 @@ const SprintTasksPage: React.FC = () => {
                                     ) : (
                                         <>
                                             <div>{sprintTask.headline}</div>
-                                            {sprintTask.description ? <div onClick={() => handleDescriptionClick(sprintTask)} className="task_description">
-                                                {sprintTask.description.substring(0, 20)}...
-                                            </div> : ''}
+                                            {sprintTask.description ?
+                                                <div onClick={() => handleDescriptionClick(sprintTask)}
+                                                     className="task_description">
+                                                    {sprintTask.description.substring(0, 20)}...
+                                                </div> : ''}
                                             <div>{sprintTask.priority}</div>
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
