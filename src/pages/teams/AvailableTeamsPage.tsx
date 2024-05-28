@@ -46,7 +46,7 @@ const AvailableTeamsPage: React.FC = () => {
                                             <h2>{team.name}</h2>
                                             <p>{team.memberCount} участников</p>
                                         </div>
-                                        <button className="navigate-button" onClick={() => navigate(`/teams/team-members/${team.id}`)}>Перейти</button>
+                                        <button className="navigate-button" onClick={() => navigate(RoutePaths.teamMembers + '/' + team.id.toString())}>Перейти</button>
                                     </div>
                                 ))}
                             </div>

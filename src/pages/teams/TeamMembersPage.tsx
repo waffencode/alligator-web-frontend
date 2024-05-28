@@ -8,30 +8,41 @@ import Sidebar from "../../widgets/SideBar/SideBar";
 import Content from "../../widgets/Content/Content";
 import { RoutePaths } from "../../shared/config/routes";
 import './TeamMembersPage.css';
-import { UserInfo } from '../../shared/api/IResponses';
+import {Team, TeamMember, TeamMembersResponse_TeamMember, UserInfo} from '../../shared/api/IResponses';
 
 const TeamMembersPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const id = useParams<{ id: string }>();
     const { api } = useContext(ApiContext);
     const navigate = useNavigate();
-    const [team, setTeam] = useState<any>(null);
-    const [members, setMembers] = useState<UserInfo[]>([]);
+    const [team, setTeam] = useState<Team | null>(null);
+    const [members, setMembers] = useState<TeamMember[]>([]);
     const [allUsers, setAllUsers] = useState<UserInfo[]>([]);
-    const [newMemberId, setNewMemberId] = useState<string>('');
+    const [newMemberId, setNewMemberId] = useState<number>();
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [teamMembersInfo, setTeamMembersInfo] = useState<TeamMembersResponse_TeamMember[]>([]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            api.team.getTeamById(id)
+            const pageId = Number(id.id);
+
+            api.team.getTeamById(pageId)
                 .then((team) => {
                     setTeam(team);
-                    setMembers(team.members);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch team details', err);
                     setError('Failed to load team details');
+                });
+
+            api.team.getTeamMembers(pageId)
+                .then((teamMembers) => {
+                    setMembers(teamMembers._embedded.teamMembers);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch team members', err);
+                    setError('Failed to load team members');
                 });
 
             api.user.getAllUsersInfoWithRoles()
@@ -41,6 +52,14 @@ const TeamMembersPage: React.FC = () => {
                 .catch((err: Error) => {
                     console.error('Failed to fetch users with roles', err);
                 });
+
+            api.team.getTeamMembersInfo(pageId)
+                .then((response: TeamMembersResponse_TeamMember[]) => {
+                    setTeamMembersInfo(response);
+                })
+                .catch((err: Error) => {
+                    console.error('Failed to fetch team members info', err);
+                });
         }
     }, [api.team, api.user, id]);
 
@@ -49,13 +68,22 @@ const TeamMembersPage: React.FC = () => {
         setError(null);
         setSuccessMessage(null);
 
-        api.team.addMemberToTeam(id, newMemberId)
-            .then(() => {
-                const newMember = allUsers.find(user => user.id === newMemberId);
+        const pageId = Number(id.id);
+        api.team.addMemberToTeam(pageId, newMemberId)
+            .then((response: TeamMember) => {
+                const newMember = response;
                 if (newMember) {
                     setMembers([...members, newMember]);
                     setSuccessMessage('Member added successfully!');
-                    setNewMemberId('');
+                    setNewMemberId(undefined);
+
+                    api.team.getTeamMembersInfo(pageId)
+                        .then((response: TeamMembersResponse_TeamMember[]) => {
+                            setTeamMembersInfo(response);
+                        })
+                        .catch((err: Error) => {
+                            console.error('Failed to fetch team members info', err);
+                        });
                 }
             })
             .catch((err) => {
@@ -64,11 +92,11 @@ const TeamMembersPage: React.FC = () => {
             });
     };
 
-    const handleRemoveMember = (memberId: string) => {
+    const handleRemoveMember = (memberId: number) => {
         setError(null);
         setSuccessMessage(null);
 
-        api.team.removeMemberFromTeam(id, memberId)
+        api.team.removeMemberFromTeam(memberId)
             .then(() => {
                 setMembers(members.filter(member => member.id !== memberId));
                 setSuccessMessage('Member removed successfully!');
@@ -105,8 +133,8 @@ const TeamMembersPage: React.FC = () => {
                         </div>
                         <div className="members-list">
                             {members.map(member => (
-                                <div key={member.id} className={`member-tile ${member.isTeamLead ? 'team-lead' : ''}`}>
-                                    <span>{member.fullName}</span>
+                                <div key={member.id} className={`member-tile ${team.team_lead_id === member.id ? 'team-lead' : ''}`}>
+                                    <span>{teamMembersInfo.find((teamMember) => teamMember.teamMemberId === member.id)?.userInfo.fullName}</span>
                                     <button onClick={() => handleRemoveMember(member.id)}>Удалить</button>
                                 </div>
                             ))}
@@ -120,11 +148,11 @@ const TeamMembersPage: React.FC = () => {
                                     <select
                                         id="newMember"
                                         value={newMemberId}
-                                        onChange={(e) => setNewMemberId(e.target.value)}
+                                        onChange={(e) => setNewMemberId(Number(e.target.value))}
                                         required
                                     >
                                         <option value="">Выберите участника</option>
-                                        {allUsers.filter(user => !members.some(member => member.id === user.id)).map(user => (
+                                        {allUsers.filter(user => !teamMembersInfo.some(member => member.userInfo.user.id === user.id)).map(user => (
                                             <option key={user.id} value={user.id}>
                                                 {user.fullName}
                                             </option>

@@ -220,14 +220,14 @@ interface TeamMemberLinks {
 // Интерфейс для элемента teamMember
 interface TeamMember {
     id: number;
-    name?: string;
+    //name?: string;
     state: string;
     _links: TeamMemberLinks;
 }
 
 // Интерфейс для _embedded части ответа
 interface EmbeddedTeamMembers {
-    teamMembers: Team[];
+    teamMembers: TeamMember[];
 }
 
 // Основной интерфейс для ответа от сервера
@@ -382,6 +382,7 @@ interface TeamMemberRole {
 
 // Основной интерфейс для представления участника команды с ролями
 interface TeamMembersResponse_TeamMember {
+    teamMemberId: number;
     userInfo: UserInfo_TeamMember;
     teamMemberRoles: TeamMemberRole[];
 }
