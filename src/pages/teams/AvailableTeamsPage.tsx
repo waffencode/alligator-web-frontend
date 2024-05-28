@@ -8,9 +8,10 @@ import Sidebar from "../../widgets/SideBar/SideBar";
 import Content from "../../widgets/Content/Content";
 import { RoutePaths } from "../../shared/config/routes";
 import { Team } from '../../shared/api/IResponses';
-import './AvaliableTeamsPage.css';
+import "./AvaliableTeamsPage.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Button from "../../widgets/Button/Button";
 
 const AvailableTeamsPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -46,14 +47,14 @@ const AvailableTeamsPage: React.FC = () => {
                                             <h2>{team.name}</h2>
                                             <p>{team.memberCount} участников</p>
                                         </div>
-                                        <button className="navigate-button" onClick={() => navigate(RoutePaths.teamMembers + '/' + team.id.toString())}>Перейти</button>
+                                        <Button className="button" onClick={() => navigate(RoutePaths.teamMembers + '/' + team.id.toString())}>Перейти</Button>
                                     </div>
                                 ))}
                             </div>
                             <div className="create-team-button-container">
-                                <button className="create-team-button" onClick={() => navigate(RoutePaths.createTeam)}>
+                                <Button className="button" onClick={() => navigate(RoutePaths.createTeam)}>
                                     Создать команду
-                                </button>
+                                </Button>
                             </div>
                         </div>
                     </div>

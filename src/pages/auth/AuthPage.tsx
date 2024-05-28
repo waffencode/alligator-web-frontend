@@ -1,19 +1,19 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import './AuthPage.css';
 import ApiContext from "../../features/api-context";
-import {AuthenticationContextData} from "../../shared/lib/authentication";
-import {useNavigate} from "react-router-dom";
-import {RoutePaths} from "../../shared/config/routes";
+import { AuthenticationContextData } from "../../shared/lib/authentication";
+import { useNavigate } from "react-router-dom";
+import { RoutePaths } from "../../shared/config/routes";
 
 const AuthPage: React.FC = () => {
-    const { api, setAuthentication, resetAuthentication } = useContext(ApiContext);
+    const { api, setAuthentication } = useContext(ApiContext);
     const navigate = useNavigate();
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [message, setMessage] = React.useState('');
 
-    const _fetchAuthenticationContextDataByToken = (token:string) => {
+    const _fetchAuthenticationContextDataByToken = (token: string) => {
         return fetch("http://localhost:8080/whoami", {
             method: "GET",
             mode: "cors",
@@ -38,44 +38,43 @@ const AuthPage: React.FC = () => {
         setMessage(''); // Сброс сообщения об ошибке перед отправкой
 
         try {
-          const tokenResponse = await api.auth.login(username, password);
-          const token = tokenResponse.toString();
+            const tokenResponse = await api.auth.login(username, password);
+            const token = tokenResponse.toString();
 
-          const authData = await _fetchAuthenticationContextDataByToken(token);
+            const authData = await _fetchAuthenticationContextDataByToken(token);
 
-          const authenticationContext = new AuthenticationContextData(
-              token,
-              authData?.username,
-              authData?.id,
-              authData?.roles
-          );
+            const authenticationContext = new AuthenticationContextData(
+                token,
+                authData?.username,
+                authData?.id,
+                authData?.roles
+            );
 
-          console.log(authenticationContext);
+            console.log(authenticationContext);
 
-          setAuthentication(authenticationContext);
+            setAuthentication(authenticationContext);
 
-          navigate(RoutePaths.profile);
-      } catch (error) {
-          if (error instanceof Error) {
-              const [status, errorMessage] = error.message.split(': ', 2);
-              if (status === '409') {
-                  setMessage('Неправильный email или пароль.');
-              } else {
-                  setMessage('Ошибка при аутентификации. Попробуйте еще раз.');
-                  setMessage(`Ошибка ${status}: ${errorMessage}`);
-              }
-          } else {
-              setMessage('Неизвестная ошибка. Попробуйте еще раз.');
-          }
-      }
+            navigate(RoutePaths.profile);
+        } catch (error) {
+            if (error instanceof Error) {
+                const [status, errorMessage] = error.message.split(': ', 2);
+                if (status === '409') {
+                    setMessage('Неправильный email или пароль.');
+                } else {
+                    setMessage('Ошибка при аутентификации. Попробуйте еще раз.');
+                    setMessage(`Ошибка ${status}: ${errorMessage}`);
+                }
+            } else {
+                setMessage('Неизвестная ошибка. Попробуйте еще раз.');
+            }
+        }
     };
-
 
     return (
         <div className="container">
             <div className="form-container">
                 <h2>Войти</h2>
-                <label className="error-message">{message}</label>
+                {message && <div className="error-message">{message}</div>}
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">
                         <label htmlFor="username">Email</label><br />
