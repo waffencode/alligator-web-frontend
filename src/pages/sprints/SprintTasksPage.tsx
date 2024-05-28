@@ -49,6 +49,7 @@ const SprintTasksPage: React.FC = () => {
             let spCurTemp = 0;
             for (const task of tasks) {
                 spCurTemp+=task.sp;
+                console.log(spCurTemp);
             }
             setSpCur(spCurTemp);
             
@@ -56,6 +57,14 @@ const SprintTasksPage: React.FC = () => {
             setError('No authentication token found');
         }
     }, [api.tasks]);
+
+    useEffect(() => {
+        let spCurTemp = 0;
+        for (const task of tasks) {
+            spCurTemp += task.sp;
+        }
+        setSpCur(spCurTemp);
+    }, [tasks]);
 
     const handleEditClick = (task: SprintTask) => {
         if (editingTaskId === task.id) {
