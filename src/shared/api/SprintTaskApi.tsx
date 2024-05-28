@@ -1,23 +1,31 @@
-import { UserApi } from "./UserApi";
-import { AuthenticationContextData } from "../lib/authentication";
-import { BaseApi } from "./BaseApi";
-import ApiContext from "../../features/api-context";
-import { DeadlineResponse, SprintTask, SprintTasksResponse, Task, TeamMember, UserResponse, UserInfoResponse, AssignedTasksResponse, TasksResponse } from "./IResponses";
-import { format, parse, parseISO } from 'date-fns';
+import {AuthenticationContextData} from "../lib/authentication";
+import {BaseApi} from "./BaseApi";
+import {
+    AssignedTasksResponse,
+    DeadlineResponse,
+    SprintTask,
+    SprintTasksResponse,
+    Task,
+    TeamMember,
+    UserInfoResponse,
+    UserResponse
+} from "./IResponses";
+import {TaskApi} from "./TaskApi";
 
 export class SprintTaskApi extends BaseApi {
-    
+    private taskApi: TaskApi;
     private authenticationContext: AuthenticationContextData;
 
-    constructor(authenticationContext: AuthenticationContextData) {
+    constructor(authenticationContext: AuthenticationContextData, taskApi: TaskApi) {
         super();
         this.authenticationContext = authenticationContext;
+        this.taskApi = taskApi;
     }
 
     public async assignTasks(sprintId: number) : Promise<AssignedTasksResponse[]> {
         const href = this.getPath() + '/sprints/' + sprintId.toString();
 
-        const assignedTasks = await this.fetchJson<AssignedTasksResponse[]>(`/assign`, {
+        return await this.fetchJson<AssignedTasksResponse[]>(`/assign`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
@@ -25,8 +33,6 @@ export class SprintTaskApi extends BaseApi {
             },
             body: JSON.stringify({href})
         });
-
-        return assignedTasks;
     }
 
     public async getSprintTasksWithAllInfoBySprintId(sprintId: number): Promise<SprintTask[]> {
@@ -123,21 +129,12 @@ export class SprintTaskApi extends BaseApi {
         return (await resp)._embedded.sprintTasks;
     }
 
-    
     public async getProposedTasks(): Promise<Task[]> {
-        // получаем все задачи из бэклога
-        const resp = await this.fetchJson<TasksResponse>(`/tasks`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        const tasks = resp._embedded.tasks;
-        const filteredTasks = [];
+        const tasks = await this.taskApi.getTasks();
+        const filteredTasks: Task[] = [];
         
         for (let task of tasks) {
-            const sprintTaskResp = await this.fetchJson<SprintTasksResponse>(`/sprintTasks?taskId=` + task.id, {
+            const sprintTaskResp = await this.fetchJson<SprintTasksResponse>(`/sprintTasks?taskId=` + task.id.toString(), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
@@ -152,6 +149,4 @@ export class SprintTaskApi extends BaseApi {
 
         return filteredTasks;
     }
-
-
 }

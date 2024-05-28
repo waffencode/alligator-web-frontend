@@ -1,8 +1,7 @@
-import { UserApi } from "./UserApi";
 import { AuthenticationContextData } from "../lib/authentication";
 import { BaseApi } from "./BaseApi";
 import { DeadlineResponse, Task, TasksResponse } from "./IResponses";
-import { format, parse, parseISO } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 export class TaskApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -185,6 +184,4 @@ export class TaskApi extends BaseApi {
             }
         });;
     }
-
-
 }

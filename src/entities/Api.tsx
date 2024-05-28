@@ -31,7 +31,7 @@ class Api {
         this.sprint = new SprintApi(this._authenticationContext);
         this.tasks = new TaskApi(this._authenticationContext);
         this.team = new TeamApi(this._authenticationContext);
-        this.sprintTask = new SprintTaskApi(this._authenticationContext);
+        this.sprintTask = new SprintTaskApi(this._authenticationContext, this.tasks);
     }
 
     isLoggedIn(): boolean {
