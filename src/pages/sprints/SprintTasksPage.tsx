@@ -19,7 +19,7 @@ const SprintTasksPage: React.FC = () => {
     const [spCur, setSpCur] = useState<number>(0);
     const [spLimit, setSpLimit] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
-    const [tasks, setTasks] = useState<SprintTask[]>([]); // SprintTask[]
+    const [sprintTasksList, setSprintTasksList] = useState<SprintTask[]>([]); // SprintTask[]
     const [selectedTask, setSelectedTask] = useState<SprintTask | null>(null);
     const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
     const [editedTask, setEditedTask] = useState<SprintTask | null>(null);
@@ -29,42 +29,41 @@ const SprintTasksPage: React.FC = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
+            console.log('useEffect call with sprintId: ', sprintId);
+
             api.sprintTask.getSprintTasksWithAllInfoBySprintId(sprintId)
                 .then((tasks) => {
-                    setTasks(tasks);
+                    setSprintTasksList(tasks);
                 })
                 .catch((err) => {
-                    console.error('Failed to fetch sprint tasks', err);
-                    setError('Failed to load sprint tasks');
+                    console.error('Failed to load sprint tasks', err);
+                    setError('Ошибка при загрузке задач!');
                 });
+
             api.sprint.getSprintBySprintId(sprintId)
                 .then((sprint) => {
                     setSpLimit(sprint.sp);
                 })
                 .catch((err) => {
-                    console.error('Failed to fetch sprint tasks', err);
-                    setError('Failed to load sprint tasks');
+                    console.error('Failed to fetch sprint info', err);
+                    setError('Ошибка при получении информации о спринте!');
                 });
-
-            let spCurTemp = 0;
-            for (const task of tasks) {
-                spCurTemp+=task.sp;
-                console.log(spCurTemp);
-            }
-            setSpCur(spCurTemp);
-            
         } else {
             setError('No authentication token found');
         }
-    }, [api.tasks]);
+    }, [api.tasks, api.sprintTask]);
 
     useEffect(() => {
-        let spCurTemp = 0;
-        for (const task of tasks) {
-            spCurTemp += task.sp;
+        let currentSpCount = 0;
+
+        for (const task of sprintTasksList) {
+            currentSpCount += task.sp;
+            console.log("currentSpCount: ", currentSpCount);
         }
-        setSpCur(spCurTemp);
-    }, [tasks]);
+
+        setSpCur(currentSpCount);
+
+    }, [sprintTasksList]);
 
     const handleEditClick = (task: SprintTask) => {
         if (editingTaskId === task.id) {
@@ -73,7 +72,7 @@ const SprintTasksPage: React.FC = () => {
                 if (token) {
                     //api.tasks.updateTask(editedTask)
                     //    .then(() => {
-                            setTasks(tasks.map(t => t.id === editedTask.id ? editedTask : t));
+                            setSprintTasksList(sprintTasksList.map(t => t.id === editedTask.id ? editedTask : t));
                             setEditingTaskId(null);
                             setEditedTask(null);
                     //    })
@@ -105,6 +104,17 @@ const SprintTasksPage: React.FC = () => {
         setSelectedTask(task);
     };
 
+    const handleAssignationCall = ()  =>  {
+        api.sprintTask.assignTasks(sprintId)
+            .then((assignedTasks) => {
+                console.log('Task assignation completed with ' + assignedTasks.length + ' entries.');
+            })
+            .catch((err) => {
+                console.error('Failed to assign tasks', err);
+                setError('Ошибка при назначении задач!');
+            });
+    }
+
     const getValue = (value: string | undefined) => value !== undefined ? value : '';
 
     const loadTeamMembers = () => {        
@@ -128,7 +138,7 @@ const SprintTasksPage: React.FC = () => {
                     {error && <div className="error-message">{error}</div>}
                     <div className="profile-info">
                         <h2>SP: {spCur}/{spLimit}</h2>
-                        <Button>Автоматически назначить задачи</Button>
+                        <Button onClick={handleAssignationCall}>Автоматически назначить задачи</Button>
                         <div className="sprints-grid">
                             <div className="sprints-grid-header">
                                 <div>Убрать в бэклог</div>
@@ -144,35 +154,35 @@ const SprintTasksPage: React.FC = () => {
                                 <div>Ответственный</div>
                                 <div>Статус</div>
                            </div>
-                            {tasks.map((task, index) => (
+                            {sprintTasksList.map((sprintTask, index) => (
                                 <div key={index} className="sprint-tile">
                                     <div className="edit_button_container">
                                         <button 
                                             className="edit_button"
-                                            onClick={() => handleEditClick(task)}
+                                            onClick={() => handleEditClick(sprintTask)}
                                         >✕</button>
                                     </div>
                                     <div className="edit_button_container">
                                         
                                         <button
                                             className="edit_button"
-                                            onClick={() => handleEditClick(task)}
+                                            onClick={() => handleEditClick(sprintTask)}
                                         >
-                                            {editingTaskId === task.id ? '✓' : '✎'}
+                                            {editingTaskId === sprintTask.id ? '✓' : '✎'}
                                         </button>
                                     </div>
-                                    {editingTaskId === task.id ? (
+                                    {editingTaskId === sprintTask.id ? (
                                         <>
-                                            <div>{task.headline}</div>
-                                            {task.description ? <div onClick={() => handleDescriptionClick(task)} className="task_description">
-                                                {task.description.substring(0, 20)}...
+                                            <div>{sprintTask.headline}</div>
+                                            {sprintTask.description ? <div onClick={() => handleDescriptionClick(sprintTask)} className="task_description">
+                                                {sprintTask.description.substring(0, 20)}...
                                             </div> : ''}
-                                            <div>{task.priority}</div>
-                                            <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
-                                            <div>{task.deadline_type ? task.deadline_type : ''}</div>
+                                            <div>{sprintTask.priority}</div>
+                                            <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
+                                            <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
                                             <div></div>
                                             <div></div>
-                                            <div>{task.sp}</div>
+                                            <div>{sprintTask.sp}</div>
                                             <select
                                                 value={editedTask?.team_member_id || 0}
                                                 onChange={(e) => handleTaskChange('team_member_id', parseInt(e.target.value))}
@@ -199,18 +209,18 @@ const SprintTasksPage: React.FC = () => {
                                         </>
                                     ) : (
                                         <>
-                                            <div>{task.headline}</div>
-                                            {task.description ? <div onClick={() => handleDescriptionClick(task)} className="task_description">
-                                                {task.description.substring(0, 20)}...
+                                            <div>{sprintTask.headline}</div>
+                                            {sprintTask.description ? <div onClick={() => handleDescriptionClick(sprintTask)} className="task_description">
+                                                {sprintTask.description.substring(0, 20)}...
                                             </div> : ''}
-                                            <div>{task.priority}</div>
-                                            <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
-                                            <div>{task.deadline_type ? task.deadline_type : ''}</div>
+                                            <div>{sprintTask.priority}</div>
+                                            <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
+                                            <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
                                             <div></div>
                                             <div></div>
-                                            <div>{task.sp}</div>
-                                            <div>{task.team_member_fullName}</div>
-                                            <div>{task.state}</div>
+                                            <div>{sprintTask.sp}</div>
+                                            <div>{sprintTask.team_member_fullName ? sprintTask.team_member_fullName : 'Не назначен'}</div>
+                                            <div>{sprintTask.state}</div>
                                         </>
                                     )}
                                 </div>
