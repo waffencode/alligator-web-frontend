@@ -3,7 +3,7 @@ import {BaseApi} from "./BaseApi";
 import {
     AssignedTasksResponse,
     DeadlineResponse,
-    SprintTask,
+    SprintTask, SprintTaskDto,
     SprintTasksResponse,
     Task,
     TeamMember,
@@ -32,6 +32,21 @@ export class SprintTaskApi extends BaseApi {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({href})
+        });
+    }
+
+    public async addSprintTask(sprintTaskDto: SprintTaskDto): Promise<SprintTask>  {
+        const sp = sprintTaskDto.sp;
+        const task = this.getPath() + '/tasks/' + sprintTaskDto.task_id.toString();
+        const sprint = this.getPath() + '/sprints/' + sprintTaskDto.sprint_id;
+
+        return await this.fetchJson<SprintTask>(`/sprintTasks`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({sp, task, sprint})
         });
     }
 

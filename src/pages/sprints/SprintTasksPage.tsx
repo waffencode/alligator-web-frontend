@@ -156,20 +156,23 @@ const SprintTasksPage: React.FC = () => {
 
     const handleAddProposedTask = (e: React.FormEvent) => {
         e.preventDefault();
+
         if (selectedProposedTaskId) {
             const selectedTask = proposedTasks.find(task => task.id === selectedProposedTaskId);
             if (selectedTask) {
                 const token = localStorage.getItem('token');
                 if (token) {
-                   // api.sprintTask.addTaskToSprint(selectedProposedTaskId, sprintId)
-                    //    .then((newTask) => {
+                    api.sprintTask.addSprintTask({sp: 0, sprint_id: sprintId, task_id: selectedProposedTaskId})
+                        .then((newTask) => {
                             setSprintTasksList([...sprintTasksList, newTask]);
                             setSelectedProposedTaskId(null);
-                   //     })
-                   //     .catch((err) => {
-                   //         console.error('Failed to add proposed task', err);
-                    //        setError('Failed to add proposed task');
-                    //    });
+                            loadSprintTasks();
+                            console.log(`Task added to sprint: '${newTask._links?.self.href}'`);
+                        })
+                        .catch((err) => {
+                            console.error('Failed to add proposed task', err);
+                            setError('Ошибка при добавлении задачи');
+                        });
                 }
             }
         }
