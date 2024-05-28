@@ -76,6 +76,14 @@ const TeamMembersPage: React.FC = () => {
                     setMembers([...members, newMember]);
                     setSuccessMessage('Member added successfully!');
                     setNewMemberId(undefined);
+
+                    api.team.getTeamMembersInfo(pageId)
+                        .then((response: TeamMembersResponse_TeamMember[]) => {
+                            setTeamMembersInfo(response);
+                        })
+                        .catch((err: Error) => {
+                            console.error('Failed to fetch team members info', err);
+                        });
                 }
             })
             .catch((err) => {
@@ -144,7 +152,7 @@ const TeamMembersPage: React.FC = () => {
                                         required
                                     >
                                         <option value="">Выберите участника</option>
-                                        {allUsers.filter(user => !members.some(member => member.id === user.id)).map(user => (
+                                        {allUsers.filter(user => !teamMembersInfo.some(member => member.userInfo.user.id === user.id)).map(user => (
                                             <option key={user.id} value={user.id}>
                                                 {user.fullName}
                                             </option>
