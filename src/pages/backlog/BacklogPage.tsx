@@ -383,10 +383,12 @@ const BacklogPage: React.FC = () => {
                                     />
                                     <input
                                         type="text"
-                                        value={getValue(editedTask?.description)}
-                                        onChange={(e) => handleTaskChange('description', e.target.value.slice(0, 250))}
-                                        maxLength={250}
+                                        value={getValue(newTask.description)}
+                                        onChange={(e) => handleNewTaskChange('description', e.target.value)}
+                                        
                                     />
+
+
 
                                     <select
                                         value={(getValue(newTask.priority) ? getValue(newTask.priority) : "A")}
