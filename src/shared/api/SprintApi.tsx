@@ -1,6 +1,6 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Sprint, SprintsResponse, Team, TeamMember, TeamMembersResponse, UserInfo, UserInfoResponse, UserProfile} from "./IResponses";
+import {Sprint, SprintsResponse, Team, TeamMember, TeamMembersResponse, UserInfo, UserInfoResponse, UserProfile, SprintTasksResponse, SprintTask} from "./IResponses";
 
 export class SprintApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -209,6 +209,42 @@ export class SprintApi extends BaseApi {
         const sprints = sprintsResp;
         
         return sprints;
+    }
+
+    public async deleteSprint(sprintId: number): Promise<Sprint> {
+        // удаление задач из бэклога спринта
+        const sprintTasks = await this.getSprintTasksBySprintId(sprintId);
+        for (const sprintTask of sprintTasks) {
+            const sprintTaskResp = await this.fetchJson<Sprint>(`/sprintTasks/`+sprintTask.id, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+
+        // удаление спринта
+        const sprintResp = await this.fetchJson<Sprint>(`/sprints/`+sprintId, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return sprintResp;
+    }
+
+    public async getSprintTasksBySprintId(sprintId: number): Promise<SprintTask[]> {
+        const resp = this.fetchJson<SprintTasksResponse>(`/sprintTasks?sprintId=`+sprintId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return (await resp)._embedded.sprintTasks;
     }
     
 

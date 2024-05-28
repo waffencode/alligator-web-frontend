@@ -179,6 +179,24 @@ const SprintsPage: React.FC = () => {
         return 'Произошла ошибка';
     };
 
+    const handleDeleteSprint = (sprintId: number) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            api.sprint.deleteSprint(sprintId)
+                .then(() => {
+                    setSprints(sprints.filter(sprint => sprint.id !== sprintId));
+                    if (editingSprintId === sprintId) {
+                        setEditingSprintId(null);
+                        setEditedSprint(null);
+                    }
+                })
+                .catch((err) => {
+                    console.error('Failed to delete sprint', err);
+                    setError('Failed to delete sprint');
+                });
+        }
+    };
+
     return (
         <Layout
             topLeft={<BrandLogo />}
@@ -253,7 +271,7 @@ const SprintsPage: React.FC = () => {
                                                 <option value="STOPPED">STOPPED</option>
                                                 <option value="ENDED">ENDED</option>
                                             </select>
-                                            <Button>Удалить</Button>
+                                            <button onClick={() => handleDeleteSprint(sprint.id)}>Удалить спринт</button>
                                         </>
                                     ) : (
                                         <>
