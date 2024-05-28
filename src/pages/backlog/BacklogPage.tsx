@@ -107,7 +107,6 @@ const BacklogPage: React.FC = () => {
             setEditedTask(task);
         }
     };
-    
 
     const handleTaskChange = (field: keyof Task, value: string | number) => {
         if (editedTask) {
@@ -146,13 +145,13 @@ const BacklogPage: React.FC = () => {
                         id: 0,
                         headline: '',
                         description: '',
-                        priority: '',
-                        deadline_time: '',
-                        deadline_type: '',
-                        state: '',
+                        priority: 'A', // Сбрасываем параметры newTask к исходным значениям
+                        deadline_time: format(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'), // Сбрасываем параметры newTask к исходным значениям
+                        deadline_type: 'SOFT', // Сбрасываем параметры newTask к исходным значениям
+                        state: 'TODO', // Сбрасываем параметры newTask к исходным значениям
                     });
                     // Обновляем статус задачи на русский язык
-                    switch (createdTask.state) {
+                    switch (createdTask?.state) {
                         case "NEED_REWORK":
                             createdTask.state = "Требуется доработка";
                             break;
@@ -177,6 +176,7 @@ const BacklogPage: React.FC = () => {
                         default:
                             break;
                     }
+                    
                 })
                 .catch((err) => {
                     console.error('Failed to create task', err);
@@ -184,7 +184,6 @@ const BacklogPage: React.FC = () => {
                 });
         }
     };
-    
 
     const handleTaskSelect = (taskId: number) => {
         setSelectedTaskIds((prevSelectedTaskIds) =>
@@ -385,12 +384,11 @@ const BacklogPage: React.FC = () => {
                                 </div>
                             )}
                             <Button className={`${styles.smallButton} button`} onClick={handleAddNewTask}>
-                            Добавить задачу
-                        </Button>
-                        <Button className={`${styles.smallButton} button`} onClick={handleDeleteSelectedTasks}>
-                            Удалить выбранные задачи
-                        </Button>
-
+                                Добавить задачу
+                            </Button>
+                            <Button className={`${styles.smallButton} button`} onClick={handleDeleteSelectedTasks}>
+                                Удалить выбранные задачи
+                            </Button>
                         </div>
                         {selectedTask && (
                             <div className="modal">
@@ -409,4 +407,5 @@ const BacklogPage: React.FC = () => {
 };
 
 export default BacklogPage;
+
 
