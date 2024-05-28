@@ -65,7 +65,7 @@ const UsersPage: React.FC = () => {
                     const newRoles = getUpdatedUserRoles();
                     console.log(oldRoles);
                     console.log(newRoles);
-                    // api.user.updateUser(user, oldRoles, newRoles); // удаляем старые из таблицы, добавляем новые
+                    api.user.updateUser(user, oldRoles, newRoles); // удаляем старые из таблицы, добавляем новые
                     setUsers(users.map(t => t.id === editedUser.id ? editedUser : t));
                     setEditingUserId(null);
                     setEditedUser(null);

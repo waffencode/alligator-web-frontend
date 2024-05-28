@@ -132,6 +132,7 @@ interface UserInfoLinks {
 // Интерфейс для элемента userInfo
 interface UserInfo {
     id: number;
+    //user_id?: number;
     fullName: string;
     email: string;
     phone_number: string | null;

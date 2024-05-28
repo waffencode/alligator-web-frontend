@@ -23,6 +23,7 @@ export class UserApi extends BaseApi {
     // получение информации обо всех пользователях
     public async getAllUsersInfoWithRoles(): Promise<UserInfoWithRolesInterfaces[]> {
         // получаем инфу о пользователе без ролей (id, fullName, email, phone_number, _links)
+        // TODO: получение истинного id пользователя (user_details)
         const usersResp = this.userInfoes();
         const users = (await usersResp)._embedded.userInfoes;
 
@@ -122,4 +123,53 @@ export class UserApi extends BaseApi {
         return resp._embedded.roles;
 
     }
+
+    public async updateUser(user: UserInfoWithRolesInterfaces, oldRoles: Role[], newRoles: Role[]): Promise<UserProfile> {
+        // TODO: устанавливаем данные пользователя
+
+        // удаляем старые роли по id в таблице user_roles
+        for (const oldRole of oldRoles) {
+            // если в новых ролях нет старой роли
+            if (!newRoles.some(newRole => newRole.id === oldRole.id)) {
+                this.deleteUserRole(oldRole.id);
+            }
+        }
+
+        // добавляем новые роли в таблицу user_roles
+        for (const newRole of newRoles) {
+            // если в старых ролях нет новой роли
+            if (!oldRoles.some(oldRole => oldRole.id === newRole.id)) {
+                this.addUserRole(newRole.id, user.id);
+            }
+        }
+
+        return this.getUserInfoesByUserId(user.id);
+    }
+
+    public async deleteUserRole(userRoleId: number): Promise<Role> {
+        return this.fetchJson<Role>(`/userRoles/`+userRoleId, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+        });
+    }
+
+    public async addUserRole(userRoleId: number, userId: number): Promise<Role> {
+        const role = this.getPath()+"/roles/"+userRoleId;
+        const user = this.getPath()+"/users/"+userId;
+        console.log(role);
+        console.log(user);
+        return this.fetchJson<Role>(`/userRoles`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({user, role})
+        });
+    }
+    
+
 }
