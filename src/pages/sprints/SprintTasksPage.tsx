@@ -16,9 +16,9 @@ import {useParams} from "react-router-dom";
 const SprintTasksPage: React.FC = () => {
     const {api} = useContext(ApiContext);
     const sprintId = Number(useParams<{ id: string }>().id);
-    const [error, setError] = useState<string | null>(null);
     const [spCur, setSpCur] = useState<number>(0);
     const [spLimit, setSpLimit] = useState<number>(0);
+    const [error, setError] = useState<string | null>(null);
     const [tasks, setTasks] = useState<SprintTask[]>([]); // SprintTask[]
     const [selectedTask, setSelectedTask] = useState<SprintTask | null>(null);
     const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
@@ -34,9 +34,24 @@ const SprintTasksPage: React.FC = () => {
                     setTasks(tasks);
                 })
                 .catch((err) => {
-                    console.error('Failed to fetch tasks', err);
-                    setError('Failed to load tasks');
+                    console.error('Failed to fetch sprint tasks', err);
+                    setError('Failed to load sprint tasks');
                 });
+            api.sprint.getSprintBySprintId(sprintId)
+                .then((sprint) => {
+                    setSpLimit(sprint.sp);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch sprint tasks', err);
+                    setError('Failed to load sprint tasks');
+                });
+
+            let spCurTemp = 0;
+            for (const task of tasks) {
+                spCurTemp+=task.sp;
+            }
+            setSpCur(spCurTemp);
+            
         } else {
             setError('No authentication token found');
         }

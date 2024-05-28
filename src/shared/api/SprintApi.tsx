@@ -70,6 +70,16 @@ export class SprintApi extends BaseApi {
         return sprints;
     }
 
+    public async getSprintBySprintId(sprintId: number): Promise<Sprint> {
+        return this.fetchJson<Sprint>(`/sprints/`+sprintId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });;
+    }
+
     public async getTeamBySprintId(sprintId: number): Promise<Team> {
         return this.fetchJson<Team>(`/sprints/`+sprintId+`/team`, {
             method: 'GET',
@@ -77,7 +87,7 @@ export class SprintApi extends BaseApi {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             }
-        });;
+        });
     }
 
     public async getTeamMemberBySprintId(sprintId: number): Promise<TeamMember> {
