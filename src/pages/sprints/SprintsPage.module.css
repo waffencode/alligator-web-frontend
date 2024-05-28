@@ -1,0 +1,185 @@
+.profile_page {
+  display: flex;
+}
+
+
+
+.profile_content h1 {
+  margin-bottom: 1rem;
+}
+
+
+/* Dropdown Menu Styles */
+.selectDropdown {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  appearance: none; /* Removes the default arrow in some browsers */
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.selectDropdown:hover {
+  border-color: #888;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.selectDropdown:focus {
+  outline: none;
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.smallButton {
+  font-size: 12px; /* Adjust font size */
+  padding: 5px 10px; /* Adjust padding */
+}
+
+.sprints_grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 10px; /* Отступ между блоками */
+}
+
+
+.sprints_grid_header {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  background-color: #ffffff; /* Цвет фона блока */
+  font-weight: bold; /* Жирный текст */
+  border-radius: 8px; /* Закругление углов */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
+  padding: 10px; /* Внутренний отступ */
+  gap: 0px; /* Увеличиваем расстояние между элементами */
+  text-align: center; /* Центрируем текст */
+}
+
+.sprint_tile {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr); /* Так же, как и для основной сетки */
+  background-color: #ffffff; /* Цвет фона блока */
+  border-radius: 8px; /* Закругление углов */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
+  padding: 10px; /* Внутренний отступ */
+  gap: 0px; /* Увеличиваем расстояние между элементами */
+  cursor: default; /* Изменение курсора при наведении */
+  align-items: center; /* Вертикальное выравнивание по центру */
+  text-align: center; /* Центрирование текста */
+}
+
+.sprint_tile:hover {
+  background-color: #f5f5f5; /* Изменение цвета фона при наведении */
+}
+
+.sprint_tile > div {
+  white-space: nowrap; /* Запрещаем перенос текста */
+  overflow: hidden; /* Обрезаем переполняющий текст */
+  text-overflow: ellipsis; /* Добавляем многоточие для переполняющего текста */
+  display: flex; /* Используем Flexbox */
+  align-items: center; /* Вертикальное выравнивание по центру */
+  justify-content: center; /* Горизонтальное выравнивание по центру */
+}
+
+.task_description {
+  cursor: pointer; /* Указатель при наведении на описание */
+  text-decoration: underline; /* Подчёркивание для описания */
+}
+
+.task_description:hover {
+  color: #6cc24a; /* Изменение цвета текста при наведении */
+}
+
+.edit_button_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit_button {
+  background: none; /* Убираем фон */
+  border: none; /* Убираем границу */
+  cursor: pointer; /* Курсор при наведении */
+  font-size: 1.2rem; /* Размер шрифта */
+  padding: 0; /* Убираем отступы */
+  margin-right: 10px; /* Отступ справа */
+}
+
+
+/* Styles for Modal */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Fixed position to overlay over the entire screen */
+  z-index: 1000; /* High z-index to ensure it appears on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+}
+
+.modal_content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  position: relative; /* Ensure the close button is positioned relative to the content */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+}
+.task_description_expanded {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.close_button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #999;
+}
+.task_description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2; /* Ограничиваем количество строк до 2 */
+}
+.task_description {
+  max-width: 100%;
+  display: inline-block;
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* Для поддержки старых версий браузеров */
+  max-width: 100%;
+  white-space: pre-line;
+  width: 100%;
+  max-height: 2.6em; /* Переход на вторую строку после 2.6 строк */
+  text-overflow: ellipsis; /* Добавление многоточия, если текст обрезается */
+}
+

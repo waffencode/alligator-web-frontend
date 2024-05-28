@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './SprintsPage.css';
+import styles from './SprintsPage.module.css';
 import { Sprint, Team, UserInfo_TeamMember } from '../../shared/api/IResponses';
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
@@ -186,10 +186,10 @@ const SprintsPage: React.FC = () => {
             bottomLeft={<Sidebar currentPageURL={RoutePaths.sprints} />}
             bottomRight={
                 <Content>
-                    {error && <div className="error-message">{error}</div>}
-                    <div className="profile-info">
-                        <div className="sprints-grid">
-                            <div className="sprints-grid-header">
+                    {error && <div className="error_message">{error}</div>}
+                    <div className="profile_info">
+                        <div className={styles.sprints_grid}>
+                            <div className={styles.sprints_grid_header}>
                                 <div>Редактировать</div>
                                 <div>Название</div>
                                 <div>Команда</div>
@@ -201,10 +201,10 @@ const SprintsPage: React.FC = () => {
                                 <div>Задачи</div>
                             </div>
                             {sprints.map((sprint, index) => (
-                                <div key={index} className="sprint-tile">
-                                    <div className="edit_button_container">
+                                <div key={index} className={styles.sprint_tile}>
+                                    <div className={styles.edit_button_container}>
                                         <button
-                                            className="edit_button"
+                                            className={styles.edit_button}
                                             onClick={() => handleEditClick(sprint)}
                                         >
                                             {editingSprintId === sprint.id ? '✓' : '✎'}
@@ -272,8 +272,8 @@ const SprintsPage: React.FC = () => {
                                 </div>
                             ))}
                             {isAddingNewSprint && (
-                                <div className="sprint-tile">
-                                    <div className="edit_button_container">
+                                <div className={styles.sprint_tile}>
+                                    <div className={styles.edit_button_container}>
                                         <button
                                             className="edit_button"
                                             onClick={handleSaveNewSprint}
