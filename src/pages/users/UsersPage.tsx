@@ -61,7 +61,11 @@ const UsersPage: React.FC = () => {
             if (editedUser) {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    // updateUser
+                    const oldRoles = user.roles;
+                    const newRoles = getUpdatedUserRoles();
+                    console.log(oldRoles);
+                    console.log(newRoles);
+                    // api.user.updateUser(user, oldRoles, newRoles); // удаляем старые из таблицы, добавляем новые
                     setUsers(users.map(t => t.id === editedUser.id ? editedUser : t));
                     setEditingUserId(null);
                     setEditedUser(null);
@@ -75,18 +79,18 @@ const UsersPage: React.FC = () => {
                 const foundRole = user.roles.find(userRole => userRole.role_id === role.id);
                 return foundRole ? { ...role, selected: true } : { ...role, selected: false };
             });
-            setEditedRoles(markedRoles);
-            console.log(markedRoles); // если у пользователя есть роль, то она помечена
+            setEditedRoles(markedRoles); // если у пользователя есть роль, то она помечена
         }
     };
 
+    const getUpdatedUserRoles = () => {
+        return editedRoles.filter(role => role.selected);
+    };
+
     const handleRoleEdit = (roleId: number) => {
-        console.log(roleId);
-        console.log(editedRoles);
         const updatedRoles = editedRoles.map(role => // editedRoles -- список всех ролей (тек. пользователя) с выбором 
             role.id === roleId ? { ...role, selected: !role.selected } : role
         );
-        console.log(updatedRoles);
         setEditedRoles(updatedRoles);
     };
 
