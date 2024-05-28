@@ -39,6 +39,7 @@ const SprintTasksPage: React.FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+
         if (token) {
             console.log('useEffect call with sprintId: ', sprintId);
             loadSprintTasks();
@@ -51,30 +52,24 @@ const SprintTasksPage: React.FC = () => {
                     console.error('Failed to fetch sprint info', err);
                     setError('Ошибка при получении информации о спринте!');
                 });
-            api.sprintTask.getProposedTasks() // задачи, доступные для добавления в спринт
+
+            // TODO: Load this only when adding a new sprint task.
+            api.sprintTask.getProposedTasks()
                 .then((proposedTasks) => {
                     setProposedTasks(proposedTasks);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch proposed tasks', err);
-                    setError('Failed to load proposed tasks');
+                    setError('Ошибка при загрузке бэклога!');
                 });
         } else {
             setError('No authentication token found');
         }
     }, [api.tasks, api.sprintTask]);
 
-
     useEffect(() => {
-        let currentSpCount = 0;
-
-        for (const task of sprintTasksList) {
-            currentSpCount += task.sp;
-            console.log("currentSpCount: ", currentSpCount);
-        }
-
-        setSpCur(currentSpCount);
-
+        // Count the total complexity of tasks in the sprintTasksList
+        setSpCur(sprintTasksList.reduce((totalComplexity, sprintTask) => totalComplexity + sprintTask.sp, 0));
     }, [sprintTasksList]);
 
     const loadSprintTasks = ()  => {
@@ -150,7 +145,7 @@ const SprintTasksPage: React.FC = () => {
             })
             .catch((err) => {
                 console.error('Failed to load team members', err);
-                setError('Failed to load team members');
+                setError('Ошибка при загрузке списка участников команды!');
             });
     };
 

@@ -144,6 +144,9 @@ export class SprintTaskApi extends BaseApi {
         return (await resp)._embedded.sprintTasks;
     }
 
+    /**
+     * Get tasks available for adding to the sprint.
+     */
     public async getProposedTasks(): Promise<Task[]> {
         const tasks = await this.taskApi.getTasks();
         const filteredTasks: Task[] = [];
