@@ -271,7 +271,9 @@ const SprintTasksPage: React.FC = () => {
                         <div>
                             <form onSubmit={handleAddProposedTask}>
                                 <div className="form-group">
-                                    <label htmlFor="proposedTask">Добавить задачу</label>
+                                    <label htmlFor="proposedTask">
+                                        <h3>Добавить задачу</h3>
+                                    </label>
                                     <select
                                         id="proposedTask"
                                         value={selectedProposedTaskId || ''}
@@ -279,7 +281,7 @@ const SprintTasksPage: React.FC = () => {
                                         onChange={(e) => setSelectedProposedTaskId(Number(e.target.value))}
                                         required
                                     >
-                                        <option value="">Выберите задачу</option>
+                                        <option value="">Выберите задачу...</option>
                                         {proposedTasks.map(task => (
                                             <option key={task.id} value={task.id}>
                                                 {task.headline}
