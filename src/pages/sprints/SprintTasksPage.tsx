@@ -52,16 +52,6 @@ const SprintTasksPage: React.FC = () => {
                     console.error('Failed to fetch sprint info', err);
                     setError('Ошибка при получении информации о спринте!');
                 });
-
-            // TODO: Load this only when adding a new sprint task.
-            api.sprintTask.getProposedTasks()
-                .then((proposedTasks) => {
-                    setProposedTasks(proposedTasks);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch proposed tasks', err);
-                    setError('Ошибка при загрузке бэклога!');
-                });
         } else {
             setError('No authentication token found');
         }
@@ -149,6 +139,17 @@ const SprintTasksPage: React.FC = () => {
             });
     };
 
+    const loadProposedTasks = () => {
+        api.sprintTask.getProposedTasks()
+            .then((proposedTasks) => {
+                setProposedTasks(proposedTasks);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch proposed tasks', err);
+                setError('Ошибка при загрузке бэклога!');
+            });
+    }
+
     const handleAddProposedTask = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -160,6 +161,7 @@ const SprintTasksPage: React.FC = () => {
                     api.sprintTask.addSprintTask({sp: 0, sprint_id: sprintId, task_id: selectedProposedTaskId})
                         .then((newTask) => {
                             setSprintTasksList([...sprintTasksList, newTask]);
+                            setProposedTasks(proposedTasks.filter(task => task.id !== selectedProposedTaskId));
                             setSelectedProposedTaskId(null);
                             loadSprintTasks();
                             console.log(`Task added to sprint: '${newTask._links?.self.href}'`);
@@ -277,6 +279,7 @@ const SprintTasksPage: React.FC = () => {
                                     <select
                                         id="proposedTask"
                                         value={selectedProposedTaskId || ''}
+                                        onClick={loadProposedTasks}
                                         onChange={(e) => setSelectedProposedTaskId(Number(e.target.value))}
                                         required
                                     >
