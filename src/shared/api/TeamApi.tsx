@@ -169,8 +169,8 @@ export class TeamApi extends BaseApi {
         return await responseData;
     }
     public async updateTeamName(teamId: number, newName: string): Promise<void> {
-        const response = await fetch(`/api/teams/${teamId}/name`, {
-            method: 'PUT',
+        const response = this.fetchJson<void>('/teams/' + teamId.toString(), {
+            method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
@@ -178,10 +178,8 @@ export class TeamApi extends BaseApi {
             body: JSON.stringify({ name: newName })
         });
 
-        if (!response.ok) {
+        if (!response) {
             throw new Error('Failed to update team name');
         }
     }
-
-
 }
