@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './SprintTasksPage.css';
-import { Sprint, Team, UserInfo_TeamMember } from '../../shared/api/IResponses';
+import { Sprint, Task, UserInfo_TeamMember } from '../../shared/api/IResponses'; // SprintTask
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
 import { RoutePaths } from "../../shared/config/routes";
@@ -16,6 +16,70 @@ import {useParams} from "react-router-dom";
 const SprintTasksPage: React.FC = () => {
     const {api} = useContext(ApiContext);
     const sprintId = Number(useParams<{ id: string }>().id);
+    const [error, setError] = useState<string | null>(null);
+    const [spCur, setSpCur] = useState<number>(0);
+    const [spLimit, setSpLimit] = useState<number>(0);
+    const [tasks, setTasks] = useState<Task[]>([]); // SprintTask[]
+    const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+    const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
+    const [editedTask, setEditedTask] = useState<Task | null>(null);
+    const [isAddingNewTask, setIsAddingNewTask] = useState<boolean>(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            api.tasks.getTasksForBacklog()
+                .then((tasks) => {
+                    setTasks(tasks);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch tasks', err);
+                    setError('Failed to load tasks');
+                });
+        } else {
+            setError('No authentication token found');
+        }
+    }, [api.tasks]);
+
+    const handleEditClick = (task: Task) => {
+        if (editingTaskId === task.id) {
+            if (editedTask) {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    //api.tasks.updateTask(editedTask)
+                    //    .then(() => {
+                            setTasks(tasks.map(t => t.id === editedTask.id ? editedTask : t));
+                            setEditingTaskId(null);
+                            setEditedTask(null);
+                    //    })
+                    //    .catch((err) => {
+                    //        console.error('Failed to update task', err);
+                    //        setError('Failed to update task');
+                    //    });
+                }
+            }
+        } else {
+            setEditingTaskId(task.id);
+            setEditedTask(task);
+        }
+    };
+
+    const handleTaskChange = (field: keyof Task, value: string | number) => {
+        if (editedTask) {
+            if (field === 'deadline_time') {
+                const editedDeadlineTime = new Date(value);
+                setEditedTask({ ...editedTask, deadline_time: editedDeadlineTime.toISOString() });
+            } else {
+                setEditedTask({ ...editedTask, [field]: value });
+            }
+        }
+    };
+
+    const handleDescriptionClick = (task: Task) => {
+        setSelectedTask(task);
+    };
+
+    const getValue = (value: string | undefined) => value !== undefined ? value : '';
 
     return (
         <Layout
@@ -24,157 +88,109 @@ const SprintTasksPage: React.FC = () => {
             bottomLeft={<Sidebar currentPageURL={RoutePaths.sprints} />}
             bottomRight={
                 <Content>
-                    {/*{error && <div className="error-message">{error}</div>}*/}
-                    {/*<div className="profile-info">*/}
-                    {/*    <div className="sprints-grid">*/}
-                    {/*        <div className="sprints-grid-header">*/}
-                    {/*            <div>Редактировать</div>*/}
-                    {/*            <div>Название</div>*/}
-                    {/*            <div>Команда</div>*/}
-                    {/*            <div>Scrum-мастер</div>*/}
-                    {/*            <div>Начало</div>*/}
-                    {/*            <div>Конец</div>*/}
-                    {/*            <div>SP</div>*/}
-                    {/*            <div>Статус</div>*/}
-                    {/*            <div>Задачи</div>*/}
-                    {/*        </div>*/}
-                    {/*        {sprints.map((sprint, index) => (*/}
-                    {/*            <div key={index} className="sprint-tile">*/}
-                    {/*                <div className="edit_button_container">*/}
-                    {/*                    <button*/}
-                    {/*                        className="edit_button"*/}
-                    {/*                        onClick={() => handleEditClick(sprint)}*/}
-                    {/*                    >*/}
-                    {/*                        {editingSprintId === sprint.id ? '✓' : '✎'}*/}
-                    {/*                    </button>*/}
-                    {/*                </div>*/}
-                    {/*                {editingSprintId === sprint.id ? (*/}
-                    {/*                    <>*/}
-                    {/*                        <input*/}
-                    {/*                            type="text"*/}
-                    {/*                            value={editedSprint?.name || ''}*/}
-                    {/*                            onChange={(e) => handleSprintChange('name', e.target.value)}*/}
-                    {/*                        />*/}
-                    {/*                        <div>{sprint.team_name}</div>*/}
-                    {/*                        <select*/}
-                    {/*                            value={editedSprint?.scrumMaster_id || 0}*/}
-                    {/*                            onChange={(e) => handleSprintChange('scrumMaster_id', parseInt(e.target.value))}*/}
-                    {/*                        >*/}
-                    {/*                            <option value="">Выберите Scrum-мастера</option>*/}
-                    {/*                            {teamMembers.map((member) => (*/}
-                    {/*                                <option key={member.id} value={member.id}>*/}
-                    {/*                                    {member. fullName}*/}
-                    {/*                                </option>*/}
-                    {/*                            ))}*/}
-                    {/*                        </select>*/}
-                    {/*                        <input*/}
-                    {/*                            type="date"*/}
-                    {/*                            value={editedSprint ? format(new Date(editedSprint.startTime), 'yyyy-MM-dd') : ''}*/}
-                    {/*                            onChange={(e) => handleSprintChange('startTime', e.target.value)}*/}
-                    {/*                        />*/}
-                    {/*                        <input*/}
-                    {/*                            type="date"*/}
-                    {/*                            value={editedSprint ? format(new Date(editedSprint.endTime), 'yyyy-MM-dd') : ''}*/}
-                    {/*                            onChange={(e) => handleSprintChange('endTime', e.target.value)}*/}
-                    {/*                        />*/}
-                    {/*                        <input*/}
-                    {/*                            type="number"*/}
-                    {/*                            value={editedSprint?.sp || 0}*/}
-                    {/*                            onChange={(e) => handleSprintChange('sp', e.target.value)}*/}
-                    {/*                        />*/}
-                    {/*                        <select*/}
-                    {/*                            value={editedSprint?.state || ''}*/}
-                    {/*                            onChange={(e) => handleSprintChange('state', e.target.value)}*/}
-                    {/*                        >*/}
-                    {/*                            <option value="PLANNING">PLANNING</option>*/}
-                    {/*                            <option value="ACTIVE">ACTIVE</option>*/}
-                    {/*                            <option value="STOPPED">STOPPED</option>*/}
-                    {/*                            <option value="ENDED">ENDED</option>*/}
-                    {/*                        </select>*/}
-                    {/*                        <div></div>*/}
-                    {/*                    </>*/}
-                    {/*                ) : (*/}
-                    {/*                    <>*/}
-                    {/*                        <div>{sprint.name}</div>*/}
-                    {/*                        <div>{sprint.team_name}</div>*/}
-                    {/*                        <div>{sprint.scrumMaster_fullName}</div>*/}
-                    {/*                        <div>{format(new Date(sprint.startTime), 'dd.MM.yyyy')}</div>*/}
-                    {/*                        <div>{format(new Date(sprint.endTime), 'dd.MM.yyyy')}</div>*/}
-                    {/*                        <div>{sprint.sp}</div>*/}
-                    {/*                        <div>{sprint.state}</div>*/}
-                    {/*                        <div><button>Перейти</button></div>*/}
-                    {/*                    </>*/}
-                    {/*                )}*/}
-                    {/*            </div>*/}
-                    {/*        ))}*/}
-                    {/*        {isAddingNewSprint && (*/}
-                    {/*            <div className="sprint-tile">*/}
-                    {/*                <div className="edit_button_container">*/}
-                    {/*                    <button*/}
-                    {/*                        className="edit_button"*/}
-                    {/*                        onClick={handleSaveNewSprint}*/}
-                    {/*                    >*/}
-                    {/*                        ✓*/}
-                    {/*                    </button>*/}
-                    {/*                </div>*/}
-                    {/*                <input*/}
-                    {/*                    type="text"*/}
-                    {/*                    value={newSprint.name}*/}
-                    {/*                    onChange={(e) => handleNewSprintChange('name', e.target.value)}*/}
-                    {/*                />*/}
-                    {/*                <select*/}
-                    {/*                    value={newSprint.team_id}*/}
-                    {/*                    onChange={(e) => handleNewSprintChange('team_id', parseInt(e.target.value))}*/}
-                    {/*                >*/}
-                    {/*                    <option value="">Выберите команду</option>*/}
-                    {/*                    {teams.map((team) => (*/}
-                    {/*                        <option key={team.id} value={team.id}>*/}
-                    {/*                            {team.name}*/}
-                    {/*                        </option>*/}
-                    {/*                    ))}*/}
-                    {/*                </select>*/}
-                    {/*                <select*/}
-                    {/*                    value={newSprint.scrumMaster_id}*/}
-                    {/*                    onChange={(e) => handleNewSprintChange('scrumMaster_id', parseInt(e.target.value))}*/}
-                    {/*                >*/}
-                    {/*                    <option value="">Выберите Scrum-мастера</option>*/}
-                    {/*                    {teamMembers.map((member) => (*/}
-                    {/*                        <option key={member.id} value={member.id}>*/}
-                    {/*                            {member.fullName}*/}
-                    {/*                        </option>*/}
-                    {/*                    ))}*/}
-                    {/*                </select>*/}
-                    {/*                <input*/}
-                    {/*                    type="date"*/}
-                    {/*                    value={newSprint.startTime}*/}
-                    {/*                    onChange={(e) => handleNewSprintChange('startTime', e.target.value)}*/}
-                    {/*                />*/}
-                    {/*                <input*/}
-                    {/*                    type="date"*/}
-                    {/*                    value={newSprint.endTime}*/}
-                    {/*                    onChange={(e) => handleNewSprintChange('endTime', e.target.value)}*/}
-                    {/*                />*/}
-                    {/*                <input*/}
-                    {/*                    type="number"*/}
-                    {/*                    value={newSprint.sp}*/}
-                    {/*                    onChange={(e) => handleNewSprintChange('sp', e.target.value)}*/}
-                    {/*                />*/}
-                    {/*                <select*/}
-                    {/*                    value={newSprint.state}*/}
-                    {/*                    onChange={(e) => handleNewSprintChange('state', e.target.value)}*/}
-                    {/*                >*/}
-                    {/*                    <option value="PLANNING">PLANNING</option>*/}
-                    {/*                    <option value="ACTIVE">ACTIVE</option>*/}
-                    {/*                    <option value="STOPPED">STOPPED</option>*/}
-                    {/*                    <option value="ENDED">ENDED</option>*/}
-                    {/*                </select>*/}
-                    {/*                <div></div>*/}
-                    {/*            </div>*/}
-                    {/*        )}*/}
-                    {/*        <Button className="smallButton button" onClick={handleAddNewSprint}>Добавить спринт</Button>*/}
-
-                    {/*    </div>*/}
-                    {/*</div>*/}
+                    {error && <div className="error-message">{error}</div>}
+                    <div className="profile-info">
+                        <h2>SP: {spCur}/{spLimit}</h2>
+                        <div className="sprints-grid">
+                            <div className="sprints-grid-header">
+                                <div>Убрать в бэклог</div>
+                                <div>Редактировать</div>
+                                <div>Название</div>
+                                <div>Описание</div>
+                                <div>Приоритет</div>
+                                <div>Дедлайн</div>
+                                <div>Роли</div>
+                                <div>SP</div>
+                                <div>Тип дедлайна</div>
+                                <div>Зависимые задачи</div>
+                                <div>Ответственный</div>
+                                <div>Статус</div>
+                           </div>
+                            {tasks.map((task, index) => (
+                                <div key={index} className="sprint-tile">
+                                    <div className="edit_button_container">
+                                        <button 
+                                            className="edit_button"
+                                            onClick={() => handleEditClick(task)}
+                                        >✕</button>
+                                    </div>
+                                    <div className="edit_button_container">
+                                        
+                                        <button
+                                            className="edit_button"
+                                            onClick={() => handleEditClick(task)}
+                                        >
+                                            {editingTaskId === task.id ? '✓' : '✎'}
+                                        </button>
+                                    </div>
+                                    {editingTaskId === task.id ? (
+                                        <>
+                                            <input
+                                                type="text"
+                                                value={getValue(editedTask?.headline
+                                                )}
+                                                onChange={(e) => handleTaskChange('headline', e.target.value)}
+                                            />
+                                            <input
+                                                type="text"
+                                                value={getValue(editedTask?.description)}
+                                                onChange={(e) => handleTaskChange('description', e.target.value)}
+                                            />
+                                            <select
+                                                value={getValue(editedTask?.priority)}
+                                                onChange={(e) => handleTaskChange('priority', e.target.value)}
+                                            >
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
+                                            </select>
+                                            <input
+                                                type="date"
+                                                value={editedTask?.deadline_time ? format(new Date(editedTask?.deadline_time), 'yyyy-MM-dd') : ''}
+                                                onChange={(e) => handleTaskChange('deadline_time', e.target.value)}
+                                            />
+                                            <select
+                                                value={getValue(editedTask?.deadline_type)}
+                                                onChange={(e) => handleTaskChange('deadline_type', e.target.value)}
+                                            >
+                                                <option value="SOFT">SOFT</option>
+                                                <option value="HARD">HARD</option>
+                                            </select>
+                                            <div></div>
+                                            <div></div>
+                                            <select
+                                                value={getValue(editedTask?.state)}
+                                                onChange={(e) => handleTaskChange('state', e.target.value)}
+                                            >
+                                                <option value="NEED_REWORK">Требуется доработка</option>
+                                                <option value="TODO">Сделать</option>
+                                                <option value="PICKED">Выбрано</option>
+                                                <option value="IN_PROGRESS">В процессе</option>
+                                                <option value="TESTING">На тестировании</option>
+                                                <option value="DONE">Выполнено</option>
+                                                <option value="ABORTED">Прервано</option>
+                                            </select>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div>{task.headline}</div>
+                                            <div onClick={() => handleDescriptionClick(task)} className="task_description">
+                                                {task.description.substring(0, 20)}...
+                                            </div>
+                                            <div>{task.priority}</div>
+                                            <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
+                                            <div>{task.deadline_type ? task.deadline_type : ''}</div>
+                                            <div></div>
+                                            <div></div>
+                                            <div>{task.state}</div>
+                                        </>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </Content>
             }
         />
