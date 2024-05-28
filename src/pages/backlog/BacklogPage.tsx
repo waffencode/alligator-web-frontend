@@ -12,6 +12,7 @@ import Sidebar from "../../widgets/SideBar/SideBar";
 import Modal from "../../widgets/Modal/Modal";
 import CreateNewTaskModalContent from "./CreateNewTaskModalContent";
 import Button from "../../widgets/Button/Button";
+import {translateStatus} from "../../entities/StatusTranslator";
 
 const BacklogPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -50,27 +51,6 @@ const BacklogPage: React.FC = () => {
             setError('No authentication token found');
         }
     }, [api.tasks]);
-
-    const translateStatus = (status: string) => {
-        switch (status) {
-            case "NEED_REWORK":
-                return "Требуется доработка";
-            case "TODO":
-                return "Сделать";
-            case "PICKED":
-                return "Выбрано";
-            case "IN_PROGRESS":
-                return "В процессе";
-            case "TESTING":
-                return "На тестировании";
-            case "DONE":
-                return "Выполнено";
-            case "ABORTED":
-                return "Прервано";
-            default:
-                return status;
-        }
-    };
     
     const handleDescriptionClick = (taskId: number) => {
         setExpandedTaskId(taskId === expandedTaskId ? null : taskId);

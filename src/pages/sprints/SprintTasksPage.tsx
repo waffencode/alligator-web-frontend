@@ -11,6 +11,7 @@ import PageName from '../../widgets/PageName/PageName';
 import Sidebar from '../../widgets/SideBar/SideBar';
 import Button from "../../widgets/Button/Button";
 import { useParams } from "react-router-dom";
+import {translateStatus} from "../../entities/StatusTranslator";
 
 const SprintTasksPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -162,27 +163,6 @@ const SprintTasksPage: React.FC = () => {
                         });
                 }
             }
-        }
-    };
-
-    const translateStatus = (status?: string) => {
-        switch (status) {
-            case "NEED_REWORK":
-                return "Требуется доработка";
-            case "TODO":
-                return "Сделать";
-            case "PICKED":
-                return "Выбрано";
-            case "IN_PROGRESS":
-                return "В процессе";
-            case "TESTING":
-                return "На тестировании";
-            case "DONE":
-                return "Выполнено";
-            case "ABORTED":
-                return "Прервано";
-            default:
-                return status;
         }
     };
 
