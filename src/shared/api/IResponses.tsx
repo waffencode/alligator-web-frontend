@@ -3,6 +3,8 @@ interface Link {
     href: string;
 }
 
+
+
 // Интерфейс для ролей пользователя
 interface UserRoleLinks {
     self: Link;
@@ -442,6 +444,48 @@ interface SprintTasksResponse {
     page: SprintTasksPageInfo;
 }
 
+// Интерфейс для ссылок в assignedTask
+interface AssignedTaskLinks {
+    self: Link;
+    assignedTask: Link;
+    task: Link;
+    teamMember: Link;
+}
+
+// Интерфейс для элемента assignedTask
+interface AssignedTask {
+    id: number;
+    assignationTime: string;
+    _links: AssignedTaskLinks;
+}
+
+// Интерфейс для _embedded части ответа с assignedTasks
+interface EmbeddedAssignedTasks {
+    assignedTasks: AssignedTask[];
+}
+
+// Интерфейс для верхнего уровня ссылок в ответе с assignedTasks
+interface AssignedTasksTopLevelLinks {
+    self: Link;
+    profile: Link;
+    search: Link;
+}
+
+// Интерфейс для информации о странице в ответе с assignedTasks
+interface AssignedTasksPageInfo {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+
+// Основной интерфейс для ответа с assignedTasks
+interface AssignedTasksResponse {
+    _embedded: EmbeddedAssignedTasks;
+    _links: AssignedTasksTopLevelLinks;
+    page: AssignedTasksPageInfo;
+}
+
 export type { 
     UserProfile, 
     AuthResponse, 
@@ -478,5 +522,11 @@ export type {
     EmbeddedSprintTasks,
     SprintTasksTopLevelLinks,
     SprintTasksPageInfo,
-    SprintTasksResponse
+    SprintTasksResponse,
+    AssignedTask,
+    AssignedTaskLinks,
+    EmbeddedAssignedTasks,
+    AssignedTasksTopLevelLinks,
+    AssignedTasksPageInfo,
+    AssignedTasksResponse
 };
