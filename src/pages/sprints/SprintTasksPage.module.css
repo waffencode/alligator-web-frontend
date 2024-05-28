@@ -1,3 +1,91 @@
+.profile-info {
+    display: flex;
+}
+
+.sprints_grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 10px; /* Отступ между блоками */
+    margin-top: 10px;
+}
+
+.sprints_grid_header {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    background-color: #ffffff; /* Цвет фона блока */
+    font-weight: bold; /* Жирный текст */
+    border-radius: 8px; /* Закругление углов */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
+    padding: 10px; /* Внутренний отступ */
+    gap: 30px; /* Увеличиваем расстояние между элементами */
+}
+
+.sprint_tile {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* Так же, как и для основной сетки */
+    background-color: #ffffff; /* Цвет фона блока */
+    border-radius: 8px; /* Закругление углов */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
+    padding: 10px; /* Внутренний отступ */
+    gap: 30px; /* Увеличиваем расстояние между элементами */
+    cursor: default; /* Изменение курсора при наведении */
+}
+
+.sprint_tile:hover {
+    background-color: #f5f5f5; /* Изменение цвета фона при наведении */
+}
+
+.edit_button_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit_button {
+    background: none; /* Убираем фон */
+    border: none; /* Убираем границу */
+    cursor: pointer; /* Курсор при наведении */
+    font-size: 1.2rem; /* Размер шрифта */
+    padding: 0; /* Убираем отступы */
+    margin-right: 10px; /* Отступ справа */
+}
+
+.form_group {
+    margin-top: 10px;
+}
+
+.form_group {
+    margin-bottom: 15px;
+}
+
+.form_group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form_group input,
+.form_group select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.form_group select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='gray'><polygon points='0,0 10,10 20,0'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 98%;
+    background-position-y: 50%;
+    padding-right: 30px;
+}
+
 .profile-page {
     display: flex;
 }
@@ -16,60 +104,3 @@
     padding: 5px 10px; /* Adjust padding */
 }
 
-.sprints-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-gap: 10px; /* Отступ между блоками */
-    margin-top: 10px;
-}
-
-.sprints-grid-header {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    background-color: #ffffff; /* Цвет фона блока */
-    font-weight: bold; /* Жирный текст */
-    border-radius: 8px; /* Закругление углов */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
-    padding: 10px; /* Внутренний отступ */
-    gap: 30px; /* Увеличиваем расстояние между элементами */
-}
-
-.sprint-tile {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr); /* Так же, как и для основной сетки */
-    background-color: #ffffff; /* Цвет фона блока */
-    border-radius: 8px; /* Закругление углов */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */
-    padding: 10px; /* Внутренний отступ */
-    gap: 30px; /* Увеличиваем расстояние между элементами */
-    cursor: default; /* Изменение курсора при наведении */
-}
-
-.sprint-tile:hover {
-    background-color: #f5f5f5; /* Изменение цвета фона при наведении */
-}
-
-.edit_button_container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.edit_button_container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.edit_button {
-    background: none; /* Убираем фон */
-    border: none; /* Убираем границу */
-    cursor: pointer; /* Курсор при наведении */
-    font-size: 1.2rem; /* Размер шрифта */
-    padding: 0; /* Убираем отступы */
-    margin-right: 10px; /* Отступ справа */
-}
-
-.form-group {
-    margin-top: 10px;
-}

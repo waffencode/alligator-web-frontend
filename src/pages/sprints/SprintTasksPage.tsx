@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './SprintTasksPage.css';
+import styles from './SprintTasksPage.module.css';
 import { SprintTask, TeamMember, Task } from '../../shared/api/IResponses'; // Imported necessary types
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
@@ -173,12 +173,14 @@ const SprintTasksPage: React.FC = () => {
             bottomRight={
                 <Content>
                     {error && <div className="error-message">{error}</div>}
-                    <div className="profile-info">
+                    <div className={styles.profileInfo}>
                         <h2>Спринт '{sprintName}'</h2>
                         <h2>SP: {spCur}/{spLimit}</h2>
+
                         <Button onClick={handleAssignationCall}>Автоматически назначить задачи</Button>
-                        <div className="sprints-grid">
-                            <div className="sprints-grid-header">
+
+                        <div className={styles.sprints_grid}>
+                            <div className={styles.sprints_grid_header}>
                                 <div>Убрать в бэклог</div>
                                 <div>Редактировать</div>
                                 <div>Название</div>
@@ -192,18 +194,19 @@ const SprintTasksPage: React.FC = () => {
                                 <div>Ответственный</div>
                                 <div>Статус</div>
                             </div>
+
                             {sprintTasksList.map((sprintTask, index) => (
-                                <div key={index} className="sprint-tile">
-                                    <div className="edit_button_container">
+                                <div key={index} className={styles.sprint_tile}>
+                                    <div className={styles.edit_button_container}>
                                         <button
-                                            className="edit_button"
+                                            className={styles.edit_button}
                                             onClick={() => handleEditClick(sprintTask)}
                                         >✕
                                         </button>
                                     </div>
-                                    <div className="edit_button_container">
+                                    <div className={styles.edit_button_container}>
                                         <button
-                                            className="edit_button"
+                                            className={styles.edit_button}
                                             onClick={() => handleEditClick(sprintTask)}
                                         >
                                             {editingTaskId === sprintTask.id ? '✓' : '✎'}
@@ -268,9 +271,10 @@ const SprintTasksPage: React.FC = () => {
                                 </div>
                             ))}
                         </div>
+
                         <div>
                             <form onSubmit={handleAddProposedTask}>
-                                <div className="form-group">
+                                <div className={styles.form_group}>
                                     <label htmlFor="proposedTask">
                                         <h3>Добавить задачу</h3>
                                     </label>
