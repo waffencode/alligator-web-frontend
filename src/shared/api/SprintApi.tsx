@@ -118,39 +118,27 @@ export class SprintApi extends BaseApi {
         const sp = sprint.sp;
         const name = sprint.name;
         const state = sprint.state;
+        const id = sprint.id;
 
         // установка новой команды
-        //const team = this.getPath()+'/teams/'+sprint.team_id;
+        const team = this.getPath()+'/teams/'+sprint.team_id;
         
-
         // установка нового scrum master
         //const scrumMasterPath = this.getPath()+'/sprints/'+sprint.id+'/scrumMaster';
         //const scrumMaster = this.getPath()+'http://localhost:8080/teamMembers/1';
 
-        const sprintsResp = await this.fetchJson<SprintsResponse>(`/sprints/`+sprint.id, {
-            method: 'POST',
+        const sprintsResp = await this.fetchJson<Sprint>(`/sprints/`+sprint.id, {
+            method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({startTime, endTime, sp, name, state})
+            body: JSON.stringify({id, startTime, endTime, sp, name, state})
         });
 
-        // team 
-        const teamResp = await this.fetchJson<TeamResponse>(`/sprints/`+sprint.team_id+`/team`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({startTime, endTime, sp, name, state})
-        });
-
-        // scrumMaster
-
-        const sprints = sprintsResp._embedded.sprints;
+        const sprints = sprintsResp;
         
-        return sprints[0];
+        return sprints;
     }
     
 
