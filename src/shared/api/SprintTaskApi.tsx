@@ -2,7 +2,7 @@ import { UserApi } from "./UserApi";
 import { AuthenticationContextData } from "../lib/authentication";
 import { BaseApi } from "./BaseApi";
 import ApiContext from "../../features/api-context";
-import { DeadlineResponse, SprintTask, SprintTasksResponse, Task, TeamMember, UserResponse, UserInfoResponse, AssignedTasksResponse } from "./IResponses";
+import { DeadlineResponse, SprintTask, SprintTasksResponse, Task, TeamMember, UserResponse, UserInfoResponse, AssignedTasksResponse, TasksResponse } from "./IResponses";
 import { format, parse, parseISO } from 'date-fns';
 
 export class SprintTaskApi extends BaseApi {
@@ -82,9 +82,6 @@ export class SprintTaskApi extends BaseApi {
 
         return sprintTasks;
     }
-
-
-
     
     public async getSprintTasksBySprintId(sprintId: number): Promise<SprintTask[]> {
         const resp = this.fetchJson<SprintTasksResponse>(`/sprintTasks?sprintId=`+sprintId, {
@@ -96,6 +93,36 @@ export class SprintTaskApi extends BaseApi {
         });
 
         return (await resp)._embedded.sprintTasks;
+    }
+
+    
+    public async getProposedTasks(): Promise<Task[]> {
+        // получаем все задачи из бэклога
+        const resp = await this.fetchJson<TasksResponse>(`/tasks`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const tasks = resp._embedded.tasks;
+        const filteredTasks = [];
+        
+        for (let task of tasks) {
+            const sprintTaskResp = await this.fetchJson<SprintTasksResponse>(`/sprintTasks?taskId=` + task.id, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        
+            if (sprintTaskResp.page.totalElements === 0) {
+                filteredTasks.push(task);
+            }
+        }
+
+        return filteredTasks;
     }
 
 

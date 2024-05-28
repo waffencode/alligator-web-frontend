@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './SprintTasksPage.css';
-import { Sprint, UserInfo_TeamMember, SprintTask, TeamMember } from '../../shared/api/IResponses'; // SprintTask
+import { SprintTask, TeamMember, Task } from '../../shared/api/IResponses'; // Imported necessary types
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
 import { RoutePaths } from "../../shared/config/routes";
@@ -10,21 +10,32 @@ import BrandLogo from '../../widgets/BrandLogo/BrandLogo';
 import PageName from '../../widgets/PageName/PageName';
 import Sidebar from '../../widgets/SideBar/SideBar';
 import Button from "../../widgets/Button/Button";
-import SprintsPage from "./SprintsPage";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const SprintTasksPage: React.FC = () => {
-    const {api} = useContext(ApiContext);
+    const { api } = useContext(ApiContext);
     const sprintId = Number(useParams<{ id: string }>().id);
     const [spCur, setSpCur] = useState<number>(0);
     const [spLimit, setSpLimit] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
-    const [tasks, setTasks] = useState<SprintTask[]>([]); // SprintTask[]
+    const [tasks, setTasks] = useState<SprintTask[]>([]);
     const [selectedTask, setSelectedTask] = useState<SprintTask | null>(null);
     const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
     const [editedTask, setEditedTask] = useState<SprintTask | null>(null);
-    const [isAddingNewTask, setIsAddingNewTask] = useState<boolean>(false);
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+    const [proposedTasks, setProposedTasks] = useState<Task[]>([]); // New state for proposed tasks
+    const [selectedProposedTaskId, setSelectedProposedTaskId] = useState<number | null>(null); // State for selected proposed task
+    const [newTask, setNewTask] = useState<SprintTask>({
+        id: 0,
+        headline: '',
+        description: '',
+        priority: 'A', 
+        deadline_time: format(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
+        deadline_type: 'SOFT', 
+        state: 'TODO', 
+        sp: 0,
+        team_member_fullName: '',
+    });
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -45,18 +56,19 @@ const SprintTasksPage: React.FC = () => {
                     console.error('Failed to fetch sprint tasks', err);
                     setError('Failed to load sprint tasks');
                 });
-
-            let spCurTemp = 0;
-            for (const task of tasks) {
-                spCurTemp+=task.sp;
-                console.log(spCurTemp);
-            }
-            setSpCur(spCurTemp);
-            
+                
+            api.sprintTask.getProposedTasks() // задачи, доступные для добавления в спринт
+                .then((proposedTasks) => {
+                    setProposedTasks(proposedTasks);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch proposed tasks', err);
+                    setError('Failed to load proposed tasks');
+                });
         } else {
             setError('No authentication token found');
         }
-    }, [api.tasks]);
+    }, [api, sprintId]);
 
     useEffect(() => {
         let spCurTemp = 0;
@@ -71,7 +83,7 @@ const SprintTasksPage: React.FC = () => {
             if (editedTask) {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    //api.tasks.updateTask(editedTask)
+                    // api.tasks.updateTask(editedTask)
                     //    .then(() => {
                             setTasks(tasks.map(t => t.id === editedTask.id ? editedTask : t));
                             setEditingTaskId(null);
@@ -118,6 +130,27 @@ const SprintTasksPage: React.FC = () => {
             });
     };
 
+    const handleAddProposedTask = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (selectedProposedTaskId) {
+            const selectedTask = proposedTasks.find(task => task.id === selectedProposedTaskId);
+            if (selectedTask) {
+                const token = localStorage.getItem('token');
+                if (token) {
+                   // api.sprintTask.addTaskToSprint(selectedProposedTaskId, sprintId)
+                    //    .then((newTask) => {
+                            setTasks([...tasks, newTask]);
+                            setSelectedProposedTaskId(null);
+                   //     })
+                   //     .catch((err) => {
+                   //         console.error('Failed to add proposed task', err);
+                    //        setError('Failed to add proposed task');
+                    //    });
+                }
+            }
+        }
+    };
+
     return (
         <Layout
             topLeft={<BrandLogo />}
@@ -143,7 +176,7 @@ const SprintTasksPage: React.FC = () => {
                                 <div>SP</div>
                                 <div>Ответственный</div>
                                 <div>Статус</div>
-                           </div>
+                            </div>
                             {tasks.map((task, index) => (
                                 <div key={index} className="sprint-tile">
                                     <div className="edit_button_container">
@@ -153,7 +186,6 @@ const SprintTasksPage: React.FC = () => {
                                         >✕</button>
                                     </div>
                                     <div className="edit_button_container">
-                                        
                                         <button
                                             className="edit_button"
                                             onClick={() => handleEditClick(task)}
@@ -215,6 +247,27 @@ const SprintTasksPage: React.FC = () => {
                                     )}
                                 </div>
                             ))}
+                        </div>
+                        <div>
+                            <form onSubmit={handleAddProposedTask}>
+                                <div className="form-group">
+                                    <label htmlFor="proposedTask">Добавить задачу</label>
+                                    <select
+                                        id="proposedTask"
+                                        value={selectedProposedTaskId || ''}
+                                        onChange={(e) => setSelectedProposedTaskId(Number(e.target.value))}
+                                        required
+                                    >
+                                        <option value="">Выберите задачу</option>
+                                        {proposedTasks.map(task => (
+                                            <option key={task.id} value={task.id}>
+                                                {task.headline}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <Button type="submit" className="button">Добавить</Button>
+                            </form>
                         </div>
                     </div>
                 </Content>

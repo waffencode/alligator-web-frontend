@@ -401,7 +401,7 @@ interface SprintTaskLinks {
 interface SprintTask {
     id: number;
     sp: number; // sp
-    _links: SprintTaskLinks;
+    _links?: SprintTaskLinks;
     priority?: string; // приоритет
     state?: string; // статус
     headline?: string; // название
