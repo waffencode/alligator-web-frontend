@@ -99,10 +99,10 @@ const SprintTasksPage: React.FC = () => {
                                 <div>Описание</div>
                                 <div>Приоритет</div>
                                 <div>Дедлайн</div>
-                                <div>Роли</div>
-                                <div>SP</div>
                                 <div>Тип дедлайна</div>
+                                <div>Роли</div>
                                 <div>Зависимые задачи</div>
+                                <div>SP</div>
                                 <div>Ответственный</div>
                                 <div>Статус</div>
                            </div>
@@ -183,6 +183,8 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{task.deadline_type ? task.deadline_type : ''}</div>
                                             <div></div>
+                                            <div></div>
+                                            <div>{task.sp}</div>
                                             <div></div>
                                             <div>{task.state}</div>
                                         </>

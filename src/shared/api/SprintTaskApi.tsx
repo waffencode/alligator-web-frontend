@@ -1,10 +1,12 @@
 import { UserApi } from "./UserApi";
 import { AuthenticationContextData } from "../lib/authentication";
 import { BaseApi } from "./BaseApi";
+import ApiContext from "../../features/api-context";
 import { DeadlineResponse, SprintTask, SprintTasksResponse, Task } from "./IResponses";
 import { format, parse, parseISO } from 'date-fns';
 
 export class SprintTaskApi extends BaseApi {
+    
     private authenticationContext: AuthenticationContextData;
 
     constructor(authenticationContext: AuthenticationContextData) {
@@ -29,12 +31,26 @@ export class SprintTaskApi extends BaseApi {
             sprintTask.state = task.state;
             sprintTask.headline = task.headline;
             sprintTask.description = task.description;
+            // deadline_id, deadline_time, deadline_type
+            const deadlineResp = await this.fetchJson<DeadlineResponse>(`/tasks/` + task.id + `/deadline`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            sprintTask.deadline_id = deadlineResp.id;
+            sprintTask.deadline_time = deadlineResp.time;
+            sprintTask.deadline_type = deadlineResp.type;
         }
 
 
         return sprintTasks;
     }
 
+
+
+    
     public async getSprintTasksBySprintId(sprintId: number): Promise<SprintTask[]> {
         const resp = this.fetchJson<SprintTasksResponse>(`/sprintTasks?sprintId=`+sprintId, {
             method: 'GET',
