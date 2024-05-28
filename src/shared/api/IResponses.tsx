@@ -399,6 +399,7 @@ export type {
     UserProfileWithRoles, 
     UserProfileWithRolesInterfaces,
     UserInfoWithRolesInterfaces,
+    UserInfo_TeamMember,
     UserResponse,
     TeamResponse, 
     TeamMembersResponse, 
