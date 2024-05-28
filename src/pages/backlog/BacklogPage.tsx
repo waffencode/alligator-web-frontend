@@ -33,7 +33,7 @@ const BacklogPage: React.FC = () => {
     });
     const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
     const [taskCreateModalOpen, setTaskCreateModalOpen] = useState(false);
-
+    const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null);
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -75,8 +75,8 @@ const BacklogPage: React.FC = () => {
         }
     };
     
-    const handleDescriptionClick = (task: Task) => {
-        setSelectedTask(task);
+    const handleDescriptionClick = (taskId: number) => {
+        setExpandedTaskId(taskId === expandedTaskId ? null : taskId);
     };
 
     const closeModal = () => {
@@ -282,6 +282,15 @@ const BacklogPage: React.FC = () => {
                                             {editingTaskId === task.id ? '✓' : '✎'}
                                         </button>
                                     </div>
+                                    {/* Здесь заменяем комментированный блок "Остальной код задачи" на код отображения описания */}
+                                    {expandedTaskId === task.id && (
+                                        <div className={styles.task_description_expanded}>
+                                            <button className={styles.close_button} onClick={() => handleDescriptionClick(task.id)}>
+                                                &times;
+                                            </button>
+                                            <p>{task.description}</p>
+                                        </div>
+                                    )}
                                     {editingTaskId === task.id ? (
                                         <>
                                             <input
@@ -335,7 +344,8 @@ const BacklogPage: React.FC = () => {
                                     ) : (
                                         <>
                                             <div>{task.headline}</div>
-                                            <div onClick={() => handleDescriptionClick(task)} className={styles.task_description}>
+                                            <div onClick={() => handleDescriptionClick(task.id)} className={styles.task_description}>
+
                                                 {task.description.substring(0, 20)}...
                                             </div>
                                             <div>{task.priority}</div>
