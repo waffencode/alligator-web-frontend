@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 const SprintTasksPage: React.FC = () => {
     const { api } = useContext(ApiContext);
     const sprintId = Number(useParams<{ id: string }>().id);
+    const [sprintName, setSprintName] = useState<string | null>(null);
     const [spCur, setSpCur] = useState<number>(0);
     const [spLimit, setSpLimit] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
@@ -25,17 +26,6 @@ const SprintTasksPage: React.FC = () => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [proposedTasks, setProposedTasks] = useState<Task[]>([]); // New state for proposed tasks
     const [selectedProposedTaskId, setSelectedProposedTaskId] = useState<number | null>(null); // State for selected proposed task
-    const [newTask, setNewTask] = useState<SprintTask>({
-        id: 0,
-        headline: '',
-        description: '',
-        priority: 'A', 
-        deadline_time: format(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
-        deadline_type: 'SOFT', 
-        state: 'TODO', 
-        sp: 0,
-        team_member_fullName: '',
-    });
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -46,6 +36,7 @@ const SprintTasksPage: React.FC = () => {
             api.sprint.getSprintBySprintId(sprintId)
                 .then((sprint) => {
                     setSpLimit(sprint.sp);
+                    setSprintName(sprint.name);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch sprint info', err);
@@ -183,6 +174,7 @@ const SprintTasksPage: React.FC = () => {
                 <Content>
                     {error && <div className="error-message">{error}</div>}
                     <div className="profile-info">
+                        <h2>Спринт '{sprintName}'</h2>
                         <h2>SP: {spCur}/{spLimit}</h2>
                         <Button onClick={handleAssignationCall}>Автоматически назначить задачи</Button>
                         <div className="sprints-grid">
