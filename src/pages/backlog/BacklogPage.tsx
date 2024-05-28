@@ -34,16 +34,13 @@ const BacklogPage: React.FC = () => {
     const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
     const [taskCreateModalOpen, setTaskCreateModalOpen] = useState(false);
     const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
             api.tasks.getTasksForBacklog()
                 .then((tasks) => {
-                    const translatedTasks = tasks.map(task => ({
-                        ...task,
-                        state: translateStatus(task.state)
-                    }));
-                    setTasks(translatedTasks);
+                    setTasks(tasks);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch tasks', err);
@@ -88,9 +85,6 @@ const BacklogPage: React.FC = () => {
             if (editedTask) {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    // Получаем английский эквивалент статуса задачи
-                    const englishState = translateStatusToEnglish(editedTask.state);
-                    editedTask.state = englishState; // Присваиваем английский эквивалент статуса
                     api.tasks.updateTask(editedTask)
                         .then(() => {
                             setTasks(tasks.map(t => t.id === editedTask.id ? editedTask : t));
@@ -108,29 +102,7 @@ const BacklogPage: React.FC = () => {
             setEditedTask(task);
         }
     };
-    
-    // Функция для перевода статуса задачи на английский
-    const translateStatusToEnglish = (status: string) => {
-        switch (status) {
-            case "Требуется доработка":
-                return "NEED_REWORK";
-            case "Сделать":
-                return "TODO";
-            case "Выбрано":
-                return "PICKED";
-            case "В процессе":
-                return "IN_PROGRESS";
-            case "На тестировании":
-                return "TESTING";
-            case "Выполнено":
-                return "DONE";
-            case "Прервано":
-                return "ABORTED";
-            default:
-                return status;
-        }
-    };
-    
+
     const handleTaskChange = (field: keyof Task, value: string | number) => {
         if (editedTask) {
             if (field === 'deadline_time') {
@@ -152,12 +124,7 @@ const BacklogPage: React.FC = () => {
             setNewTask((prevTask) => ({ ...prevTask, [field]: value }));
         }
     };
-    
-    
-    
-    
-    
-    
+
     const handleAddNewTask = () => {
         setIsAddingNewTask(true);
     };
@@ -180,32 +147,6 @@ const BacklogPage: React.FC = () => {
                         deadline_type: 'SOFT', // Сбрасываем параметры newTask к исходным значениям
                         state: 'TODO', // Сбрасываем параметры newTask к исходным значениям
                     });
-                    // Обновляем статус задачи на русский язык
-                    switch (createdTask?.state) {
-                        case "NEED_REWORK":
-                            createdTask.state = "Требуется доработка";
-                            break;
-                        case "TODO":
-                            createdTask.state = "Сделать";
-                            break;
-                        case "PICKED":
-                            createdTask.state = "Выбрано";
-                            break;
-                        case "IN_PROGRESS":
-                            createdTask.state = "В процессе";
-                            break;
-                        case "TESTING":
-                            createdTask.state = "На тестировании";
-                            break;
-                        case "DONE":
-                            createdTask.state = "Выполнено";
-                            break;
-                        case "ABORTED":
-                            createdTask.state = "Прервано";
-                            break;
-                        default:
-                            break;
-                    }
                     
                 })
                 .catch((err) => {
@@ -360,7 +301,7 @@ const BacklogPage: React.FC = () => {
                                             <div>{task.deadline_type ? task.deadline_type : ''}</div>
                                             <div></div>
                                             <div></div>
-                                            <div>{task.state}</div>
+                                            <div>{translateStatus(task.state)}</div>
                                         </>
                                     )}
                                 </div>
