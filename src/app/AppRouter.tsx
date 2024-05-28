@@ -12,6 +12,7 @@ import Authenticated from "../widgets/Authenticated/Authenticated";
 import UsersPage from '../pages/users/UsersPage';
 import CreateTeamPage from '../pages/teams/CreateTeamPage';
 import TeamMembersPage from '../pages/teams/TeamMembersPage';
+import SprintTasksPage from "../pages/sprints/SprintTasksPage";
 interface SecuredRouteProps {
     path?: string;
     authenticated?: boolean;
@@ -64,6 +65,10 @@ const routes: Record<AppRoutes, AppRouteProps> = {
     [AppRoutes.TEAM_MEMBERS]: {
         path: RoutePaths.teamMembers + '/:id',
         authenticated: true
+    },
+    [AppRoutes.SPRINT_TASKS]: {
+    path: RoutePaths.sprintTasks + '/:id',
+        authenticated: true
     }
 };
 
@@ -101,6 +106,9 @@ const routeElements: Record<AppRoutes, AppRouteProps> = {
     },
     [AppRoutes.TEAM_MEMBERS]: {
         element: <TeamMembersPage />
+    },
+    [AppRoutes.SPRINT_TASKS]: {
+        element: <SprintTasksPage />
     }
 };
 

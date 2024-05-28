@@ -10,9 +10,11 @@ import BrandLogo from '../../widgets/BrandLogo/BrandLogo';
 import PageName from '../../widgets/PageName/PageName';
 import Sidebar from '../../widgets/SideBar/SideBar';
 import Button from "../../widgets/Button/Button";
+import {useNavigate} from "react-router-dom";
 
 const SprintsPage: React.FC = () => {
     const { api } = useContext(ApiContext);
+    const navigate = useNavigate();
 
     const [sprints, setSprints] = useState<Sprint[]>([]);
     const [teams, setTeams] = useState<Team[]>([]);
@@ -262,7 +264,9 @@ const SprintsPage: React.FC = () => {
                                             <div>{format(new Date(sprint.endTime), 'dd.MM.yyyy')}</div>
                                             <div>{sprint.sp}</div>
                                             <div>{sprint.state}</div>
-                                            <div><button>Перейти</button></div>
+                                            <div><Button className="button" onClick={() => navigate(RoutePaths.sprintTasks + '/' + sprint.id)}>
+                                                Перейти
+                                            </Button></div>
                                         </>
                                     )}
                                 </div>

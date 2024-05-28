@@ -11,14 +11,16 @@ import PageName from '../../widgets/PageName/PageName';
 import Sidebar from '../../widgets/SideBar/SideBar';
 import Button from "../../widgets/Button/Button";
 import SprintsPage from "./SprintsPage";
+import {useParams} from "react-router-dom";
 
 const SprintTasksPage: React.FC = () => {
     const {api} = useContext(ApiContext);
+    const sprintId = Number(useParams<{ id: string }>().id);
 
     return (
         <Layout
             topLeft={<BrandLogo />}
-            topRight={<PageName text="Список спринтов" />}
+            topRight={<PageName text="Список задач в спринте" />}
             bottomLeft={<Sidebar currentPageURL={RoutePaths.sprints} />}
             bottomRight={
                 <Content>
