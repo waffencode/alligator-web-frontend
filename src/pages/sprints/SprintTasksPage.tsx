@@ -24,6 +24,7 @@ const SprintTasksPage: React.FC = () => {
     const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
     const [editedTask, setEditedTask] = useState<SprintTask | null>(null);
     const [isAddingNewTask, setIsAddingNewTask] = useState<boolean>(false);
+    const [teamMembers, setTeamMembers] = useState<UserInfo_TeamMember[]>([]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -81,6 +82,20 @@ const SprintTasksPage: React.FC = () => {
 
     const getValue = (value: string | undefined) => value !== undefined ? value : '';
 
+    const loadTeamMembers = (teamId: number) => {
+        if (!teamId) return; // Не загружать участников, если команда не выбрана
+        
+        api.team.getTeamMembersInfo(teamId)
+            .then((members) => {
+                const userInfos = members.map(member => member.userInfo);
+                setTeamMembers(userInfos);
+            })
+            .catch((err) => {
+                console.error('Failed to load team members', err);
+                setError('Failed to load team members');
+            });
+    };
+
     return (
         <Layout
             topLeft={<BrandLogo />}
@@ -91,6 +106,7 @@ const SprintTasksPage: React.FC = () => {
                     {error && <div className="error-message">{error}</div>}
                     <div className="profile-info">
                         <h2>SP: {spCur}/{spLimit}</h2>
+                        <Button>Автоматически назначить задачи</Button>
                         <div className="sprints-grid">
                             <div className="sprints-grid-header">
                                 <div>Убрать в бэклог</div>
@@ -125,41 +141,28 @@ const SprintTasksPage: React.FC = () => {
                                     </div>
                                     {editingTaskId === task.id ? (
                                         <>
-                                            <input
-                                                type="text"
-                                                value={getValue(editedTask?.headline
-                                                )}
-                                                onChange={(e) => handleTaskChange('headline', e.target.value)}
-                                            />
-                                            <input
-                                                type="text"
-                                                value={getValue(editedTask?.description)}
-                                                onChange={(e) => handleTaskChange('description', e.target.value)}
-                                            />
-                                            <select
-                                                value={getValue(editedTask?.priority)}
-                                                onChange={(e) => handleTaskChange('priority', e.target.value)}
-                                            >
-                                                <option value="A">A</option>
-                                                <option value="B">B</option>
-                                                <option value="C">C</option>
-                                                <option value="D">D</option>
-                                                <option value="E">E</option>
-                                            </select>
-                                            <input
-                                                type="date"
-                                                value={editedTask?.deadline_time ? format(new Date(editedTask?.deadline_time), 'yyyy-MM-dd') : ''}
-                                                onChange={(e) => handleTaskChange('deadline_time', e.target.value)}
-                                            />
-                                            <select
-                                                value={getValue(editedTask?.deadline_type)}
-                                                onChange={(e) => handleTaskChange('deadline_type', e.target.value)}
-                                            >
-                                                <option value="SOFT">SOFT</option>
-                                                <option value="HARD">HARD</option>
-                                            </select>
+                                            <div>{task.headline}</div>
+                                            {task.description ? <div onClick={() => handleDescriptionClick(task)} className="task_description">
+                                                {task.description.substring(0, 20)}...
+                                            </div> : ''}
+                                            <div>{task.priority}</div>
+                                            <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
+                                            <div>{task.deadline_type ? task.deadline_type : ''}</div>
                                             <div></div>
                                             <div></div>
+                                            <div>{task.sp}</div>
+                                            <div></div>
+                                            <select
+                                                value={editedTask?.team_member_id || 0}
+                                                onChange={(e) => handleTaskChange('team_member_id', parseInt(e.target.value))}
+                                            >
+                                                <option value="">Назначьте ответственного</option>
+                                                {teamMembers.map((member) => (
+                                                    <option key={member.id} value={member.id}>
+                                                        {member. fullName}
+                                                    </option>
+                                                ))}
+                                            </select>
                                             <select
                                                 value={getValue(editedTask?.state)}
                                                 onChange={(e) => handleTaskChange('state', e.target.value)}
