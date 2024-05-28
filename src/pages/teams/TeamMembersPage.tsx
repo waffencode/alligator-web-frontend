@@ -22,6 +22,8 @@ const TeamMembersPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [teamMembersInfo, setTeamMembersInfo] = useState<TeamMembersResponse_TeamMember[]>([]);
+    const [isEditingName, setIsEditingName] = useState<boolean>(false);
+    const [newTeamName, setNewTeamName] = useState<string>('');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -109,7 +111,25 @@ const TeamMembersPage: React.FC = () => {
     };
 
     const handleEditTeamName = () => {
-        // Implement edit team name logic
+        if (!team) return;
+
+        if (isEditingName) {
+            // Save new team name
+            api.team.updateTeamName(team.id, newTeamName)
+                .then(() => {
+                    setTeam({ ...team, name: newTeamName });
+                    setIsEditingName(false);
+                    setSuccessMessage('Team name updated successfully!');
+                })
+                .catch((err: any) => {
+                    console.error('Failed to update team name', err);
+                    setError('Failed to update team name');
+                });
+        } else {
+            // Start editing
+            setNewTeamName(team.name);
+            setIsEditingName(true);
+        }
     };
 
     if (error) {
@@ -129,8 +149,20 @@ const TeamMembersPage: React.FC = () => {
                 <Content>
                     <div className="team-members-page">
                         <div className="team-info">
-                            <h2>{team.name}</h2>
-                            <Button className="button" onClick={handleEditTeamName}>Редактировать название</Button>
+                            <h2>
+                                {isEditingName ? (
+                                    <input
+                                        type="text"
+                                        value={newTeamName}
+                                        onChange={(e) => setNewTeamName(e.target.value)}
+                                    />
+                                ) : (
+                                    team.name
+                                )}
+                            </h2>
+                            <Button className="button" onClick={handleEditTeamName}>
+                                {isEditingName ? 'Сохранить' : 'Редактировать название'}
+                            </Button>
                         </div>
                         <div className="members-list">
                             {members.map(member => (
@@ -160,7 +192,7 @@ const TeamMembersPage: React.FC = () => {
                                         ))}
                                     </select>
                                 </div>
-                                <Button  type="submit" className="button">Добавить</Button>
+                                <Button type="submit" className="button">Добавить</Button>
                             </form>
                         </div>
                     </div>
