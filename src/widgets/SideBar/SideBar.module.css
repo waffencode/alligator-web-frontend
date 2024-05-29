@@ -3,7 +3,6 @@
     padding-right: 25px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
     font-size: 24px;
 }
 
@@ -16,18 +15,20 @@
     padding-top: 10px;
     flex-direction: column;
     display: flex;
-    gap: 10px;
 }
 
 .tab_entry {
     color: black;
     display: flex;
-    gap: 10px;
     user-select: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
 }
 
 .selected {
-    color: var(--alligator-green);
+    color: #ffffff;
+    background-color: var(--alligator-green-dark);
 }
 
 .icon_cnt {
@@ -38,11 +39,10 @@
 .text_cnt {
     transition: color 0.2s ease-out;
     vertical-align: center;
-    height: 24px;
     white-space: nowrap;
 }
 
-.tab_entry :hover {
+.tab_entry:not(.selected):hover {
     color: var(--alligator-green);
 }
 
