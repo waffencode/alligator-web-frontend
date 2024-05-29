@@ -132,19 +132,7 @@ export class SprintTaskApi extends BaseApi {
 
 
     public async updateSprintTask(sprintTask: SprintTask): Promise<SprintTask> {
-        // статус
-        // получение id задачи
-        const taskResp = await this.getTaskBySprintTaskId(sprintTask.id);
-        // изменение статуса
-        const state = sprintTask.state;
-        const taskPatchResp = this.fetchJson<TasksResponse>(`/tasks/` + taskResp.id, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ state })
-        });
+        let wasAssigned = false;
 
         // TODO: ручное назначение задачи
         // находим, назначена ли задача
@@ -152,15 +140,16 @@ export class SprintTaskApi extends BaseApi {
         if (assignedTaskGetResp.page.totalElements != 0) {
             if (sprintTask.team_member_id && sprintTask.team_member_id > 0) {
                 // если да, то меняем id team member (пользователя)
-                const teamMemberId = sprintTask.team_member_id;
+                const teamMember = this.getPath() + "/teamMembers/" + sprintTask.team_member_id;
                 const updateAssResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks/` + assignedTaskGetResp._embedded.assignedTasks[0].id, {
                     method: 'PATCH',
                     headers: {
                         'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ teamMemberId })
+                    body: JSON.stringify({ teamMember })
                 });
+                wasAssigned = true;
             } else {
                 // удаляем назначение
                 const assignedTaskDelResp = await this.deleteAssignedTaskById(assignedTaskGetResp._embedded.assignedTasks[0].id);
@@ -180,9 +169,26 @@ export class SprintTaskApi extends BaseApi {
                     },
                     body: JSON.stringify({ assignationTime, task, teamMember })
                 });
-                console.log(postAssResp);
+                wasAssigned = true;
             }
         }
+
+        // статус
+        // получение id задачи
+        const taskResp = await this.getTaskBySprintTaskId(sprintTask.id);
+        // изменение статуса
+        let state = sprintTask.state;
+        if (wasAssigned && state === 'TODO') {
+            state = 'IN_PROGRESS';
+        }
+        const taskPatchResp = this.fetchJson<TasksResponse>(`/tasks/` + taskResp.id, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ state })
+        });
 
         // SP
         const sp = sprintTask.sp;

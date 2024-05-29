@@ -53,16 +53,7 @@ const SprintTasksPage: React.FC = () => {
         // Count the total complexity of tasks in the sprintTasksList
         setSpCur(sprintTasksList.reduce((totalComplexity, sprintTask) => totalComplexity + sprintTask.sp, 0));
     }, [sprintTasksList]);
-    /*
-        useEffect(() => {
-            let spCurTemp: number = 0;
-            for (const task of sprintTasksList) {
-                spCurTemp += task.sp;
-            }
-            setSpCur(spCurTemp);
-            console.log(spCurTemp);
-        }, [sprintTasksList]);
-    */
+  
     const loadSprintTasks = () => {
         api.sprintTask.getSprintTasksWithAllInfoBySprintId(sprintId)
             .then((tasks) => {
@@ -84,6 +75,8 @@ const SprintTasksPage: React.FC = () => {
                             setSprintTasksList(sprintTasksList.map(t => t.id === editedTask.id ? editedTask : t));
                             setEditingTaskId(null);
                             setEditedTask(null);
+                            loadSprintTasks();
+                            //console.log("edit");
                         })
                         .catch((err) => {
                             console.error('Failed to update task', err);
