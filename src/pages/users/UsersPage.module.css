@@ -1,26 +1,26 @@
 .profile_page {
     display: flex;
-  }
-  
-  .profile_content {
+}
+
+.profile_content {
     margin-left: 250px; /* Ширина бокового меню */
     padding: 0 2rem;
     width: calc(100% - 250px);
     background-color: #f9f9f9;
     height: 100vh; /* Полная высота экрана */
-  }
-  
-  .profile_content h1 {
+}
+
+.profile_content h1 {
     margin-bottom: 1rem;
-  }
-  
-  .sprints_grid {
+}
+
+.sprints_grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     grid-gap: 10px; /* Отступ между блоками */
-  }
-  
-  .sprints_grid_header {
+}
+
+.sprints_grid_header {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     background-color: #ffffff; /* Цвет фона блока */
@@ -30,9 +30,9 @@
     padding: 10px; /* Внутренний отступ */
     gap: 0px; /* Увеличиваем расстояние между элементами */
     text-align: center; /* Центрируем текст */
-  }
-  
-  .sprint_tile {
+}
+
+.sprint_tile {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* Так же, как и для основной сетки */
     background-color: #ffffff; /* Цвет фона блока */
@@ -43,48 +43,48 @@
     cursor: default; /* Изменение курсора при наведении */
     align-items: center; /* Вертикальное выравнивание по центру */
     text-align: center; /* Центрирование текста */
-  }
-  
-  .sprint_tile:hover {
+}
+
+.sprint_tile:hover {
     background-color: #f5f5f5; /* Изменение цвета фона при наведении */
-  }
-  
-  .sprint_tile > div {
-    white-space: nowrap; /* Запрещаем перенос текста */
+}
+
+.sprint_tile > div {
+    /*white-space: nowrap; !* Запрещаем перенос текста *!*/
     overflow: hidden; /* Обрезаем переполняющий текст */
     text-overflow: ellipsis; /* Добавляем многоточие для переполняющего текста */
     display: flex; /* Используем Flexbox */
     align-items: center; /* Вертикальное выравнивание по центру */
     justify-content: center; /* Горизонтальное выравнивание по центру */
-  }
-  
-  .task_description {
+}
+
+.task_description {
     cursor: pointer; /* Указатель при наведении на описание */
     text-decoration: underline; /* Подчёркивание для описания */
-  }
-  
-  .task_description:hover {
+}
+
+.task_description:hover {
     color: blue; /* Изменение цвета текста при наведении */
-  }
-  
-  .edit_button_container {
+}
+
+.edit_button_container {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .edit_button {
+}
+
+.edit_button {
     background: none; /* Убираем фон */
     border: none; /* Убираем границу */
     cursor: pointer; /* Курсор при наведении */
     font-size: 1.2rem; /* Размер шрифта */
     padding: 0; /* Убираем отступы */
     margin-right: 10px; /* Отступ справа */
-  }
-  
-  
-  /* Styles for Modal */
-  .modal {
+}
+
+
+/* Styles for Modal */
+.modal {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -96,9 +96,9 @@
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
-  }
-  
-  .modal_content {
+}
+
+.modal_content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
@@ -107,54 +107,53 @@
     width: 80%;
     max-width: 600px;
     position: relative; /* Ensure the close button is positioned relative to the content */
-  }
-  
-  .close {
+}
+
+.close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-  }
-  
-  .close:hover,
-  .close:focus {
+}
+
+.close:hover,
+.close:focus {
     color: black;
     text-decoration: none;
-  }
+}
 
-  /* Стили для выпадающего списка с ролями */
+/* Стили для выпадающего списка с ролями */
 .roleOptions {
-  position: absolute; /* Абсолютное позиционирование */
-  top: 100%; /* Размещение списка под полем выбора роли */
-  left: 0; /* Выравнивание списка по левому краю поля */
-  width: 100%; /* Ширина равна ширине поля */
-  background-color: #fff; /* Цвет фона */
-  border: 1px solid #ccc; /* Граница */
-  border-radius: 4px; /* Закругление углов */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень */
-  z-index: 1; /* Отображение над другими элементами */
-  padding: 5px 0; /* Внутренний отступ */
-  max-height: 150px; /* Максимальная высота списка */
-  overflow-y: auto; /* Включение вертикальной прокрутки, если элементов слишком много */
-  display: flex; /* Располагаем элементы в столбик */
-  flex-direction: column; /* Располагаем элементы в столбик */
-  align-items: flex-start; /* Выравниваем элементы по левому краю */
+    top: 100%; /* Размещение списка под полем выбора роли */
+    left: 0; /* Выравнивание списка по левому краю поля */
+    width: 100%; /* Ширина равна ширине поля */
+    background-color: #fff; /* Цвет фона */
+    border: 1px solid #ccc; /* Граница */
+    border-radius: 4px; /* Закругление углов */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень */
+    z-index: 1; /* Отображение над другими элементами */
+    padding: 5px 0; /* Внутренний отступ */
+    max-height: 150px; /* Максимальная высота списка */
+    overflow-y: auto; /* Включение вертикальной прокрутки, если элементов слишком много */
+    display: flex; /* Располагаем элементы в столбик */
+    flex-direction: column; /* Располагаем элементы в столбик */
+    align-items: flex-start; /* Выравниваем элементы по левому краю */
 }
 
 /* Стили для элементов списка с ролями */
 .roleOptions label {
-  display: block; /* Отображение каждого элемента на отдельной строке */
-  padding: 5px 10px; /* Внутренний отступ */
-  cursor: pointer; /* Изменение курсора при наведении */
+    display: block; /* Отображение каждого элемента на отдельной строке */
+    padding: 5px 10px; /* Внутренний отступ */
+    cursor: pointer; /* Изменение курсора при наведении */
 }
 
 /* Стили для отмеченного элемента списка */
 .roleOptions label input[type="checkbox"] {
-  margin-right: 5px; /* Отступ между чекбоксом и текстом */
+    margin-right: 5px; /* Отступ между чекбоксом и текстом */
 }
 
 /* Стили для отмеченного элемента списка */
 .roleOptions label:hover {
-  background-color: #f5f5f5; /* Изменение цвета фона при наведении */
+    background-color: #f5f5f5; /* Изменение цвета фона при наведении */
 }
