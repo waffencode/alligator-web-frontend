@@ -149,8 +149,6 @@ export class TeamRolesApi extends BaseApi {
         return resp;
     }
 
-    
-
     public async getTeamMember(teamMemberId: number): Promise<TeamMember> {
         // получаем id пользователя
         const userDetailsResp = await this.fetchJson<UserResponse>(`/teamMembers/` + teamMemberId + `/user`, {
@@ -181,6 +179,41 @@ export class TeamRolesApi extends BaseApi {
 
         teamMemberResp.fullName = userInfoResp.fullName;
         return teamMemberResp;
+    }
+
+    public async updateTeamMemberRoles(teamMemberId: number, oldTeamRoles: TeamRole[], newTeamRoles: TeamRole[]): Promise<TeamRole> {
+        // удаляем роли, которых нет в newTeamRoles
+        // Получаем массив идентификаторов ролей из newTeamRoles
+        const newRoleIds = newTeamRoles.map(role => role.id);
+        // Фильтруем oldTeamRoles и оставляем только те роли, у которых id отсутствует в newRoleIds
+        const rolesToRemove = oldTeamRoles.filter(role => !newRoleIds.includes(role.id));
+        for (const teamRole of rolesToRemove) {
+            if (teamRole.team_member_role_id) this.deleteTeamMemberRoleById(teamRole.team_member_role_id);
+        }
+        
+        // добавляем роли, которых нет в teamMemberId
+        // Получаем массив идентификаторов ролей из oldTeamRoles
+        const oldRoleIds = oldTeamRoles.map(role => role.id);
+        // Фильтруем newTeamRoles и оставляем только те роли, у которых id отсутствует в oldRoleIds
+        const rolesToAdd = newTeamRoles.filter(role => !oldRoleIds.includes(role.id));
+        for (const teamRole of rolesToAdd) {
+            this.addTeamMemberRole(teamMemberId, teamRole.id);
+        }
+        return await this.getTeamRoleByTeamMemRoleId(teamMemberId);
+    }
+
+    public async addTeamMemberRole(teamMemberRoleId: number, teamRoleId: number): Promise<TeamMemberRole> {
+        const teamMember = this.getPath() + `/teamMembers/` + teamMemberRoleId;
+        const role = this.getPath() + `/teamRoles/` + teamRoleId;
+        const deleteTeamMemberRole = await this.fetchJson<TeamMemberRole>(`/teamMemberRoles`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ teamMember, role })
+        });
+        return deleteTeamMemberRole;
     }
    
 }

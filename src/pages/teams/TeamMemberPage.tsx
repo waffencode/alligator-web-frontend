@@ -20,6 +20,7 @@ const TeamMemberPage: React.FC = () => {
     const navigate = useNavigate();
     const { api } = useContext(ApiContext);
     const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [teamMember, setTeamMember] = useState<TeamMember>();
     const [teamMemberId, setTeamMemberId] = useState<number>(Number(id));
     const [curTeamMemTeamRoles, setCurTeamMemTeamRoles] = useState<TeamRole[]>([]);
@@ -39,7 +40,17 @@ const TeamMemberPage: React.FC = () => {
     }, [curTeamMemTeamRoles]);
 
     const handleSaveClick = () => {
-        // Implement save functionality here
+        const selectedRoles = allTeamRoles.filter(role => role.selected);
+        const updatedRoles = selectedRoles.map(({ selected, ...rest }) => rest);
+        api.teamRoles.updateTeamMemberRoles(teamMemberId, curTeamMemTeamRoles, updatedRoles)
+            .then(() => {
+                setError(null);
+                setSuccessMessage('Роли успешно обновлены');
+            })
+            .catch((err) => {
+                console.error('Failed to update team roles', err);
+                setError('Ошибка при обновлении ролей');
+            });
     };
 
     const loadAllTeamRoles = () => {
@@ -87,8 +98,8 @@ const TeamMemberPage: React.FC = () => {
             bottomLeft={<Sidebar currentPageURL={RoutePaths.sprints} />}
             bottomRight={
                 <Content>
+                    {successMessage && <div className="success-message">{successMessage}</div>}
                     {error && <div className="error-message">{error}</div>}
-                    <Button onClick={() => navigate(-1)}>Назад</Button>  {/*Реализовать возвращение назад */}
                     <div className={styles.profileInfo}>
                         <h2>Пользователь {teamMember?.fullName}</h2>
                         <div className={styles.sprints_grid}>
@@ -118,6 +129,7 @@ const TeamMemberPage: React.FC = () => {
                         </div>
                     </div>
                     <Button onClick={handleSaveClick}>Сохранить</Button>
+                    <Button className="button margin-right" onClick={() => navigate(-1)}>Назад</Button>  {/*Реализовать возвращение назад */}
                 </Content>
             }
         />
