@@ -6,8 +6,12 @@ import {Team,
     TeamMemberRole,
     TeamMemberRolesResponse,
     SprintTaskRolesResponse,
-    SprintTaskRole 
+    SprintTaskRole, 
+    TeamMember,
+    UserResponse,
+    UserInfo
 } from "./IResponses";
+import User from "../../entities/User";
 
 export class TeamRolesApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -56,7 +60,7 @@ export class TeamRolesApi extends BaseApi {
     }
 
     public async deleteTeamRole(teamRole: TeamRole): Promise<TeamRole> {
-        // TODO: удалить роль у пользователей team_member_roles
+        // удалить роль у пользователей team_member_roles
         const teamMemberRoleGetResp = await this.fetchJson<TeamMemberRolesResponse>(`/teamMemberRoles?teamRoleId=`+teamRole.id, {
             method: 'GET',
             headers: {
@@ -69,7 +73,7 @@ export class TeamRolesApi extends BaseApi {
             this.deleteTeamMemberRoleById(teamMemberRole.id);
         }
 
-        // TODO: удалить роль у задач sprint_task_roles
+        // удалить роль у задач sprint_task_roles
         const sprintTaskRolesGetResp = await this.fetchJson<SprintTaskRolesResponse>(`/sprintTaskRoles?teamRoleId=` + teamRole.id, {
             method: 'GET',
             headers: {
@@ -114,5 +118,69 @@ export class TeamRolesApi extends BaseApi {
         return deleteSprintTaskRole;
     }
 
+    // получаем массив ролей, имеющихся у пользователя
+    public async getTeamRolesByTeamMemId(teamMemberId: number): Promise<TeamRole[]> {
+        // получаем записи из таблицы team member roles
+        const resp = await this.fetchJson<TeamMemberRolesResponse>(`/teamMemberRoles?teamMemberId=` + teamMemberId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const teamMemberRoles = resp._embedded.teamMemberRoles;
+        let teamRoles: TeamRole[] = [];
+        for (const teamMemberRole of teamMemberRoles) {
+            let teamRole = await this.getTeamRoleByTeamMemRoleId(teamMemberRole.id);
+            teamRole.team_member_role_id = teamMemberRole.id;
+            teamRoles.push(teamRole);
+        }
+        return teamRoles;
+    }
+
+    public async getTeamRoleByTeamMemRoleId(teamMemberRoleId: number): Promise<TeamRole> {
+        const resp = await this.fetchJson<TeamRole>(`/teamMemberRoles/` + teamMemberRoleId + `/role`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return resp;
+    }
+
+    
+
+    public async getTeamMember(teamMemberId: number): Promise<TeamMember> {
+        // получаем id пользователя
+        const userDetailsResp = await this.fetchJson<UserResponse>(`/teamMembers/` + teamMemberId + `/user`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // получаем имя пользователя
+        const userInfoResp = await this.fetchJson<UserInfo>(`/userInfoes/` + userDetailsResp.id, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // получаем team member
+        const teamMemberResp = await this.fetchJson<TeamMember>(`/teamMembers/` + teamMemberId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        teamMemberResp.fullName = userInfoResp.fullName;
+        return teamMemberResp;
+    }
    
 }

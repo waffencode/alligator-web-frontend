@@ -226,7 +226,7 @@ interface TeamMember {
     id: number;
     fullName?: string;
     state: string;
-    _links: TeamMemberLinks;
+    _links?: TeamMemberLinks;
 }
 
 // Интерфейс для _embedded части ответа
@@ -398,6 +398,7 @@ interface TeamMember_TeamMember {
 
 // Интерфейс для представления роли участника команды
 interface TeamMemberRole {
+    //selected?: any;
     id: number;
     teamMember: TeamMember_TeamMember;
     role: Role;
@@ -518,6 +519,7 @@ interface TeamRole {
     id: number;
     name: string;
     _links?: UserRoleLinks;
+    team_member_role_id?: number;
 }
 
 // Интерфейс для представления роли в команде
@@ -525,12 +527,12 @@ interface TeamRoleLinks {
     self: Link;
     teamRole: Link;
 }
-
+/*
 interface TeamRole {
     id: number;
     name: string;
     //_links: TeamRoleLinks;
-}
+}*/
 
 // Интерфейс для _embedded части ответа с ролями в команде
 interface EmbeddedTeamRoles {

@@ -13,6 +13,7 @@ export enum AppRoutes {
     TEAM_MEMBERS = 'teamMembers',
     SPRINT_TASKS  = 'sprintTasks',
     TEAM_ROLES  = 'teamRoles',
+    TEAM_MEMBER  = 'teamMember',
 }
 
 // // чтобы не хардкодить шаблонную строку
@@ -33,8 +34,9 @@ export const RoutePaths: Record<AppRoutes, string> = {
     [AppRoutes.SPRINTS]: '/sprints',
     [AppRoutes.BACKLOG]: '/backlog',
     [AppRoutes.USERS]: '/users',
-    [AppRoutes.CREATE_TEAM]: '/createTeam',
-    [AppRoutes.TEAM_MEMBERS]: '/teamMembers',
-    [AppRoutes.SPRINT_TASKS]: '/sprintTasks',
-    [AppRoutes.TEAM_ROLES]: '/teamRoles',
+    [AppRoutes.CREATE_TEAM]: '/create-team',
+    [AppRoutes.TEAM_MEMBERS]: '/team-members',
+    [AppRoutes.SPRINT_TASKS]: '/sprint-tasks',
+    [AppRoutes.TEAM_ROLES]: '/team-roles',
+    [AppRoutes.TEAM_MEMBER]: '/team-member',
 };

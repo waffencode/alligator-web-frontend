@@ -345,10 +345,10 @@ const BacklogPage: React.FC = () => {
                                     </select>
                                 </div>
                             )}
-                            <Button className={`${styles.smallButton} button`} onClick={handleAddNewTask}>
+                            <Button onClick={handleAddNewTask}>
                                 Добавить задачу
                             </Button>
-                            <Button className={`${styles.smallButton} button`} onClick={handleDeleteSelectedTasks}>
+                            <Button onClick={handleDeleteSelectedTasks}>
                                 Удалить выбранные задачи
                             </Button>
                         </div>

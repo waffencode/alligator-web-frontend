@@ -168,6 +168,7 @@ const TeamMembersPage: React.FC = () => {
                             {members.map(member => (
                                 <div key={member.id} className={`member-tile ${team.team_lead_id === member.id ? 'team-lead' : ''}`}>
                                     <span>{teamMembersInfo.find((teamMember) => teamMember.teamMemberId === member.id)?.userInfo.fullName}</span>
+                                    <Button className="button-small" onClick={() => navigate(RoutePaths.teamMember + '/' + member.id.toString())}>Перейти к командным ролям</Button>
                                     <Button className="button-small" onClick={() => handleRemoveMember(member.id)}>Удалить</Button>
                                 </div>
                             ))}

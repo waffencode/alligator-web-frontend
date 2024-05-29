@@ -14,6 +14,7 @@ import CreateTeamPage from '../pages/teams/CreateTeamPage';
 import TeamMembersPage from '../pages/teams/TeamMembersPage';
 import SprintTasksPage from "../pages/sprints/SprintTasksPage";
 import TeamRolesPage from '../pages/teamRoles/TeamRolesPage';
+import TeamMemberPage from '../pages/teams/TeamMemberPage';
 interface SecuredRouteProps {
     path?: string;
     authenticated?: boolean;
@@ -73,8 +74,12 @@ const routes: Record<AppRoutes, AppRouteProps> = {
     },
     [AppRoutes.TEAM_ROLES]: {
         path: RoutePaths.teamRoles,
-            authenticated: true
-        }
+        authenticated: true
+    },
+    [AppRoutes.TEAM_MEMBER]: {
+        path: RoutePaths.teamMember + '/:id',
+        authenticated: true
+    },
 };
 
 // root elements
@@ -117,6 +122,9 @@ const routeElements: Record<AppRoutes, AppRouteProps> = {
     },
     [AppRoutes.TEAM_ROLES]: {
         element: <TeamRolesPage />
+    },
+    [AppRoutes.TEAM_MEMBER]: {
+        element: <TeamMemberPage />
     }
 };
 
