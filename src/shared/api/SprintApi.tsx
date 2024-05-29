@@ -211,7 +211,9 @@ export class SprintApi extends BaseApi {
     }
 
     public async deleteSprint(sprintId: number): Promise<Sprint> {
-        // удаление задач из бэклога спринта
+        // TODO: удаление задач из бэклога спринта
+            // удаление назначенных задач
+            // удаление задач из таблицы sprint_tasks
         const sprintTasks = await this.getSprintTasksBySprintId(sprintId);
         for (const sprintTask of sprintTasks) {
             const sprintTaskResp = await this.fetchJson<Sprint>(`/sprintTasks/`+sprintTask.id, {
@@ -233,6 +235,8 @@ export class SprintApi extends BaseApi {
         });
         return sprintResp;
     }
+
+    
 
     public async getSprintTasksBySprintId(sprintId: number): Promise<SprintTask[]> {
         const resp = this.fetchJson<SprintTasksResponse>(`/sprintTasks?sprintId=`+sprintId, {

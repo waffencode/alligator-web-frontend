@@ -131,9 +131,11 @@ export class SprintTaskApi extends BaseApi {
     
 
     public async updateSprintTask(sprintTask: SprintTask): Promise<SprintTask>  {
+        // статус
 
+
+        // SP
         const sp = sprintTask.sp;
-
         const updateSPResp = await this.fetchJson<SprintTask>(`/sprintTasks/`+sprintTask.id, {
             method: 'PATCH',
             headers: {
@@ -144,6 +146,36 @@ export class SprintTaskApi extends BaseApi {
         });
 
         return updateSPResp
+    }
+
+    public async deleteSprintTaskById(sprintTaskId: number): Promise<SprintTask> {
+        // удаление назначенной задачи
+        const assignedTaskGetResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks?taskId=`+sprintTaskId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (assignedTaskGetResp.page.totalElements != 0) {
+            console.log("yes");
+            const assignedTaskDelResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks/`+assignedTaskGetResp._embedded.assignedTasks[0].id, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+        const sprintTaskResp = await this.fetchJson<SprintTask>(`/sprintTasks/`+sprintTaskId, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return sprintTaskResp;
     }
 
     public async getSprintTasksBySprintId(sprintId: number): Promise<SprintTask[]> {

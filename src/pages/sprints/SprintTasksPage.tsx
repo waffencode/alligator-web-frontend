@@ -10,8 +10,8 @@ import BrandLogo from '../../widgets/BrandLogo/BrandLogo';
 import PageName from '../../widgets/PageName/PageName';
 import Sidebar from '../../widgets/SideBar/SideBar';
 import Button from "../../widgets/Button/Button";
-import {useNavigate, useParams} from "react-router-dom";
-import {translateStatus} from "../../entities/StatusTranslator";
+import { useNavigate, useParams } from "react-router-dom";
+import { translateStatus } from "../../entities/StatusTranslator";
 
 const SprintTasksPage: React.FC = () => {
     const navigate = useNavigate();
@@ -53,17 +53,17 @@ const SprintTasksPage: React.FC = () => {
         // Count the total complexity of tasks in the sprintTasksList
         setSpCur(sprintTasksList.reduce((totalComplexity, sprintTask) => totalComplexity + sprintTask.sp, 0));
     }, [sprintTasksList]);
-/*
-    useEffect(() => {
-        let spCurTemp: number = 0;
-        for (const task of sprintTasksList) {
-            spCurTemp += task.sp;
-        }
-        setSpCur(spCurTemp);
-        console.log(spCurTemp);
-    }, [sprintTasksList]);
-*/
-    const loadSprintTasks = ()  => {
+    /*
+        useEffect(() => {
+            let spCurTemp: number = 0;
+            for (const task of sprintTasksList) {
+                spCurTemp += task.sp;
+            }
+            setSpCur(spCurTemp);
+            console.log(spCurTemp);
+        }, [sprintTasksList]);
+    */
+    const loadSprintTasks = () => {
         api.sprintTask.getSprintTasksWithAllInfoBySprintId(sprintId)
             .then((tasks) => {
                 setSprintTasksList(tasks);
@@ -78,9 +78,8 @@ const SprintTasksPage: React.FC = () => {
         if (editingTaskId === task.id) {
             if (editedTask) {
                 const token = localStorage.getItem('token');
-
                 if (token) {
-                     api.sprintTask.updateSprintTask(editedTask)
+                    api.sprintTask.updateSprintTask(editedTask)
                         .then(() => {
                             setSprintTasksList(sprintTasksList.map(t => t.id === editedTask.id ? editedTask : t));
                             setEditingTaskId(null);
@@ -99,29 +98,23 @@ const SprintTasksPage: React.FC = () => {
         }
     };
 
-    const handleDeleteClick = (task: SprintTask) => {
-        if (editingTaskId === task.id) {
-            if (editedTask) {
-                const token = localStorage.getItem('token');
-
-                if (token) {
-                    // api.tasks.updateTask(editedTask)
-                    //    .then(() => {
-                            setSprintTasksList(sprintTasksList.map(t => t.id === editedTask.id ? editedTask : t));
-                            setEditingTaskId(null);
-                            setEditedTask(null);
-                    //    })
-                    //    .catch((err) => {
-                    //        console.error('Failed to update task', err);
-                    //        setError('Failed to update task');
-                    //    });
-                }
-            }
-        } else {
-            setEditingTaskId(task.id);
-            setEditedTask(task);
-            loadTeamMembers();
+    const handleDeleteClick = (taskId: number) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            api.sprintTask.deleteSprintTaskById(taskId)
+                .then(() => {
+                    setSprintTasksList(sprintTasksList.filter(task => task.id !== taskId));
+                    if (editingTaskId === sprintId) {
+                        setEditingTaskId(null);
+                        setEditedTask(null);
+                    }
+                })
+                .catch((err) => {
+                    console.error('Failed to delete sprint task', err);
+                    setError('Ошибка при удалении задачи из спринта');
+                });
         }
+
     };
 
     const handleTaskChange = (field: keyof SprintTask, value: string | number) => {
@@ -142,7 +135,7 @@ const SprintTasksPage: React.FC = () => {
         setSelectedTask(task);
     };
 
-    const handleAssignationCall = ()  =>  {
+    const handleAssignationCall = () => {
         api.sprintTask.assignTasks(sprintId)
             .then((assignedTasks) => {
                 console.log('Task assignation completed with ' + assignedTasks.length + ' entries.');
@@ -157,7 +150,7 @@ const SprintTasksPage: React.FC = () => {
 
     const getValue = (value: string | undefined) => value !== undefined ? value : '';
 
-    const loadTeamMembers = () => {        
+    const loadTeamMembers = () => {
         api.sprint.getTeamMembersBySprintId(sprintId)
             .then((members) => {
                 setTeamMembers(members);
@@ -187,7 +180,7 @@ const SprintTasksPage: React.FC = () => {
             if (selectedTask) {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    api.sprintTask.addSprintTask({sp: 0, sprint_id: sprintId, task_id: selectedProposedTaskId})
+                    api.sprintTask.addSprintTask({ sp: 0, sprint_id: sprintId, task_id: selectedProposedTaskId })
                         .then((newTask) => {
                             setSprintTasksList([...sprintTasksList, newTask]);
                             setProposedTasks(proposedTasks.filter(task => task.id !== selectedProposedTaskId));
@@ -239,7 +232,7 @@ const SprintTasksPage: React.FC = () => {
                                     <div className={styles.edit_button_container}>
                                         <button
                                             className={styles.edit_button}
-                                            onClick={() => handleEditClick(sprintTask)} // handleDeleteClick
+                                            onClick={() => handleDeleteClick(sprintTask.id)} // handleDeleteClick
                                         >✕
                                         </button>
                                     </div>
@@ -256,7 +249,7 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{sprintTask.headline}</div>
                                             {sprintTask.description ? (
                                                 <div onClick={() => handleDescriptionClick(sprintTask)}
-                                                     className={styles.task_description}>
+                                                    className={styles.task_description}>
                                                     {sprintTask.description.substring(0, 20)}...
                                                 </div>) : <div></div>}
                                             <div>{sprintTask.priority}</div>
@@ -267,7 +260,7 @@ const SprintTasksPage: React.FC = () => {
                                             <input
                                                 type="number"
                                                 value={editedTask?.sp || 0}
-                                                onChange={(e) => handleTaskChange('sp', e.target.value)}
+                                                onChange={(e) => handleTaskChange('sp', parseInt(e.target.value))}
                                             />
                                             <select
                                                 value={editedTask?.team_member_id || 0}
@@ -298,7 +291,7 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{sprintTask.headline}</div>
                                             {sprintTask.description ?
                                                 <div onClick={() => handleDescriptionClick(sprintTask)}
-                                                     className="task_description">
+                                                    className="task_description">
                                                     {sprintTask.description.substring(0, 20)}...
                                                 </div> : <div></div>}
                                             <div>{sprintTask.priority}</div>
