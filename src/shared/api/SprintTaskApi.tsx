@@ -129,6 +129,23 @@ export class SprintTaskApi extends BaseApi {
         return sprintTasks;
     }
     
+
+    public async updateSprintTask(sprintTask: SprintTask): Promise<SprintTask>  {
+
+        const sp = sprintTask.sp;
+
+        const updateSPResp = await this.fetchJson<SprintTask>(`/sprintTasks/`+sprintTask.id, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({sp})
+        });
+
+        return updateSPResp
+    }
+
     public async getSprintTasksBySprintId(sprintId: number): Promise<SprintTask[]> {
         const resp = this.fetchJson<SprintTasksResponse>(`/sprintTasks?sprintId=`+sprintId, {
             method: 'GET',

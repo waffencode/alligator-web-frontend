@@ -108,7 +108,6 @@ export class SprintApi extends BaseApi {
             // fullName
             const userInfo = await this.getUserInfoesByUserId(user.id);
             teamMember.fullName = userInfo.fullName;
-            console.log(teamMember.fullName);
         }
         return teamMembers;
     }

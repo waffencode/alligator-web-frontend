@@ -53,7 +53,16 @@ const SprintTasksPage: React.FC = () => {
         // Count the total complexity of tasks in the sprintTasksList
         setSpCur(sprintTasksList.reduce((totalComplexity, sprintTask) => totalComplexity + sprintTask.sp, 0));
     }, [sprintTasksList]);
-
+/*
+    useEffect(() => {
+        let spCurTemp: number = 0;
+        for (const task of sprintTasksList) {
+            spCurTemp += task.sp;
+        }
+        setSpCur(spCurTemp);
+        console.log(spCurTemp);
+    }, [sprintTasksList]);
+*/
     const loadSprintTasks = ()  => {
         api.sprintTask.getSprintTasksWithAllInfoBySprintId(sprintId)
             .then((tasks) => {
@@ -66,6 +75,31 @@ const SprintTasksPage: React.FC = () => {
     }
 
     const handleEditClick = (task: SprintTask) => {
+        if (editingTaskId === task.id) {
+            if (editedTask) {
+                const token = localStorage.getItem('token');
+
+                if (token) {
+                     api.sprintTask.updateSprintTask(editedTask)
+                        .then(() => {
+                            setSprintTasksList(sprintTasksList.map(t => t.id === editedTask.id ? editedTask : t));
+                            setEditingTaskId(null);
+                            setEditedTask(null);
+                        })
+                        .catch((err) => {
+                            console.error('Failed to update task', err);
+                            setError('Failed to update task');
+                        });
+                }
+            }
+        } else {
+            setEditingTaskId(task.id);
+            setEditedTask(task);
+            loadTeamMembers();
+        }
+    };
+
+    const handleDeleteClick = (task: SprintTask) => {
         if (editingTaskId === task.id) {
             if (editedTask) {
                 const token = localStorage.getItem('token');
@@ -92,6 +126,9 @@ const SprintTasksPage: React.FC = () => {
 
     const handleTaskChange = (field: keyof SprintTask, value: string | number) => {
         if (editedTask) {
+            if (field === 'sp') {
+                setEditedTask({ ...editedTask, sp: parseInt(value as string, 10) });
+            }
             if (field === 'deadline_time') {
                 const editedDeadlineTime = new Date(value);
                 setEditedTask({ ...editedTask, deadline_time: editedDeadlineTime.toISOString() });
@@ -202,7 +239,7 @@ const SprintTasksPage: React.FC = () => {
                                     <div className={styles.edit_button_container}>
                                         <button
                                             className={styles.edit_button}
-                                            onClick={() => handleEditClick(sprintTask)}
+                                            onClick={() => handleEditClick(sprintTask)} // handleDeleteClick
                                         >✕
                                         </button>
                                     </div>
@@ -227,7 +264,11 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
                                             <div></div>
                                             <div></div>
-                                            <div>{sprintTask.sp}</div>
+                                            <input
+                                                type="number"
+                                                value={editedTask?.sp || 0}
+                                                onChange={(e) => handleTaskChange('sp', e.target.value)}
+                                            />
                                             <select
                                                 value={editedTask?.team_member_id || 0}
                                                 onChange={(e) => handleTaskChange('team_member_id', parseInt(e.target.value))}
