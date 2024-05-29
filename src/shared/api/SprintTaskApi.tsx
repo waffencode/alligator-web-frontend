@@ -6,6 +6,7 @@ import {
     SprintTask, SprintTaskDto,
     SprintTasksResponse,
     Task,
+    TasksResponse,
     TeamMember,
     UserInfoResponse,
     UserResponse
@@ -131,8 +132,21 @@ export class SprintTaskApi extends BaseApi {
     
 
     public async updateSprintTask(sprintTask: SprintTask): Promise<SprintTask>  {
-        // статус
+        // TODO: статус
+            // получение id задачи
+        const taskResp = await this.getTaskBySprintTaskId(sprintTask.id);
+            // изменение статуса
+        const state = sprintTask.state;
+        const taskPatchResp = this.fetchJson<TasksResponse>(`/tasks/` +  taskResp.id, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ state })
+        });
 
+        // TODO: ручное назначение задачи
 
         // SP
         const sp = sprintTask.sp;
@@ -148,6 +162,19 @@ export class SprintTaskApi extends BaseApi {
         return updateSPResp
     }
 
+    public async getTaskBySprintTaskId(sprintTaskId: number): Promise<Task> {
+        const resp = await this.fetchJson<Task>(`/sprintTasks/`+sprintTaskId+`/task`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return resp;
+    }
+
+
     public async deleteSprintTaskById(sprintTaskId: number): Promise<SprintTask> {
         // удаление назначенной задачи
         const assignedTaskGetResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks?taskId=`+sprintTaskId, {
@@ -158,7 +185,6 @@ export class SprintTaskApi extends BaseApi {
             }
         });
         if (assignedTaskGetResp.page.totalElements != 0) {
-            console.log("yes");
             const assignedTaskDelResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks/`+assignedTaskGetResp._embedded.assignedTasks[0].id, {
                 method: 'DELETE',
                 headers: {

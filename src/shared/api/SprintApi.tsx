@@ -1,6 +1,9 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Sprint, SprintsResponse, Team, TeamMember, TeamMembersResponse, UserInfo, UserInfoResponse, UserProfile, SprintTasksResponse, SprintTask} from "./IResponses";
+import {Sprint, SprintsResponse, Team, TeamMember, TeamMembersResponse, UserInfo, UserInfoResponse, UserProfile, SprintTasksResponse, 
+    SprintTask,
+    AssignedTasksResponse
+} from "./IResponses";
 
 export class SprintApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -211,11 +214,27 @@ export class SprintApi extends BaseApi {
     }
 
     public async deleteSprint(sprintId: number): Promise<Sprint> {
-        // TODO: удаление задач из бэклога спринта
-            // удаление назначенных задач
-            // удаление задач из таблицы sprint_tasks
+        // удаление задач из бэклога спринта            
         const sprintTasks = await this.getSprintTasksBySprintId(sprintId);
         for (const sprintTask of sprintTasks) {
+            // удаление назначенных задач
+            const assignedTaskGetResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks?taskId=`+sprintTask.id, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (assignedTaskGetResp.page.totalElements != 0) {
+                const assignedTaskDelResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks/`+assignedTaskGetResp._embedded.assignedTasks[0].id, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+            // удаление задач из таблицы sprint_tasks
             const sprintTaskResp = await this.fetchJson<Sprint>(`/sprintTasks/`+sprintTask.id, {
                 method: 'DELETE',
                 headers: {
