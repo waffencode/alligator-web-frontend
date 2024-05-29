@@ -45,7 +45,7 @@ const BacklogPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to fetch tasks', err);
-                    setError('Failed to load tasks');
+                    setError('Ошибка при загрузке задач');
                 });
         } else {
             setError('No authentication token found');
@@ -73,7 +73,7 @@ const BacklogPage: React.FC = () => {
                         })
                         .catch((err) => {
                             console.error('Failed to update task', err);
-                            setError('Failed to update task');
+                            setError('Ошибка при изменении задачи');
                         });
                 }
             }
@@ -131,7 +131,7 @@ const BacklogPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to create task', err);
-                    setError('Failed to create task');
+                    setError('Ошибка при создании задачи');
                 });
         }
     };
@@ -155,7 +155,7 @@ const BacklogPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to delete tasks', err);
-                    setError('Failed to delete tasks');
+                    setError('Ошибка при удалении задачи');
                 });
         }
     };

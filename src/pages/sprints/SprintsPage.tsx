@@ -10,7 +10,7 @@ import BrandLogo from '../../widgets/BrandLogo/BrandLogo';
 import PageName from '../../widgets/PageName/PageName';
 import Sidebar from '../../widgets/SideBar/SideBar';
 import Button from "../../widgets/Button/Button";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SprintsPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -39,22 +39,14 @@ const SprintsPage: React.FC = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            api.sprint.getSprints()
-                .then((sprints) => {
-                    setSprints(sprints);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch sprints', err);
-                    setError('Failed to load sprints');
-                });
-
+            loadSprints();
             api.team.getTeams()
                 .then((teams) => {
                     setTeams(teams);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch teams', err);
-                    setError('Failed to load teams');
+                    setError('Ошибка при загрузке команд');
                 });
         } else {
             setError('No authentication token found');
@@ -82,13 +74,15 @@ const SprintsPage: React.FC = () => {
                 if (token) {
                     api.sprint.updateSprint(editedSprint)
                         .then(() => {
-                            setSprints(sprints.map(s => s.id === editedSprint.id ? editedSprint : s));
+                            //setSprints(sprints.map(s => s.id === editedSprint.id ? editedSprint : s));
                             setEditingSprintId(null);
                             setEditedSprint(null);
+                            // обновление списка спринтов после внесения изменений
+                            loadSprints();
                         })
                         .catch((err) => {
                             console.error('Failed to update sprint', err);
-                            setError('Failed to update sprint');
+                            setError('Ошибка при изменении спринта');
                         });
                 }
             }
@@ -98,6 +92,17 @@ const SprintsPage: React.FC = () => {
             loadTeamMembers(sprint.team_id || 1);
         }
     };
+
+    const loadSprints = () => {
+        api.sprint.getSprints()
+            .then((sprints) => {
+                setSprints(sprints);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch sprints', err);
+                setError('Ошибка при загрузке спринтов');
+            });
+    }
 
     const handleSprintChange = (field: keyof Sprint, value: string | number) => {
         if (editedSprint) {
@@ -139,6 +144,7 @@ const SprintsPage: React.FC = () => {
                         scrumMaster_id: 0,
                         scrumMaster_fullName: '',
                     });
+                    loadSprints();
                 })
                 .catch((err) => {
                     console.error('Failed to create sprint', err);
@@ -156,7 +162,7 @@ const SprintsPage: React.FC = () => {
 
     const loadTeamMembers = (teamId: number) => {
         if (!teamId) return; // Не загружать участников, если команда не выбрана
-        
+
         api.team.getTeamMembersInfo(teamId)
             .then((members) => {
                 const userInfos = members.map(member => member.userInfo);
@@ -164,7 +170,7 @@ const SprintsPage: React.FC = () => {
             })
             .catch((err) => {
                 console.error('Failed to load team members', err);
-                setError('Failed to load team members');
+                setError('Ошибка при загрузке участников команды');
             });
     };
 
@@ -192,7 +198,7 @@ const SprintsPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to delete sprint', err);
-                    setError('Failed to delete sprint');
+                    setError('Ошибка при удалении спринта');
                 });
         }
     };
@@ -204,7 +210,7 @@ const SprintsPage: React.FC = () => {
             bottomLeft={<Sidebar currentPageURL={RoutePaths.sprints} />}
             bottomRight={
                 <Content>
-                    {error && <div className="error_message">{error}</div>}
+                    {error && <div className="error-message">{error}</div>}
                     <div className="profile_info">
                         <div className={styles.sprints_grid}>
                             <div className={styles.sprints_grid_header}>
@@ -243,7 +249,7 @@ const SprintsPage: React.FC = () => {
                                                 <option value="">Выберите Scrum-мастера</option>
                                                 {teamMembers.map((member) => (
                                                     <option key={member.id} value={member.id}>
-                                                        {member. fullName}
+                                                        {member.fullName}
                                                     </option>
                                                 ))}
                                             </select>

@@ -76,7 +76,6 @@ const SprintTasksPage: React.FC = () => {
                             setEditingTaskId(null);
                             setEditedTask(null);
                             loadSprintTasks();
-                            //console.log("edit");
                         })
                         .catch((err) => {
                             console.error('Failed to update task', err);
@@ -94,20 +93,22 @@ const SprintTasksPage: React.FC = () => {
     const handleDeleteClick = (taskId: number) => {
         const token = localStorage.getItem('token');
         if (token) {
-            api.sprintTask.deleteSprintTaskById(taskId)
-                .then(() => {
-                    setSprintTasksList(sprintTasksList.filter(task => task.id !== taskId));
-                    if (editingTaskId === sprintId) {
-                        setEditingTaskId(null);
-                        setEditedTask(null);
-                    }
-                })
-                .catch((err) => {
-                    console.error('Failed to delete sprint task', err);
-                    setError('Ошибка при удалении задачи из спринта');
-                });
+            const confirmed = window.confirm('Вы уверены, что хотите удалить эту задачу?');
+            if (confirmed) {
+                api.sprintTask.deleteSprintTaskById(taskId)
+                    .then(() => {
+                        setSprintTasksList(sprintTasksList.filter(task => task.id !== taskId));
+                        if (editingTaskId === sprintId) {
+                            setEditingTaskId(null);
+                            setEditedTask(null);
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('Failed to delete sprint task', err);
+                        setError('Ошибка при удалении задачи из спринта');
+                    });
+            }
         }
-
     };
 
     const handleTaskChange = (field: keyof SprintTask, value: string | number) => {
