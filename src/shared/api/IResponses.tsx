@@ -437,7 +437,7 @@ interface SprintTask {
     deadline_time?: string; // дедлайн
     deadline_type?: string; // тип дедлана
     assignation_time?: string;
-    assigned_task_id?: number; 
+    //assigned_task_id?: number; 
     task_id?: number;
     team_member_id?: number; 
     team_member_fullName?: string; // ответственный
