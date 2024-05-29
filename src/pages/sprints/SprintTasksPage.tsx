@@ -28,6 +28,7 @@ const SprintTasksPage: React.FC = () => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [proposedTasks, setProposedTasks] = useState<Task[]>([]); // New state for proposed tasks
     const [selectedProposedTaskId, setSelectedProposedTaskId] = useState<number | null>(null); // State for selected proposed task
+    const [expandedSprintTaskId, setExpandedSprintTaskId] = useState<number | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -64,6 +65,10 @@ const SprintTasksPage: React.FC = () => {
                 setError('Ошибка при загрузке задач!');
             });
     }
+
+    const closeModal = () => {
+        setSelectedTask(null);
+    };
 
     const handleEditClick = (task: SprintTask) => {
         if (editingTaskId === task.id) {
@@ -125,8 +130,8 @@ const SprintTasksPage: React.FC = () => {
         }
     };
 
-    const handleDescriptionClick = (task: SprintTask) => {
-        setSelectedTask(task);
+    const handleDescriptionClick = (sprintTaskId: number) => {
+        setExpandedSprintTaskId(sprintTaskId === expandedSprintTaskId ? null : sprintTaskId);
     };
 
     const handleAssignationCall = () => {
@@ -238,12 +243,20 @@ const SprintTasksPage: React.FC = () => {
                                             {editingTaskId === sprintTask.id ? '✓' : '✎'}
                                         </button>
                                     </div>
+                                    {/* Здесь заменяем комментированный блок "Остальной код задачи" на код отображения описания */}
+                                    {expandedSprintTaskId === sprintTask.id && (
+                                        <div className={styles.task_description_expanded}>
+                                            <button className={styles.close_button} onClick={() => handleDescriptionClick(sprintTask.id)}>
+                                                &times;
+                                            </button>
+                                            <p style={{ whiteSpace: "pre-wrap" }}>{sprintTask.description}</p>
+                                        </div>
+                                    )}
                                     {editingTaskId === sprintTask.id ? (
                                         <>
                                             <div>{sprintTask.headline}</div>
                                             {sprintTask.description ? (
-                                                <div onClick={() => handleDescriptionClick(sprintTask)}
-                                                    className={styles.task_description}>
+                                                <div onClick={() => handleDescriptionClick(sprintTask.id)} className={styles.task_description}>
                                                     {sprintTask.description.substring(0, 20)}...
                                                 </div>) : <div></div>}
                                             <div>{sprintTask.priority}</div>
@@ -284,8 +297,7 @@ const SprintTasksPage: React.FC = () => {
                                         <>
                                             <div>{sprintTask.headline}</div>
                                             {sprintTask.description ?
-                                                <div onClick={() => handleDescriptionClick(sprintTask)}
-                                                    className="task_description">
+                                                <div onClick={() => handleDescriptionClick(sprintTask.id)} className={styles.task_description}>
                                                     {sprintTask.description.substring(0, 20)}...
                                                 </div> : <div></div>}
                                             <div>{sprintTask.priority}</div>
@@ -327,6 +339,15 @@ const SprintTasksPage: React.FC = () => {
                                 <Button className="button margin-right" onClick={() => navigate(RoutePaths.sprints)}>Назад</Button>
                             </form>
                         </div>
+                        {selectedTask && (
+                            <div className="modal">
+                                <div className="modal-content">
+                                    <span className="close" onClick={closeModal}>&times;</span>
+                                    <h2>{selectedTask.headline}</h2>
+                                    <p>{selectedTask.description}</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </Content>
             }

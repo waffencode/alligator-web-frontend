@@ -271,7 +271,6 @@ const BacklogPage: React.FC = () => {
                                         <>
                                             <div>{task.headline}</div>
                                             <div onClick={() => handleDescriptionClick(task.id)} className={styles.task_description}>
-
                                                 {task.description.substring(0, 20)}...
                                             </div>
                                             <div>{task.priority}</div>
