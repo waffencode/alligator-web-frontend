@@ -59,16 +59,16 @@ const TeamRolesPage: React.FC = () => {
     };
 
     const handleDeleteClick = (teamRole: TeamRole) => {
-        /*const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token');
         if (token) {
             const confirmed = window.confirm('Вы уверены, что хотите удалить эту задачу?');
             if (confirmed) {
-                /*api.sprintTask.deleteSprintTaskById(taskId)
+                api.teamRoles.deleteTeamRole(teamRole)
                     .then(() => {
-                        setSprintTasksList(sprintTasksList.filter(task => task.id !== taskId));
-                        if (editingTaskId === sprintId) {
-                            setEditingTaskId(null);
-                            setEditedTask(null);
+                        setTeamRoles(teamRoles.filter(tRole => tRole.id !== teamRole.id));
+                        if (editingTeamRoleId === teamRole.id) {
+                            setEditingTeamRoleId(null);
+                            setEditedTeamRole(null);
                         }
                     })
                     .catch((err) => {
@@ -76,7 +76,7 @@ const TeamRolesPage: React.FC = () => {
                         setError('Ошибка при удалении задачи из спринта');
                     });
             }
-        }*/
+        }
     };
 
     const handleTeamRoleEdit = (roleId: number) => {

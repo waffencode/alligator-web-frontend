@@ -558,6 +558,88 @@ interface TeamRolesResponse {
     page: TeamRolesPageInfo;
 }
 
+// Интерфейс для ссылок в каждом элементе teamMemberRole
+interface TeamMemberRoleLinks {
+    self: Link;
+    teamMemberRole: Link;
+    role: Link;
+    teamMember: Link;
+}
+
+// Интерфейс для элемента teamMemberRole
+interface TeamMemberRole {
+    id: number;
+    _links: TeamMemberRoleLinks;
+}
+
+// Интерфейс для _embedded части ответа с teamMemberRoles
+interface EmbeddedTeamMemberRoles {
+    teamMemberRoles: TeamMemberRole[];
+}
+
+// Интерфейс для верхнего уровня ссылок в ответе с teamMemberRoles
+interface TeamMemberRolesTopLevelLinks {
+    self: Link;
+    profile: Link;
+    search: Link;
+}
+
+// Интерфейс для информации о странице в ответе с teamMemberRoles
+interface TeamMemberRolesPageInfo {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+
+// Основной интерфейс для ответа с teamMemberRoles
+interface TeamMemberRolesResponse {
+    _embedded: EmbeddedTeamMemberRoles;
+    _links: TeamMemberRolesTopLevelLinks;
+    page: TeamMemberRolesPageInfo;
+}
+
+// Интерфейс для ссылок в каждом элементе sprintTaskRole
+interface SprintTaskRoleLinks {
+    self: Link;
+    sprintTaskRole: Link;
+    role: Link;
+    task: Link;
+}
+
+// Интерфейс для элемента sprintTaskRole
+interface SprintTaskRole {
+    id: number;
+    _links: SprintTaskRoleLinks;
+}
+
+// Интерфейс для _embedded части ответа с sprintTaskRoles
+interface EmbeddedSprintTaskRoles {
+    sprintTaskRoles: SprintTaskRole[];
+}
+
+// Интерфейс для верхнего уровня ссылок в ответе с sprintTaskRoles
+interface SprintTaskRolesTopLevelLinks {
+    self: Link;
+    profile: Link;
+    search: Link;
+}
+
+// Интерфейс для информации о странице в ответе с sprintTaskRoles
+interface SprintTaskRolesPageInfo {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+
+// Основной интерфейс для ответа с sprintTaskRoles
+interface SprintTaskRolesResponse {
+    _embedded: EmbeddedSprintTaskRoles;
+    _links: SprintTaskRolesTopLevelLinks;
+    page: SprintTaskRolesPageInfo;
+}
+
 export type { 
     UserProfile, 
     AuthResponse, 
@@ -604,5 +686,9 @@ export type {
     AssignedTasksResponse,
     SprintTaskDto,
     TeamRole,
-    TeamRolesResponse
+    TeamRolesResponse,
+    TeamMemberRole,
+    TeamMemberRolesResponse,
+    SprintTaskRolesResponse,
+    SprintTaskRole 
 };
