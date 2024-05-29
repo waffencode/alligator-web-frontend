@@ -10,10 +10,11 @@ import BrandLogo from '../../widgets/BrandLogo/BrandLogo';
 import PageName from '../../widgets/PageName/PageName';
 import Sidebar from '../../widgets/SideBar/SideBar';
 import Button from "../../widgets/Button/Button";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {translateStatus} from "../../entities/StatusTranslator";
 
 const SprintTasksPage: React.FC = () => {
+    const navigate = useNavigate();
     const { api } = useContext(ApiContext);
     const sprintId = Number(useParams<{ id: string }>().id);
     const [sprintName, setSprintName] = useState<string | null>(null);
@@ -294,7 +295,8 @@ const SprintTasksPage: React.FC = () => {
                                         ))}
                                     </select>
                                 </div>
-                                <Button type="submit" className="button">Добавить</Button>
+                                <Button type="submit" className="button margin-right">Добавить</Button>
+                                <Button className="button margin-right" onClick={() => navigate(RoutePaths.sprints)}>Назад</Button>
                             </form>
                         </div>
                     </div>
