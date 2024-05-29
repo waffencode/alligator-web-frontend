@@ -36,7 +36,7 @@ const UsersPage: React.FC = () => {
         } else {
             setError('No authentication token found');
         }
-    }, [api.user]);
+    }, [api.user, editedRoles]);
 
     // Получение списка ролей
     useEffect(() => {
