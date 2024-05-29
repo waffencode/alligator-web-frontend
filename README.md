@@ -1,3 +1,7 @@
+![image](https://github.com/waffencode/alligator-web-frontend/assets/87225985/c2a72fa3-ef90-4adb-b22a-d127a186454b)
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
