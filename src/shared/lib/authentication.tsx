@@ -40,7 +40,7 @@ function getAuthenticationContextData() {
     const data = localStorage.getItem(LocalStorageKeys.AUTH);
     if (data != null) {
         const obj: object = JSON.parse(data);
-        console.log(plainToInstance(AuthenticationContextData, obj))
+        //console.log(plainToInstance(AuthenticationContextData, obj))
         return plainToInstance(AuthenticationContextData, obj);
     }
     return new AuthenticationContextData();

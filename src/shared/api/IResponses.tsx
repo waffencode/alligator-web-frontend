@@ -513,6 +513,51 @@ interface AssignedTasksResponse {
     page: AssignedTasksPageInfo;
 }
 
+interface TeamRole {
+    selected?: any;
+    id: number;
+    name: string;
+    _links?: UserRoleLinks;
+}
+
+// Интерфейс для представления роли в команде
+interface TeamRoleLinks {
+    self: Link;
+    teamRole: Link;
+}
+
+interface TeamRole {
+    id: number;
+    name: string;
+    //_links: TeamRoleLinks;
+}
+
+// Интерфейс для _embedded части ответа с ролями в команде
+interface EmbeddedTeamRoles {
+    teamRoles: TeamRole[];
+}
+
+// Интерфейс для верхнего уровня ссылок в ответе с ролями в команде
+interface TeamRolesTopLevelLinks {
+    self: Link;
+    profile: Link;
+}
+
+// Интерфейс для информации о странице в ответе с ролями в команде
+interface TeamRolesPageInfo {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+
+// Основной интерфейс для ответа с ролями в команде
+interface TeamRolesResponse {
+    _embedded: EmbeddedTeamRoles;
+    _links: TeamRolesTopLevelLinks;
+    page: TeamRolesPageInfo;
+}
+
 export type { 
     UserProfile, 
     AuthResponse, 
@@ -557,5 +602,7 @@ export type {
     AssignedTasksTopLevelLinks,
     AssignedTasksPageInfo,
     AssignedTasksResponse,
-    SprintTaskDto
+    SprintTaskDto,
+    TeamRole,
+    TeamRolesResponse
 };

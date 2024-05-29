@@ -6,6 +6,7 @@ import {SprintApi} from "../shared/api/SprintApi";
 import {TaskApi} from "../shared/api/TaskApi";
 import {TeamApi} from "../shared/api/TeamApi";
 import { SprintTaskApi } from '../shared/api/SprintTaskApi';
+import { TeamRolesApi } from '../shared/api/TeamRolesApi';
 
 type setAuthenticationContextData = (context: AuthenticationContextData) => void;
 
@@ -17,6 +18,7 @@ class Api {
     tasks: TaskApi;
     team: TeamApi;
     sprintTask: SprintTaskApi;
+    teamRoles: TeamRolesApi;
 
     _authenticationContext: AuthenticationContextData;
     _setAuthenticationContext: setAuthenticationContextData;
@@ -32,6 +34,7 @@ class Api {
         this.tasks = new TaskApi(this._authenticationContext);
         this.team = new TeamApi(this._authenticationContext);
         this.sprintTask = new SprintTaskApi(this._authenticationContext, this.tasks);
+        this.teamRoles = new TeamRolesApi(this._authenticationContext);
     }
 
     isLoggedIn(): boolean {
