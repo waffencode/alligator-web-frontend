@@ -36,7 +36,7 @@ const TeamMembersPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to fetch team details', err);
-                    setError('Failed to load team details');
+                    setError('Ошибка при загрузке информации о команде');
                 });
 
             api.team.getTeamMembers(pageId)
@@ -45,7 +45,7 @@ const TeamMembersPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to fetch team members', err);
-                    setError('Failed to load team members');
+                    setError('Ошибка при загрузке участников команды!');
                 });
 
             api.user.getAllUsersInfoWithRoles()
@@ -77,7 +77,7 @@ const TeamMembersPage: React.FC = () => {
                 const newMember = response;
                 if (newMember) {
                     setMembers([...members, newMember]);
-                    setSuccessMessage('Member added successfully!');
+                    setSuccessMessage('Участник успешно добавлен!');
                     setNewMemberId(undefined);
 
                     api.team.getTeamMembersInfo(pageId)
@@ -91,7 +91,7 @@ const TeamMembersPage: React.FC = () => {
             })
             .catch((err) => {
                 console.error('Failed to add member', err);
-                setError('Failed to add member');
+                setError('Ошибка при добавлении участника!');
             });
     };
 
@@ -102,11 +102,11 @@ const TeamMembersPage: React.FC = () => {
         api.team.removeMemberFromTeam(memberId)
             .then(() => {
                 setMembers(members.filter(member => member.id !== memberId));
-                setSuccessMessage('Member removed successfully!');
+                setSuccessMessage('Участник успешно удалён!');
             })
             .catch((err) => {
                 console.error('Failed to remove member', err);
-                setError('Failed to remove member');
+                setError('Ошибка при удалении участника!');
             });
     };
 
@@ -119,11 +119,11 @@ const TeamMembersPage: React.FC = () => {
                 .then(() => {
                     setTeam({ ...team, name: newTeamName });
                     setIsEditingName(false);
-                    setSuccessMessage('Team name updated successfully!');
+                    setSuccessMessage('Название команды успешно изменено!');
                 })
                 .catch((err: any) => {
                     console.error('Failed to update team name', err);
-                    setError('Failed to update team name');
+                    setError('Ошибка при изменении названия команды!');
                 });
         } else {
             // Start editing
@@ -192,7 +192,8 @@ const TeamMembersPage: React.FC = () => {
                                         ))}
                                     </select>
                                 </div>
-                                <Button type="submit" className="button">Добавить</Button>
+                                <Button type="submit" className="button margin-right">Добавить</Button>
+                                <Button className="button" onClick={() => navigate(RoutePaths.availableTeams)}>Назад</Button>
                             </form>
                         </div>
                     </div>

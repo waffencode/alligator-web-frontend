@@ -20,6 +20,7 @@
 }
 
 .tab_entry {
+    color: black;
     display: flex;
     gap: 10px;
     user-select: none;
@@ -35,9 +36,14 @@
 }
 
 .text_cnt {
+    transition: color 0.2s ease-out;
     vertical-align: center;
     height: 24px;
     white-space: nowrap;
+}
+
+.tab_entry :hover {
+    color: var(--alligator-green);
 }
 
 .arrow {

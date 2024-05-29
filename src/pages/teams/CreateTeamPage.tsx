@@ -58,13 +58,13 @@ const CreateTeamPage: React.FC = () => {
 
         api.team.createTeam({ id: 0, name: teamName, team_lead_id: teamLeadUserId, state: "ACTIVE" })
             .then(() => {
-                setSuccessMessage('Team created successfully!');
+                setSuccessMessage('Команда успешно создана!');
                 setTeamName(teamName);
                 setTeamLeadUserId(teamLeadUserId);
             })
             .catch((err: Error) => {
                 console.error('Failed to create team', err);
-                setError('Failed to create team');
+                setError('Ошибка при создании команды');
             });
     };
 
