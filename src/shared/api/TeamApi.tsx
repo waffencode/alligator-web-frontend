@@ -1,6 +1,11 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Team, TeamMembersResponse, TeamMembersResponse_TeamMember, TeamResponse, TeamMember} from "./IResponses";
+import {Team, TeamMembersResponse, TeamMembersResponse_TeamMember, TeamResponse, 
+    TeamMember,
+    TeamMemberRole,
+    TeamMemberRolesResponse,
+    AssignedTasksResponse
+} from "./IResponses";
 
 export class TeamApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;
@@ -158,6 +163,32 @@ export class TeamApi extends BaseApi {
     }
 
     public async removeMemberFromTeam(memberId: number): Promise<TeamMember> {
+        // удаляем командные роли
+        const teamMemberRoles = await this.getTeamMemberRolesByTeamMemId(memberId);
+        for (const teamMemberRole of teamMemberRoles) {
+            this.deleteTeamMemberRoleById(teamMemberRole.id);
+        }
+
+        // удаление записей из assigned_tasks
+        const assignedTaskGetResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks?teamMemberId=` + memberId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const assignedTasks = assignedTaskGetResp._embedded.assignedTasks;
+        console.log(assignedTasks);
+        for (const assignedTask of assignedTasks) {
+            this.fetchJson<AssignedTasksResponse>(`/assignedTasks/` + assignedTask.id, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+
         const responseData = this.fetchJson<TeamMember>('/teamMembers/' + memberId.toString(), {
             method: 'DELETE',
             headers: {
@@ -168,6 +199,34 @@ export class TeamApi extends BaseApi {
 
         return await responseData;
     }
+
+    public async getTeamMemberRolesByTeamMemId(teamMemberId: number): Promise<TeamMemberRole[]> {
+        // получаем записи из таблицы team member roles
+        const resp = await this.fetchJson<TeamMemberRolesResponse>(`/teamMemberRoles?teamMemberId=` + teamMemberId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const teamMemberRoles = resp._embedded.teamMemberRoles;
+        return teamMemberRoles;
+    }
+
+    public async deleteTeamMemberRoleById(teamMemberRoleId: number): Promise<TeamMemberRole> {
+        const resp = await this.fetchJson<TeamMemberRole>(`/teamMemberRoles/` + teamMemberRoleId, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return resp;
+    }
+
+
+
+
     public async updateTeamName(teamId: number, newName: string): Promise<void> {
         const response = this.fetchJson<void>('/teams/' + teamId.toString(), {
             method: 'PATCH',
