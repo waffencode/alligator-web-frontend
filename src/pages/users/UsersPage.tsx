@@ -8,7 +8,7 @@ import Content from "../../widgets/Content/Content";
 import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
 import PageName from "../../widgets/PageName/PageName";
 import Sidebar from "../../widgets/SideBar/SideBar";
-import {rolesTranslator, translateRole} from '../../entities/RolesTranslator';
+import { rolesTranslator, translateRole } from '../../entities/RolesTranslator';
 
 const UsersPage: React.FC = () => {
     const { api } = useContext(ApiContext);
@@ -134,7 +134,7 @@ const UsersPage: React.FC = () => {
                                             <div className={styles.roleDropdown}>
                                                 <div className={styles.roleField} onClick={toggleRoleDropdown}>
                                                     {showRoleDropdown ? '▲' : '▼'}
-                                                    Роль
+                                                    Роли
                                                 </div>
                                                 {showRoleDropdown && (
                                                     <div className={styles.roleOptions}>

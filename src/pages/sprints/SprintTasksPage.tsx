@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './SprintTasksPage.module.css';
-import { SprintTask, TeamMember, Task } from '../../shared/api/IResponses'; // Imported necessary types
+import { SprintTask, TeamMember, Task, TeamRole } from '../../shared/api/IResponses'; // Imported necessary types
 import { format } from 'date-fns';
 import ApiContext from "../../features/api-context";
 import { RoutePaths } from "../../shared/config/routes";
@@ -29,6 +29,9 @@ const SprintTasksPage: React.FC = () => {
     const [proposedTasks, setProposedTasks] = useState<Task[]>([]); // New state for proposed tasks
     const [selectedProposedTaskId, setSelectedProposedTaskId] = useState<number | null>(null); // State for selected proposed task
     const [expandedSprintTaskId, setExpandedSprintTaskId] = useState<number | null>(null);
+    const [showRoleDropdown, setShowRoleDropdown] = useState<boolean>(false);
+    const [editedTeamRoles, setEditedTeamRoles] = useState<TeamRole[]>([]); // список ролей задачи, которую редактируем в данный момент
+    const [teamRoles, setTeamRoles] = useState<TeamRole[]>([]); // все доступные роли, можем задавать свойство selected
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -54,7 +57,7 @@ const SprintTasksPage: React.FC = () => {
         // Count the total complexity of tasks in the sprintTasksList
         setSpCur(sprintTasksList.reduce((totalComplexity, sprintTask) => totalComplexity + sprintTask.sp, 0));
     }, [sprintTasksList]);
-  
+
     const loadSprintTasks = () => {
         api.sprintTask.getSprintTasksWithAllInfoBySprintId(sprintId)
             .then((tasks) => {
@@ -92,8 +95,23 @@ const SprintTasksPage: React.FC = () => {
             setEditingTaskId(task.id);
             setEditedTask(task);
             loadTeamMembers();
+            //loadSprintTaskTeamRoles(); // загрузка ролей задачи
+            //loadAllTeamRoles();        // загрузка и выбор ролей, как у задачи
         }
     };
+
+    useEffect(() => {
+        if (editedTask) {
+            loadSprintTaskTeamRoles();
+            loadAllTeamRoles();
+        }
+    }, [editedTask]);
+
+    useEffect(() => {
+        if (editedTask) {
+            loadAllTeamRoles();
+        }
+    }, [editedTeamRoles]);
 
     const handleDeleteClick = (taskId: number) => {
         const token = localStorage.getItem('token');
@@ -196,6 +214,53 @@ const SprintTasksPage: React.FC = () => {
         }
     };
 
+
+    // TODO: загружать командные роли задачи в ходе редактирования задачи спринта
+    const loadSprintTaskTeamRoles = () => {
+        api.sprintTask.getSprintTaskTeamRoles(editedTask?.id || 0)
+            .then((teamRoles) => {
+                setEditedTeamRoles(teamRoles);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch team roles', err);
+                setError('Ошибка при получении информации о командных ролях');
+            });
+    };
+
+    // загрузить все командные роли, отмечаем выбранными только те, что есть у задачи
+    const loadAllTeamRoles = () => {
+        api.teamRoles.getTeamRoles()
+            .then((teamRoles) => {
+                const rolesWithSelected = teamRoles.map(role => ({
+                    ...role,
+                    selected: editedTeamRoles.some(editedRole => editedRole.id === role.id)
+                }));
+                
+                // Установка преобразованных командных ролей в состояние
+                setTeamRoles(rolesWithSelected);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch team roles', err);
+                setError('Ошибка при получении информации о командных ролях');
+            });
+    };
+
+    // TODO: запоминать, какие командные роли были отмечены в ходе редактирования
+
+    // TODO: на основе старого и нового списка изменять записи в таблице sprint_task_roles
+
+    const handleRoleEdit = (roleId: number) => {    
+        // Обновляем состояние teamRoles
+        const updatedRoles = teamRoles.map(role => 
+            role.id === roleId ? { ...role, selected: !role.selected } : role
+        );
+        setTeamRoles(updatedRoles);
+    };
+
+    const toggleRoleDropdown = () => {
+        setShowRoleDropdown(!showRoleDropdown);
+    };
+
     return (
         <Layout
             topLeft={<BrandLogo />}
@@ -262,12 +327,32 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{sprintTask.priority}</div>
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
-                                            <div></div>
+                                            <div className={styles.roleDropdown}>
+                                                <div className={styles.roleField} onClick={toggleRoleDropdown}>
+                                                    {showRoleDropdown ? '▲' : '▼'}
+                                                    Роли
+                                                </div>
+                                                {showRoleDropdown && (
+                                                    <div className={styles.roleOptions}>
+                                                        {teamRoles.map(role => (
+                                                            <label key={role.id}>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={role.selected}
+                                                                    onChange={() => handleRoleEdit(role.id)}
+                                                                />
+                                                                {role.name}
+                                                            </label>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
                                             {/*<div></div>*/}
                                             <input
                                                 type="number"
                                                 value={editedTask?.sp || 0}
                                                 onChange={(e) => handleTaskChange('sp', parseInt(e.target.value))}
+                                                className={styles.smallInput}
                                             />
                                             <select
                                                 value={editedTask?.team_member_id || 0}

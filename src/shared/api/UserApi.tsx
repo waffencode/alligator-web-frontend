@@ -159,8 +159,6 @@ export class UserApi extends BaseApi {
     public async addUserRole(userRoleId: number, userId: number): Promise<Role> {
         const role = this.getPath()+"/roles/"+userRoleId;
         const user = this.getPath()+"/users/"+userId;
-        console.log(role);
-        console.log(user);
         return this.fetchJson<Role>(`/userRoles`, {
             method: 'POST',
             headers: {

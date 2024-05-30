@@ -520,6 +520,7 @@ interface TeamRole {
     name: string;
     _links?: UserRoleLinks;
     team_member_role_id?: number;
+    sprint_task_role_id?: number;
 }
 
 // Интерфейс для представления роли в команде
@@ -642,6 +643,7 @@ interface SprintTaskRolesResponse {
     page: SprintTaskRolesPageInfo;
 }
 
+
 export type { 
     UserProfile, 
     AuthResponse, 
@@ -692,5 +694,5 @@ export type {
     TeamMemberRole,
     TeamMemberRolesResponse,
     SprintTaskRolesResponse,
-    SprintTaskRole 
+    SprintTaskRole, 
 };

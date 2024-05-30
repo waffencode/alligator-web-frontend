@@ -4,10 +4,12 @@ import {
     AssignedTasksResponse,
     DeadlineResponse,
     SprintTask, SprintTaskDto,
+    SprintTaskRolesResponse,
     SprintTasksResponse,
     Task,
     TasksResponse,
     TeamMember,
+    TeamRole,
     UserInfoResponse,
     UserResponse
 } from "./IResponses";
@@ -286,7 +288,37 @@ export class SprintTaskApi extends BaseApi {
                 filteredTasks.push(task);
             }
         }
-
         return filteredTasks;
     }
+
+    public async getSprintTaskTeamRoles(sprintTaskId: number): Promise<TeamRole[]> {
+        // sprint_task_role id
+        const sprintTaskRolesResp = await this.fetchJson<SprintTaskRolesResponse>(`/sprintTaskRoles?taskId=` + sprintTaskId.toString(), {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const sprintTaskRoles = sprintTaskRolesResp._embedded.sprintTaskRoles;
+
+        // team_role id
+        const teamRoles: TeamRole[] = [];
+        for (const sprintTaskRole of sprintTaskRoles) {
+            let teamRole = (await this.fetchJson<TeamRole>(`/sprintTaskRoles/` + sprintTaskRole.id + `/role`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            }));
+            teamRole.sprint_task_role_id = sprintTaskRole.id;
+            teamRoles.push(teamRole);
+        }
+        
+        return teamRoles;
+    }
+
+
 }
