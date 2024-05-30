@@ -188,7 +188,7 @@ const BacklogPage: React.FC = () => {
                                 <div>Приоритет</div>
                                 <div>Дедлайн</div>
                                 <div>Тип дедлайна</div>
-                                <div>Зависимые задачи</div>
+                                {/*<div>Зависимые задачи</div>*/}
                                 <div>Статус</div>
                             </div>
                             {tasks.map((task, index) => (
@@ -253,7 +253,7 @@ const BacklogPage: React.FC = () => {
                                                 <option value="SOFT">SOFT</option>
                                                 <option value="HARD">HARD</option>
                                             </select>
-                                            <div></div>
+                                            {/*<div></div>*/}
                                             <select
                                                 value={getValue(editedTask?.state)}
                                                 onChange={(e) => handleTaskChange('state', e.target.value)}
@@ -276,7 +276,7 @@ const BacklogPage: React.FC = () => {
                                             <div>{task.priority}</div>
                                             <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{task.deadline_type ? task.deadline_type : ''}</div>
-                                            <div></div>
+                                            {/*<div></div>*/}
                                             <div>{translateStatus(task.state)}</div>
                                         </>
                                     )}

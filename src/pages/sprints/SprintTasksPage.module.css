@@ -11,7 +11,7 @@
 
 .sprints_grid_header {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(11, 1fr);
     background-color: #ffffff; /* Цвет фона блока */
     font-weight: bold; /* Жирный текст */
     font-size: 0.9em;
@@ -24,7 +24,7 @@
 
 .sprint_tile {
     display: grid;
-    grid-template-columns: repeat(12, 1fr); /* Так же, как и для основной сетки */
+    grid-template-columns: repeat(11, 1fr); /* Так же, как и для основной сетки */
     background-color: #ffffff; /* Цвет фона блока */
     border-radius: 8px; /* Закругление углов */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень блока */

@@ -220,7 +220,7 @@ const SprintTasksPage: React.FC = () => {
                                 <div>Дедлайн</div>
                                 <div>Тип дедлайна</div>
                                 <div>Роли</div>
-                                <div>Зависимые задачи</div>
+                                {/*<div>Зависимые задачи</div>*/}
                                 <div>SP</div>
                                 <div>Ответственный</div>
                                 <div>Статус</div>
@@ -263,7 +263,7 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
                                             <div></div>
-                                            <div></div>
+                                            {/*<div></div>*/}
                                             <input
                                                 type="number"
                                                 value={editedTask?.sp || 0}
@@ -304,7 +304,7 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
                                             <div></div>
-                                            <div></div>
+                                            {/*<div></div>*/}
                                             <div>{sprintTask.sp}</div>
                                             <div>{sprintTask.team_member_fullName ? sprintTask.team_member_fullName : 'Не назначен'}</div>
                                             <div>{translateStatus(sprintTask.state)}</div>
