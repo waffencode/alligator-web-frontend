@@ -197,7 +197,7 @@ export class TeamApi extends BaseApi {
             },
         });
 
-        return await responseData;
+        return await responseData; // Проблема с удалением
     }
 
     public async getTeamMemberRolesByTeamMemId(teamMemberId: number): Promise<TeamMemberRole[]> {

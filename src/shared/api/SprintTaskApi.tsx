@@ -4,6 +4,7 @@ import {
     AssignedTasksResponse,
     DeadlineResponse,
     SprintTask, SprintTaskDto,
+    SprintTaskRole,
     SprintTaskRolesResponse,
     SprintTasksResponse,
     Task,
@@ -224,6 +225,25 @@ export class SprintTaskApi extends BaseApi {
         if (assignedTaskGetResp.page.totalElements != 0) {
             const assignedTaskDelResp = await this.deleteAssignedTaskById(assignedTaskGetResp._embedded.assignedTasks[0].id);
         }
+
+        // удаление командных ролей у задачи
+        const sprintTaskRolesResp = await this.fetchJson<SprintTaskRolesResponse>(`/sprintTaskRoles?taskId=` + sprintTaskId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        for (const sprintTaskRole of sprintTaskRolesResp._embedded.sprintTaskRoles) {
+            this.fetchJson<SprintTaskRole>(`/sprintTaskRoles/` + sprintTaskRole.id, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+
         const sprintTaskResp = await this.fetchJson<SprintTask>(`/sprintTasks/` + sprintTaskId, {
             method: 'DELETE',
             headers: {
@@ -232,7 +252,7 @@ export class SprintTaskApi extends BaseApi {
             }
         });
 
-        return sprintTaskResp;
+        return sprintTaskResp; // Проблема с удалением
     }
 
     public async deleteAssignedTaskById(assignedTaskId: number): Promise<AssignedTasksResponse> {
