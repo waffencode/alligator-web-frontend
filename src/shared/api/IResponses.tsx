@@ -8,9 +8,10 @@ interface Link {
 // Интерфейс для ролей пользователя
 interface UserRoleLinks {
     self: Link;
-    userRole: Link;
-    user: Link;
-    role: Link;
+    userRole?: Link;
+    user?: Link;
+    role?: Link;
+    teamRole?: Link;
 }
 
 interface UserRole {
@@ -338,12 +339,6 @@ interface UserInfo_TeamMember {
     fullName: string;
     email: string;
     phone_number: string | null;
-}
-
-// Интерфейс для представления роли пользователя
-interface UserRoleLinks {
-    self: Link;
-    role: Link;
 }
 
 interface Role {

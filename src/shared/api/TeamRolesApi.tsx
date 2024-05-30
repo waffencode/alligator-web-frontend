@@ -215,5 +215,64 @@ export class TeamRolesApi extends BaseApi {
         });
         return deleteTeamMemberRole;
     }
+
+    // sprint task roles
+    public async updateSprintTaskRoles(sprintTaskId: number, oldTeamRoles: TeamRole[], newTeamRoles: TeamRole[]): Promise<TeamRole[]> {
+        // удаляем роли, которых нет в newTeamRoles
+        // Получаем массив идентификаторов ролей из newTeamRoles
+        const newRoleIds = newTeamRoles.map(role => role.id);
+        // Фильтруем oldTeamRoles и оставляем только те роли, у которых id отсутствует в newRoleIds
+        const rolesToRemove = oldTeamRoles.filter(role => !newRoleIds.includes(role.id));
+        for (const teamRole of rolesToRemove) {
+            if (teamRole.sprint_task_role_id) this.deleteSprintTaskRoleBySprintTaskRoleId(teamRole.sprint_task_role_id);
+        }
+        
+        // добавляем роли, которых нет в sprint task roles
+        // Получаем массив идентификаторов ролей из oldTeamRoles
+        const oldRoleIds = oldTeamRoles.map(role => role.id);
+        // Фильтруем newTeamRoles и оставляем только те роли, у которых id отсутствует в oldRoleIds
+        const rolesToAdd = newTeamRoles.filter(role => !oldRoleIds.includes(role.id));
+        for (const teamRole of rolesToAdd) {
+            this.addSprintTaskRole(sprintTaskId, teamRole.id);
+        }
+        return await this.getTeamRoles();
+    }
+
+    public async getTeamRoleBySprintTaskRoleId(sprintTaskId: number): Promise<TeamRole> {
+        const arrresp = await this.fetchJson<TeamRolesResponse>(`/sprintTaskRoles?id=` + sprintTaskId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+   
+        return arrresp._embedded.teamRoles[0];    
+    }
+
+    public async deleteSprintTaskRoleBySprintTaskRoleId(sprintTaskRoleId: number): Promise<SprintTaskRole> {
+        const deleteSprintTaskRole = await this.fetchJson<SprintTaskRole>(`/sprintTaskRoles/` + sprintTaskRoleId, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        return deleteSprintTaskRole;
+    }
+
+    public async addSprintTaskRole(sprintTaskRoleId: number, teamRoleId: number): Promise<TeamMemberRole> {
+        const task = this.getPath() + `/sprintTasks/` + sprintTaskRoleId;
+        const role = this.getPath() + `/teamRoles/` + teamRoleId;
+        const deleteTeamMemberRole = await this.fetchJson<TeamMemberRole>(`/sprintTaskRoles`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ task, role })
+        });
+        return deleteTeamMemberRole;
+    }
    
 }

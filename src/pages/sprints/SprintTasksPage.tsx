@@ -84,6 +84,11 @@ const SprintTasksPage: React.FC = () => {
                             setEditingTaskId(null);
                             setEditedTask(null);
                             loadSprintTasks();
+
+                            // Сбор выбранных ролей
+                            const selectedRoles = teamRoles.filter(role => role.selected);
+                            // Обновление ролей на сервере
+                            api.teamRoles.updateSprintTaskRoles(editedTask.id, editedTeamRoles, selectedRoles);
                         })
                         .catch((err) => {
                             console.error('Failed to update task', err);
@@ -95,8 +100,6 @@ const SprintTasksPage: React.FC = () => {
             setEditingTaskId(task.id);
             setEditedTask(task);
             loadTeamMembers();
-            //loadSprintTaskTeamRoles(); // загрузка ролей задачи
-            //loadAllTeamRoles();        // загрузка и выбор ролей, как у задачи
         }
     };
 
