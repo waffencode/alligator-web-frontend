@@ -179,7 +179,6 @@ export class TeamApi extends BaseApi {
             }
         });
         const assignedTasks = assignedTaskGetResp._embedded.assignedTasks;
-        console.log(assignedTasks);
         for (const assignedTask of assignedTasks) {
             await this.fetchJson<AssignedTasksResponse>(`/assignedTasks/` + assignedTask.id, {
                 method: 'DELETE',

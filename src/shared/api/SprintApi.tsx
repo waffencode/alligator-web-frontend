@@ -222,7 +222,7 @@ export class SprintApi extends BaseApi {
     }
 
     public async deleteSprint(sprintId: number): Promise<Sprint> {
-        // удаление задач из бэклога спринта            
+        // удаление задач из бэклога спринта           
         const sprintTasks = await this.getSprintTasksBySprintId(sprintId);
         for (const sprintTask of sprintTasks) {
             // удаление назначенных задач
@@ -243,8 +243,8 @@ export class SprintApi extends BaseApi {
                 });
             }
 
-            // TODO: удаление ролей у задач
-            const sprintTaskRolesResp = await this.fetchJson<SprintTaskRolesResponse>(`/sprintTaskRoles?taskId=` + sprintTask, {
+            // удаление ролей у задач
+            const sprintTaskRolesResp = await this.fetchJson<SprintTaskRolesResponse>(`/sprintTaskRoles?taskId=` + sprintTask.id, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
@@ -272,6 +272,7 @@ export class SprintApi extends BaseApi {
         }
 
         // удаление спринта
+        console.log('удаление задач из таблицы sprint_tasks');
         const sprintResp = await this.fetchJson<Sprint>(`/sprints/`+sprintId, {
             method: 'DELETE',
             headers: {
@@ -282,9 +283,6 @@ export class SprintApi extends BaseApi {
         return sprintResp; 
     }
 
-
-
-    
 
     public async getSprintTasksBySprintId(sprintId: number): Promise<SprintTask[]> {
         const resp = this.fetchJson<SprintTasksResponse>(`/sprintTasks?sprintId=`+sprintId, {

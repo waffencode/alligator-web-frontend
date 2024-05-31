@@ -76,7 +76,6 @@ export class TaskApi extends BaseApi {
         const state = task.state;
 
         if (task.deadline_id && task.deadline_time && task.deadline_type) {
-            console.log("DEADLINES");
             newDeadline = await this.updateDeadline(task.deadline_id, task.deadline_time, task.deadline_type);
             const deadline = this.getPath() + "/deadlines/" + newDeadline.id;
             resp = this.fetchJson<TasksResponse>(`/tasks?id=` + task.id, {
@@ -106,7 +105,6 @@ export class TaskApi extends BaseApi {
 
         const dateObject = parseISO(timeNotFormatted);
         const time = format(dateObject, "yyyy-MM-dd'T'HH:mm:ss.SSSX");
-        console.log(time);
 
         return this.fetchJson<DeadlineResponse>(`/deadlines?id=` + id, {
             method: 'POST',
@@ -130,7 +128,6 @@ export class TaskApi extends BaseApi {
         const state = task.state;
 
         if (task.deadline_time && task.deadline_type) {
-            console.log("DEADLINES");
             newDeadline = await this.createDeadline(task.deadline_time, task.deadline_type);
             const deadline = this.getPath() + "/deadlines/" + newDeadline.id;
             resp = this.fetchJson<Task>(`/tasks`, {

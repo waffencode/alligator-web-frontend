@@ -219,7 +219,6 @@ const SprintTasksPage: React.FC = () => {
                             setProposedTasks(proposedTasks.filter(task => task.id !== selectedProposedTaskId));
                             setSelectedProposedTaskId(null);
                             loadSprintTasks();
-                            console.log(`Task added to sprint: '${newTask._links?.self.href}'`);
                         })
                         .catch((err) => {
                             console.error('Failed to add proposed task', err);
