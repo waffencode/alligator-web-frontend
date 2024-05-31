@@ -128,8 +128,9 @@ const TeamMemberPage: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                    <Button onClick={handleSaveClick}>Сохранить</Button>
-                    <Button className="button margin-right" onClick={() => navigate(-1)}>Назад</Button>  {/*Реализовать возвращение назад */}
+                    <br/>
+                    <Button className="button margin-right" onClick={handleSaveClick}>Сохранить</Button>
+                    <Button className="button" onClick={() => navigate(-1)}>Назад</Button>  {/*Реализовать возвращение назад */}
                 </Content>
             }
         />

@@ -9,8 +9,7 @@ const ChangePasswordPage: React.FC = () => {
     const [password, setPassword] = React.useState('');
     const [repPassword, setRepPassword] = React.useState('');
     const [message, setMessage] = React.useState('');
-
-    const errorMessageText: string = "Неправильный email или пароль";
+    const [successMessage, setSuccessMessage] = React.useState('');
     const errorMessageTextNotEqual: string = "Пароли не совпадают";
 
     const token = localStorage.getItem('token');
@@ -18,24 +17,26 @@ const ChangePasswordPage: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setMessage(''); // Сброс сообщения об ошибке перед отправкой
+        setSuccessMessage('');
         if (password !== repPassword) {
             setMessage(errorMessageTextNotEqual);
         } else {
             try {
                 const response = await api.user.changePassword(oldPassword, password);
                 //localStorage.setItem('token', response.toString()); // Сохранение токена в локальное хранилище
-                //window.location.href = '/profile'; // Перенаправление на защищенную страницу
+                window.location.href = '/profile'; // Перенаправление на защищенную страницу
+                setSuccessMessage('Пароль успешно изменён');
             } catch (error) {
                 if (error instanceof Error) {
                     const [status, errorMessage] = error.message.split(': ', 2);
                     if (status === '409') {
-                        setMessage('Неправильный email или пароль.');
+                        setMessage('Неправильный пароль');
                     } else {
-                        setMessage('Ошибка при аутентификации. Попробуйте еще раз.');
+                        setMessage('Ошибка при аутентификации. Попробуйте еще раз');
                         setMessage(`Ошибка ${status}: ${errorMessage}`);
                     }
                 } else {
-                    setMessage('Неизвестная ошибка. Попробуйте еще раз.');
+                    setMessage('Неизвестная ошибка. Попробуйте еще раз');
                 }
             }
         }
@@ -47,6 +48,7 @@ const ChangePasswordPage: React.FC = () => {
             <div className="form-container">
                 <h2>Смена пароля</h2>
                 {message && <label className="error-message">{message}</label>}
+                {successMessage && <label className="success-message">{successMessage}</label>}
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">
                         <label htmlFor="oldPassword">Старый пароль</label><br />

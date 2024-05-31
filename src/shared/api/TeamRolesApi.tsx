@@ -1,6 +1,6 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Team, 
+import {
     TeamRole, 
     TeamRolesResponse, 
     TeamMemberRole,
@@ -11,7 +11,6 @@ import {Team,
     UserResponse,
     UserInfo
 } from "./IResponses";
-import User from "../../entities/User";
 
 export class TeamRolesApi extends BaseApi {
     private authenticationContext: AuthenticationContextData;

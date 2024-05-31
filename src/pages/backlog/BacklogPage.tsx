@@ -329,8 +329,7 @@ const BacklogPage: React.FC = () => {
                                         <option value="SOFT">SOFT</option>
                                         <option value="HARD">HARD</option>
                                     </select>
-                                    <div></div>
-                                    <div></div>
+                                    {/*<div></div>*/}
                                     <select
                                         value={getValue(newTask.state) ? getValue(newTask.state) : "TODO"}
                                         onChange={(e) => handleNewTaskChange('state', e.target.value)}
