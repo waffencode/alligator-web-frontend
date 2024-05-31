@@ -32,6 +32,9 @@ const SprintTasksPage: React.FC = () => {
     const [showRoleDropdown, setShowRoleDropdown] = useState<boolean>(false);
     const [editedTeamRoles, setEditedTeamRoles] = useState<TeamRole[]>([]); // список ролей задачи, которую редактируем в данный момент
     const [teamRoles, setTeamRoles] = useState<TeamRole[]>([]); // все доступные роли, можем задавать свойство selected
+    // для отображения ролей:
+    const [expandedRolesSprintTaskId, setExpandedRolesSprintTaskId] = useState<number | null>(null);
+    const [expendedTeamRoles, setExpendedTeamRoles] = useState<TeamRole[]>([]); // роли задачи, открытые в окне
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -116,6 +119,12 @@ const SprintTasksPage: React.FC = () => {
         }
     }, [editedTeamRoles]);
 
+    useEffect(() => {
+        if (expandedRolesSprintTaskId) {
+            loadSprintTaskTeamRolesForExpanded();
+        }
+    }, [expandedRolesSprintTaskId]);
+
     const handleDeleteClick = (taskId: number) => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -153,6 +162,10 @@ const SprintTasksPage: React.FC = () => {
 
     const handleDescriptionClick = (sprintTaskId: number) => {
         setExpandedSprintTaskId(sprintTaskId === expandedSprintTaskId ? null : sprintTaskId);
+    };
+
+    const handleRolesClick = (sprintTaskId: number) => {
+        setExpandedRolesSprintTaskId(sprintTaskId === expandedRolesSprintTaskId ? null : sprintTaskId);
     };
 
     const handleAssignationCall = () => {
@@ -194,7 +207,6 @@ const SprintTasksPage: React.FC = () => {
 
     const handleAddProposedTask = (e: React.FormEvent) => {
         e.preventDefault();
-
         if (selectedProposedTaskId) {
             const selectedTask = proposedTasks.find(task => task.id === selectedProposedTaskId);
             if (selectedTask) {
@@ -217,12 +229,21 @@ const SprintTasksPage: React.FC = () => {
         }
     };
 
-
-    // TODO: загружать командные роли задачи в ходе редактирования задачи спринта
     const loadSprintTaskTeamRoles = () => {
         api.sprintTask.getSprintTaskTeamRoles(editedTask?.id || 0)
             .then((teamRoles) => {
                 setEditedTeamRoles(teamRoles);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch team roles', err);
+                setError('Ошибка при получении информации о командных ролях');
+            });
+    };
+
+    const loadSprintTaskTeamRolesForExpanded = () => {
+        api.sprintTask.getSprintTaskTeamRoles(expandedRolesSprintTaskId || 0)
+            .then((teamRoles) => {
+                setExpendedTeamRoles(teamRoles);
             })
             .catch((err) => {
                 console.error('Failed to fetch team roles', err);
@@ -248,16 +269,16 @@ const SprintTasksPage: React.FC = () => {
             });
     };
 
-    // TODO: запоминать, какие командные роли были отмечены в ходе редактирования
-
-    // TODO: на основе старого и нового списка изменять записи в таблице sprint_task_roles
-
     const handleRoleEdit = (roleId: number) => {    
         // Обновляем состояние teamRoles
         const updatedRoles = teamRoles.map(role => 
             role.id === roleId ? { ...role, selected: !role.selected } : role
         );
         setTeamRoles(updatedRoles);
+    };
+
+    const getTeamRolesNames = (): string => {
+        return expendedTeamRoles.map(role => role.name).join(', ');
     };
 
     const toggleRoleDropdown = () => {
@@ -318,6 +339,14 @@ const SprintTasksPage: React.FC = () => {
                                                 &times;
                                             </button>
                                             <p style={{ whiteSpace: "pre-wrap" }}>{sprintTask.description}</p>
+                                        </div>
+                                    )}
+                                    {expandedRolesSprintTaskId === sprintTask.id && (
+                                        <div className={styles.task_description_expanded}>
+                                            <button className={styles.close_button} onClick={() => handleRolesClick(sprintTask.id)}>
+                                                &times;
+                                            </button>
+                                            <p style={{ whiteSpace: "pre-wrap" }}>{getTeamRolesNames()}</p>
                                         </div>
                                     )}
                                     {editingTaskId === sprintTask.id ? (
@@ -391,8 +420,11 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{sprintTask.priority}</div>
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
-                                            <div></div>
                                             {/*<div></div>*/}
+                                            {sprintTask.description ?
+                                                <div onClick={() => handleRolesClick(sprintTask.id)} className={styles.task_description}>
+                                                    Роли
+                                                </div> : <div></div>}
                                             <div>{sprintTask.sp}</div>
                                             <div>{sprintTask.team_member_fullName ? sprintTask.team_member_fullName : 'Не назначен'}</div>
                                             <div>{translateStatus(sprintTask.state)}</div>

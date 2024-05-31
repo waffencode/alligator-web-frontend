@@ -244,6 +244,8 @@ export class SprintApi extends BaseApi {
             });
         }
 
+        // при удалении спринта удаляется запись о роли
+
         // удаление спринта
         const sprintResp = await this.fetchJson<Sprint>(`/sprints/`+sprintId, {
             method: 'DELETE',
@@ -252,7 +254,7 @@ export class SprintApi extends BaseApi {
                 'Content-Type': 'application/json'
             }
         });
-        return sprintResp;
+        return sprintResp; 
     }
 
     
