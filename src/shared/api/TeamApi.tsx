@@ -180,7 +180,7 @@ export class TeamApi extends BaseApi {
         const assignedTasks = assignedTaskGetResp._embedded.assignedTasks;
         console.log(assignedTasks);
         for (const assignedTask of assignedTasks) {
-            this.fetchJson<AssignedTasksResponse>(`/assignedTasks/` + assignedTask.id, {
+            await this.fetchJson<AssignedTasksResponse>(`/assignedTasks/` + assignedTask.id, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
