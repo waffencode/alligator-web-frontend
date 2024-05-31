@@ -148,7 +148,7 @@ const SprintsPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to create sprint', err);
-                    setError(translateErrorMessage(err.message));
+                    setError("В команде может быть только один активный спринт");
                 });
         }
     };
@@ -165,24 +165,16 @@ const SprintsPage: React.FC = () => {
 
         api.team.getTeamMembersInfo(teamId)
             .then((members) => {
-                const userInfos = members.map(member => member.userInfo);
+                const userInfos = members.map(member => ({
+                    ...member.userInfo,
+                    id: member.teamMemberId
+                }));
                 setTeamMembers(userInfos);
             })
             .catch((err) => {
                 console.error('Failed to load team members', err);
                 setError('Ошибка при загрузке участников команды');
             });
-    };
-
-    const translateErrorMessage = (message: string) => {
-        if (message.includes('Only one sprint can be active in team')) {
-            let activeSprintName = message.match(/Currently active sprint name: (.+)/)?.[1];
-            if (activeSprintName) {
-                activeSprintName = activeSprintName.slice(0, -2);
-            }
-            return `В команде может быть только один активный спринт. В данный момент активен спринт с названием: ${activeSprintName}`;
-        }
-        return 'Произошла ошибка';
     };
 
     const handleDeleteSprint = (sprintId: number) => {

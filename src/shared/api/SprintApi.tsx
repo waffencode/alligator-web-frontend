@@ -1,8 +1,19 @@
 import {BaseApi} from "./BaseApi";
 import {AuthenticationContextData} from "../lib/authentication";
-import {Sprint, SprintsResponse, Team, TeamMember, TeamMembersResponse, UserInfo, UserInfoResponse, UserProfile, SprintTasksResponse, 
+import {
+    Sprint, 
+    SprintsResponse, 
+    Team, 
+    TeamMember, 
+    TeamMembersResponse, 
+    UserInfo, 
+    UserInfoResponse, 
+    UserProfile, 
+    SprintTasksResponse, 
     SprintTask,
-    AssignedTasksResponse
+    AssignedTasksResponse,
+    SprintTaskRolesResponse,
+    SprintTaskRole
 } from "./IResponses";
 
 export class SprintApi extends BaseApi {
@@ -164,9 +175,6 @@ export class SprintApi extends BaseApi {
         const name = sprint.name;
         const state = sprint.state;
         const id = sprint.id;
-
-        // установка новой команды
-        //const team = this.getPath()+'/teams/'+sprint.team_id;
         
         // установка нового scrum master (из членов команды)
         const scrumMaster = this.getPath()+'/teamMembers/'+sprint.scrumMaster_id;
@@ -191,7 +199,7 @@ export class SprintApi extends BaseApi {
         const sp = sprint.sp;
         const name = sprint.name;
         const state = sprint.state;
-        const id = sprint.id;
+        //const id = sprint.id;
 
         // установка команды
         const team = this.getPath()+'/teams/'+sprint.team_id;
@@ -205,7 +213,7 @@ export class SprintApi extends BaseApi {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({id, startTime, endTime, sp, name, state, team, scrumMaster})
+            body: JSON.stringify({startTime, endTime, sp, name, state, team, scrumMaster})
         });
 
         const sprints = sprintsResp;
@@ -234,6 +242,25 @@ export class SprintApi extends BaseApi {
                     }
                 });
             }
+
+            // TODO: удаление ролей у задач
+            const sprintTaskRolesResp = await this.fetchJson<SprintTaskRolesResponse>(`/sprintTaskRoles?taskId=` + sprintTask, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            for (const sprintTaskRole of sprintTaskRolesResp._embedded.sprintTaskRoles) {
+                await this.fetchJson<SprintTaskRole>(`/sprintTaskRoles/` + sprintTaskRole.id, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+
             // удаление задач из таблицы sprint_tasks
             const sprintTaskResp = await this.fetchJson<Sprint>(`/sprintTasks/`+sprintTask.id, {
                 method: 'DELETE',
@@ -243,8 +270,6 @@ export class SprintApi extends BaseApi {
                 }
             });
         }
-
-        // при удалении спринта удаляется запись о роли
 
         // удаление спринта
         const sprintResp = await this.fetchJson<Sprint>(`/sprints/`+sprintId, {
@@ -256,6 +281,8 @@ export class SprintApi extends BaseApi {
         });
         return sprintResp; 
     }
+
+
 
     
 

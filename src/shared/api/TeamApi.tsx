@@ -147,8 +147,9 @@ export class TeamApi extends BaseApi {
     }
 
     public async addMemberToTeam(teamId?: number, memberId?: number): Promise<TeamMember> {
-        const team = this.getPath() + /teams/ + teamId?.toString();
-        const user = this.getPath() + /users/ + memberId?.toString();
+        const team = this.getPath() + '/teams/' + teamId?.toString();
+        const user = this.getPath() + '/users/' + memberId?.toString();
+        const state = 'ACTIVE';
 
         const responseData = this.fetchJson<TeamMember>('/teamMembers', {
             method: 'POST',
@@ -156,7 +157,7 @@ export class TeamApi extends BaseApi {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({team, user})
+            body: JSON.stringify({team, user, state})
         });
 
         return await responseData;

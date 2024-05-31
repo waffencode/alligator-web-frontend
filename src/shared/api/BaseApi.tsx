@@ -8,7 +8,6 @@ export class BaseApi {
     }
 
     public async fetchJson<T>(path: string, options: RequestInit): Promise<T> {
-        //console.log(options);
         const response = await fetch(this.BASE_PATH + path, options);
         if (!response.ok) {
             const errorText = await response.text();
@@ -19,8 +18,7 @@ export class BaseApi {
         if (contentType && (contentType.includes('application/json') || contentType.includes('application/hal+json'))) {
             return response.json();
         } else {
-            //console.log("text");
-            return response.text() as unknown as T; // Преобразование текста к типу T
+            return response.text() as unknown as T;
         }
     }
 }

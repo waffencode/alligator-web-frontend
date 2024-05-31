@@ -15,8 +15,6 @@ export class ProfileApi extends BaseApi {
     }
 
     public async getCurUserProfileInfo(): Promise<UserProfileWithRoles> {
-        //const whoamiResp = await this.userApi.whoami();
-
         if(this.authenticationContext._roles === undefined || this.authenticationContext._userId === undefined) {
             throw Error("getCurUserProfileInfo: authentication error!")
         }
@@ -26,8 +24,6 @@ export class ProfileApi extends BaseApi {
 
         // добавление ролей к запросу
         const getUserInfoesByUserIdResp = await this.userApi.getUserInfoesByUserId(userId);
-
-        console.log(getUserInfoesByUserIdResp.fullName);
 
         const userProfileWithRoles: UserProfileWithRoles = {
             ...getUserInfoesByUserIdResp,
