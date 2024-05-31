@@ -42,7 +42,7 @@ const TeamMemberPage: React.FC = () => {
     const handleSaveClick = () => {
         const selectedRoles = allTeamRoles.filter(role => role.selected);
         const updatedRoles = selectedRoles.map(({ selected, ...rest }) => rest);
-        api.teamRoles.updateTeamMemberRoles(teamMemberId, curTeamMemTeamRoles, updatedRoles)
+        api.teamRoles.updateTeamMemberRoles(teamMemberId, updatedRoles)
             .then(() => {
                 setError(null);
                 setSuccessMessage('Роли успешно обновлены');

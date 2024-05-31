@@ -235,7 +235,7 @@ export class SprintTaskApi extends BaseApi {
             }
         });
         for (const sprintTaskRole of sprintTaskRolesResp._embedded.sprintTaskRoles) {
-            this.fetchJson<SprintTaskRole>(`/sprintTaskRoles/` + sprintTaskRole.id, {
+            await this.fetchJson<SprintTaskRole>(`/sprintTaskRoles/` + sprintTaskRole.id, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${this.authenticationContext.accessToken}`,

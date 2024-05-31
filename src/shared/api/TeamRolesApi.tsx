@@ -70,7 +70,7 @@ export class TeamRolesApi extends BaseApi {
         });
         const teamMemberRoles = teamMemberRoleGetResp._embedded.teamMemberRoles;
         for (const teamMemberRole of teamMemberRoles) {
-            this.deleteTeamMemberRoleById(teamMemberRole.id);
+            await this.deleteTeamMemberRoleById(teamMemberRole.id);
         }
 
         // удалить роль у задач sprint_task_roles
@@ -83,7 +83,7 @@ export class TeamRolesApi extends BaseApi {
         });
         const sprintTaskRoles = sprintTaskRolesGetResp._embedded.sprintTaskRoles;
         for (const sprintTaskRole of sprintTaskRoles) {
-            this.deleteSprintTaskRoleById(sprintTaskRole.id);
+            await this.deleteSprintTaskRoleById(sprintTaskRole.id);
         }
 
         const deletedTeamRole = await this.fetchJson<TeamRole>(`/teamRoles/`+teamRole.id, {
@@ -181,14 +181,15 @@ export class TeamRolesApi extends BaseApi {
         return teamMemberResp;
     }
 
-    public async updateTeamMemberRoles(teamMemberId: number, oldTeamRoles: TeamRole[], newTeamRoles: TeamRole[]): Promise<TeamRole> {
+    public async updateTeamMemberRoles(teamMemberId: number, newTeamRoles: TeamRole[]): Promise<TeamRole[]> {
+        const oldTeamRoles = await this.getTeamRolesByTeamMemId(teamMemberId);
         // удаляем роли, которых нет в newTeamRoles
         // Получаем массив идентификаторов ролей из newTeamRoles
         const newRoleIds = newTeamRoles.map(role => role.id);
         // Фильтруем oldTeamRoles и оставляем только те роли, у которых id отсутствует в newRoleIds
         const rolesToRemove = oldTeamRoles.filter(role => !newRoleIds.includes(role.id));
         for (const teamRole of rolesToRemove) {
-            if (teamRole.team_member_role_id) this.deleteTeamMemberRoleById(teamRole.team_member_role_id);
+            if (teamRole.team_member_role_id) await this.deleteTeamMemberRoleById(teamRole.team_member_role_id);
         }
         
         // добавляем роли, которых нет в teamMemberId
@@ -197,9 +198,9 @@ export class TeamRolesApi extends BaseApi {
         // Фильтруем newTeamRoles и оставляем только те роли, у которых id отсутствует в oldRoleIds
         const rolesToAdd = newTeamRoles.filter(role => !oldRoleIds.includes(role.id));
         for (const teamRole of rolesToAdd) {
-            this.addTeamMemberRole(teamMemberId, teamRole.id);
+            await this.addTeamMemberRole(teamMemberId, teamRole.id);
         }
-        return await this.getTeamRoleByTeamMemRoleId(teamMemberId);
+        return await this.getTeamRolesByTeamMemId(teamMemberId);
     }
 
     public async addTeamMemberRole(teamMemberRoleId: number, teamRoleId: number): Promise<TeamMemberRole> {
@@ -224,7 +225,7 @@ export class TeamRolesApi extends BaseApi {
         // Фильтруем oldTeamRoles и оставляем только те роли, у которых id отсутствует в newRoleIds
         const rolesToRemove = oldTeamRoles.filter(role => !newRoleIds.includes(role.id));
         for (const teamRole of rolesToRemove) {
-            if (teamRole.sprint_task_role_id) this.deleteSprintTaskRoleBySprintTaskRoleId(teamRole.sprint_task_role_id);
+            if (teamRole.sprint_task_role_id) await this.deleteSprintTaskRoleBySprintTaskRoleId(teamRole.sprint_task_role_id);
         }
         
         // добавляем роли, которых нет в sprint task roles
@@ -233,7 +234,7 @@ export class TeamRolesApi extends BaseApi {
         // Фильтруем newTeamRoles и оставляем только те роли, у которых id отсутствует в oldRoleIds
         const rolesToAdd = newTeamRoles.filter(role => !oldRoleIds.includes(role.id));
         for (const teamRole of rolesToAdd) {
-            this.addSprintTaskRole(sprintTaskId, teamRole.id);
+            await this.addSprintTaskRole(sprintTaskId, teamRole.id);
         }
         return await this.getTeamRoles();
     }
