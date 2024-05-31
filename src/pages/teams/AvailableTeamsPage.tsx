@@ -25,8 +25,8 @@ const AvailableTeamsPage: React.FC = () => {
                 setTeams(teams);
             })
             .catch((err) => {
-                console.error('Failed to fetch user teams', err);
-                setError('Failed to load user teams');
+                console.error('Failed to fetch teams', err);
+                setError('Ошибка при загрузке команд');
             });
     }, []);
 

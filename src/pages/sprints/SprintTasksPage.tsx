@@ -52,7 +52,8 @@ const SprintTasksPage: React.FC = () => {
                     setError('Ошибка при получении информации о спринте!');
                 });
         } else {
-            setError('No authentication token found');
+            console.error('No authentication token found');
+            setError('Ошибка при проверке авторизации пользователя');
         }
     }, [api.tasks, api.sprintTask]);
 
@@ -95,7 +96,7 @@ const SprintTasksPage: React.FC = () => {
                         })
                         .catch((err) => {
                             console.error('Failed to update task', err);
-                            setError('Failed to update task');
+                            setError('Ошибка при изменении задачи');
                         });
                 }
             }
@@ -222,7 +223,11 @@ const SprintTasksPage: React.FC = () => {
                         })
                         .catch((err) => {
                             console.error('Failed to add proposed task', err);
-                            setError('Ошибка при добавлении задачи');
+                            if (err.message && err.message.includes('Only scrum-master')) {
+                                setError('Только Scrum-мастер может добавлять задачи на спринт');
+                            } else {
+                                setError('Ошибка при добавлении задачи');
+                            }
                         });
                 }
             }

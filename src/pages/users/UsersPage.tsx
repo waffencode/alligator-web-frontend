@@ -31,10 +31,11 @@ const UsersPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to fetch users', err);
-                    setError('Failed to load users');
+                    setError('Ошибка при загрузке пользователей');
                 });
         } else {
-            setError('No authentication token found');
+            console.error('No authentication token found');
+            setError('Ошибка при проверке авторизации пользователя');
         }
     }, [api.user, editedRoles]);
 
@@ -49,10 +50,11 @@ const UsersPage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error('Failed to fetch roles', err);
-                    setError('Failed to load roles');
+                    setError('Ошибка при загрузке ролей');
                 });
         } else {
-            setError('No authentication token found');
+            console.error('No authentication token found');
+            setError('Ошибка при проверке авторизации пользователя');
         }
     }, [api.user]);
 

@@ -49,7 +49,8 @@ const SprintsPage: React.FC = () => {
                     setError('Ошибка при загрузке команд');
                 });
         } else {
-            setError('No authentication token found');
+            console.error('No authentication token found');
+            setError('Ошибка при проверке авторизации пользователя');
         }
     }, [api.sprint, api.team]);
 

@@ -48,7 +48,8 @@ const BacklogPage: React.FC = () => {
                     setError('Ошибка при загрузке задач');
                 });
         } else {
-            setError('No authentication token found');
+            console.error('No authentication token found');
+            setError('Ошибка проверки авторизации пользователя');
         }
     }, [api.tasks]);
     

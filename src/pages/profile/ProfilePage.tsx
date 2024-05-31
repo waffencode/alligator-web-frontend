@@ -33,7 +33,7 @@ const ProfilePage: React.FC = () => {
             })
             .catch((err) => {
                 console.error('Failed to fetch user profile', err);
-                setError('Failed to load user profile');
+                setError('Ошибка при загрузке информации о пользователе');
             });
     }, []);
 
