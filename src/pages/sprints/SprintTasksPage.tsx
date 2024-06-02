@@ -172,7 +172,7 @@ const SprintTasksPage: React.FC = () => {
     const handleAssignationCall = () => {
         api.sprintTask.assignTasks(sprintId)
             .then((assignedTasks) => {
-                console.log('Task assignation completed with ' + assignedTasks.length + ' entries.');
+                //console.log('Task assignation completed with ' + assignedTasks.length + ' entries.');
             })
             .catch((err) => {
                 console.error('Failed to assign tasks', err);

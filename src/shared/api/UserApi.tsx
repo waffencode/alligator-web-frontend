@@ -125,13 +125,12 @@ export class UserApi extends BaseApi {
     }
 
     public async updateUser(user: UserInfoWithRolesInterfaces, oldRoles: Role[], newRoles: Role[]): Promise<UserProfile> {
-        // TODO: устанавливаем данные пользователя
-
+        let roles = await this.getUserRolesByUserInfoId(user.id);
         // удаляем старые роли по id в таблице user_roles
-        for (const oldRole of oldRoles) {
+        for (const role of roles) {
             // если в новых ролях нет старой роли
-            if (!newRoles.some(newRole => newRole.id === oldRole.id)) {
-                this.deleteUserRole(oldRole.id);
+            if (!newRoles.some(newRole => newRole.id === role.id)) {
+                await this.deleteUserRole(role.id);
             }
         }
 
@@ -139,11 +138,11 @@ export class UserApi extends BaseApi {
         for (const newRole of newRoles) {
             // если в старых ролях нет новой роли
             if (!oldRoles.some(oldRole => oldRole.id === newRole.id)) {
-                this.addUserRole(newRole.id, user.id);
+                await this.addUserRole(newRole.id, user.id);
             }
         }
 
-        return this.getUserInfoesByUserId(user.id);
+        return await this.getUserInfoesByUserId(user.id);
     }
 
     public async deleteUserRole(userRoleId: number): Promise<Role> {
