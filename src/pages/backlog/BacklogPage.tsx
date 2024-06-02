@@ -148,6 +148,8 @@ const BacklogPage: React.FC = () => {
     const handleDeleteSelectedTasks = () => {
         const token = localStorage.getItem('token');
         if (token) {
+            const confirmed = window.confirm('Вы уверены, что хотите удалить эту задачу?');
+            if (confirmed) {
             const promises = selectedTaskIds.map((taskId) => api.tasks.deleteTask(taskId));
             Promise.all(promises)
                 .then(() => {
@@ -158,6 +160,7 @@ const BacklogPage: React.FC = () => {
                     console.error('Failed to delete tasks', err);
                     setError('Ошибка при удалении задачи');
                 });
+            }
         }
     };
 

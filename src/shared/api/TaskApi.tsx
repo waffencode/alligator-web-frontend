@@ -1,6 +1,6 @@
 import { AuthenticationContextData } from "../lib/authentication";
 import { BaseApi } from "./BaseApi";
-import { DeadlineResponse, Task, TasksResponse } from "./IResponses";
+import { AssignedTasksResponse, DeadlineResponse, SprintTask, SprintTaskRole, SprintTaskRolesResponse, SprintTasksResponse, Task, TasksResponse } from "./IResponses";
 import { format, parseISO } from 'date-fns';
 
 export class TaskApi extends BaseApi {
@@ -173,12 +173,79 @@ export class TaskApi extends BaseApi {
         // (не) удаляем дедлайн (при условии, что на 1 задачу - 1 дедлайн)
         //let newDeadline: DeadlineResponse;
 
+        // получаем sprint task id
+        const sprintTaskResp = await this.fetchJson<SprintTasksResponse>(`/sprintTasks?taskId=` + taskId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (sprintTaskResp.page.totalElements > 0) {
+            const sprintTaskId = sprintTaskResp._embedded.sprintTasks[0].id;
+  
+            // удаление назначенной задачи
+            const assignedTaskGetResp = await this.getAssignedTaskBySprintTaskId(sprintTaskId);
+            if (assignedTaskGetResp.page.totalElements != 0) {
+                const assignedTaskDelResp = await this.deleteAssignedTaskById(assignedTaskGetResp._embedded.assignedTasks[0].id);
+            }
+    
+            // удаление командных ролей у задачи
+            const sprintTaskRolesResp = await this.fetchJson<SprintTaskRolesResponse>(`/sprintTaskRoles?taskId=` + sprintTaskId, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            for (const sprintTaskRole of sprintTaskRolesResp._embedded.sprintTaskRoles) {
+                await this.fetchJson<SprintTaskRole>(`/sprintTaskRoles/` + sprintTaskRole.id, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+    
+            // удаление sprint task
+            const sprintTaskDelResp = await this.fetchJson<SprintTask>(`/sprintTasks/` + sprintTaskId, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+        
         return this.fetchJson<Task>(`/tasks/`+taskId, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
                 'Content-Type': 'application/json'
             }
-        });;
+        });
+    }
+
+    public async getAssignedTaskBySprintTaskId(sprintTaskId: number): Promise<AssignedTasksResponse> {
+        return this.fetchJson<AssignedTasksResponse>(`/assignedTasks?taskId=` + sprintTaskId, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    public async deleteAssignedTaskById(assignedTaskId: number): Promise<AssignedTasksResponse> {
+        const assignedTaskDelResp = await this.fetchJson<AssignedTasksResponse>(`/assignedTasks/` + assignedTaskId, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return assignedTaskDelResp;
     }
 }

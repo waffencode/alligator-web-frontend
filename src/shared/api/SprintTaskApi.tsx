@@ -252,7 +252,7 @@ export class SprintTaskApi extends BaseApi {
             }
         });
 
-        return sprintTaskResp; // Проблема с удалением
+        return sprintTaskResp;
     }
 
     public async deleteAssignedTaskById(assignedTaskId: number): Promise<AssignedTasksResponse> {
