@@ -181,6 +181,8 @@ const SprintsPage: React.FC = () => {
     const handleDeleteSprint = (sprintId: number) => {
         const token = localStorage.getItem('token');
         if (token) {
+            const confirmed = window.confirm('Вы уверены, что хотите удалить эту задачу?');
+            if (confirmed) {
             api.sprint.deleteSprint(sprintId)
                 .then(() => {
                     setSprints(sprints.filter(sprint => sprint.id !== sprintId));
@@ -193,6 +195,7 @@ const SprintsPage: React.FC = () => {
                     console.error('Failed to delete sprint', err);
                     setError('Ошибка при удалении спринта');
                 });
+            }
         }
     };
 
