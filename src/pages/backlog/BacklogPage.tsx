@@ -37,20 +37,14 @@ const BacklogPage: React.FC = () => {
     const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            api.tasks.getTasksForBacklog()
-                .then((tasks) => {
-                    setTasks(tasks);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch tasks', err);
-                    setError('Ошибка при загрузке задач');
-                });
-        } else {
-            console.error('No authentication token found');
-            setError('Ошибка проверки авторизации пользователя');
-        }
+        api.tasks.getTasksForBacklog()
+            .then((tasks) => {
+                setTasks(tasks);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch tasks', err);
+                setError('Ошибка при загрузке задач');
+            });
     }, [api.tasks]);
     
     const handleDescriptionClick = (taskId: number) => {

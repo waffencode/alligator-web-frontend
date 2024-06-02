@@ -37,21 +37,15 @@ const SprintsPage: React.FC = () => {
     });
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            loadSprints();
-            api.team.getTeams()
-                .then((teams) => {
-                    setTeams(teams);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch teams', err);
-                    setError('Ошибка при загрузке команд');
-                });
-        } else {
-            console.error('No authentication token found');
-            setError('Ошибка при проверке авторизации пользователя');
-        }
+        loadSprints();
+        api.team.getTeams()
+            .then((teams) => {
+                setTeams(teams);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch teams', err);
+                setError('Ошибка при загрузке команд');
+            });
     }, [api.sprint, api.team]);
 
     const handleAddNewSprint = () => {

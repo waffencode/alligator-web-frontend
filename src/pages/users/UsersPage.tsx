@@ -23,39 +23,27 @@ const UsersPage: React.FC = () => {
 
     // Получение списка пользователей
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            api.user.getAllUsersInfoWithRoles()
-                .then((users) => {
-                    setUsers(users);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch users', err);
-                    setError('Ошибка при загрузке пользователей');
-                });
-        } else {
-            console.error('No authentication token found');
-            setError('Ошибка при проверке авторизации пользователя');
-        }
+        api.user.getAllUsersInfoWithRoles()
+            .then((users) => {
+                setUsers(users);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch users', err);
+                setError('Ошибка при загрузке пользователей');
+            });
     }, [api.user, editedRoles]);
 
     // Получение списка ролей
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            api.user.getRoles()
-                .then((roles) => {
-                    const rolesWithSelected = roles.map(role => ({ ...role, selected: false }));
-                    setRoles(rolesWithSelected);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch roles', err);
-                    setError('Ошибка при загрузке ролей');
-                });
-        } else {
-            console.error('No authentication token found');
-            setError('Ошибка при проверке авторизации пользователя');
-        }
+        api.user.getRoles()
+            .then((roles) => {
+                const rolesWithSelected = roles.map(role => ({ ...role, selected: false }));
+                setRoles(rolesWithSelected);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch roles', err);
+                setError('Ошибка при загрузке ролей');
+            });
     }, [api.user]);
 
     const handleEditClick = (user: UserInfoWithRolesInterfaces) => {

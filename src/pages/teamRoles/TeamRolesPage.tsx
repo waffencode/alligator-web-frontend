@@ -26,19 +26,14 @@ const TeamRolesPage: React.FC = () => {
 
     // Получение списка пользователей
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            api.teamRoles.getTeamRoles()
-                .then((teamRoles) => {
-                    setTeamRoles(teamRoles);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch team roles', err);
-                    setError('Ошибка при загрузке командных ролей');
-                });
-        } else {
-            setError('No authentication token found');
-        }
+        api.teamRoles.getTeamRoles()
+            .then((teamRoles) => {
+                setTeamRoles(teamRoles);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch team roles', err);
+                setError('Ошибка при загрузке командных ролей');
+            });
     }, [api.teamRoles]);
 
     const handleEditClick = (teamRole: TeamRole) => {

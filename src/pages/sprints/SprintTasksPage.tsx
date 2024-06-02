@@ -37,24 +37,17 @@ const SprintTasksPage: React.FC = () => {
     const [expendedTeamRoles, setExpendedTeamRoles] = useState<TeamRole[]>([]); // роли задачи, открытые в окне
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        loadSprintTasks();
 
-        if (token) {
-            loadSprintTasks();
-
-            api.sprint.getSprintBySprintId(sprintId)
-                .then((sprint) => {
-                    setSpLimit(sprint.sp);
-                    setSprintName(sprint.name);
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch sprint info', err);
-                    setError('Ошибка при получении информации о спринте!');
-                });
-        } else {
-            console.error('No authentication token found');
-            setError('Ошибка при проверке авторизации пользователя');
-        }
+        api.sprint.getSprintBySprintId(sprintId)
+            .then((sprint) => {
+                setSpLimit(sprint.sp);
+                setSprintName(sprint.name);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch sprint info', err);
+                setError('Ошибка при получении информации о спринте!');
+            });
     }, [api.tasks, api.sprintTask]);
 
     useEffect(() => {
