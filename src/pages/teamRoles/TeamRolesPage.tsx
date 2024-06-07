@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './TeamRolesPage.module.css';
-import { UserInfoWithRolesInterfaces, Role, TeamRole } from '../../shared/api/IResponses';
+import { TeamRole } from '../../shared/api/IResponses';
 import ApiContext from "../../features/api-context";
 import { RoutePaths } from "../../shared/config/routes";
 import Layout from "../../widgets/Layout/Layout";
@@ -8,7 +8,6 @@ import Content from "../../widgets/Content/Content";
 import BrandLogo from "../../widgets/BrandLogo/BrandLogo";
 import PageName from "../../widgets/PageName/PageName";
 import Sidebar from "../../widgets/SideBar/SideBar";
-import {rolesTranslator, translateRole} from '../../entities/RolesTranslator';
 import Button from '../../widgets/Button/Button';
 
 const TeamRolesPage: React.FC = () => {
@@ -77,13 +76,6 @@ const TeamRolesPage: React.FC = () => {
                     });
             }
         }
-    };
-
-    const handleTeamRoleEdit = (roleId: number) => {
-        /*const updatedRoles = editedTeamRoles.map(role => // editedRoles -- список всех ролей (тек. пользователя) с выбором 
-            role.id === roleId ? { ...role, selected: !role.selected } : role
-        );
-        setEditedRoles(updatedRoles);*/
     };
 
     const handleTeamRoleChange = (field: keyof TeamRole, value: string | number) => {
@@ -170,7 +162,7 @@ const TeamRolesPage: React.FC = () => {
                                 <div></div>   
                                 <div className={styles.edit_button_container}>
                                     <button
-                                        className="edit_button"
+                                        className={styles.edit_button}
                                         onClick={handleSaveNewTeamRole}
                                     >
                                         ✓

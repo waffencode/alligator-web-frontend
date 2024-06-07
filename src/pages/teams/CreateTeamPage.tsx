@@ -13,7 +13,6 @@ import Button from "../../widgets/Button/Button";
 
 const CreateTeamPage: React.FC = () => {
     const { api } = useContext(ApiContext);
-    const navigate = useNavigate();
 
     const [teamName, setTeamName] = useState<string>('');
     const [teamLeadUserId, setTeamLeadUserId] = useState<number>();

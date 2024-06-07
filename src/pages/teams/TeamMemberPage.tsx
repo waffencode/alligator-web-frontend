@@ -95,7 +95,7 @@ const TeamMemberPage: React.FC = () => {
         <Layout
             topLeft={<BrandLogo />}
             topRight={<PageName text="Информация об участнике команды" />}
-            bottomLeft={<Sidebar currentPageURL={RoutePaths.sprints} />}
+            bottomLeft={<Sidebar currentPageURL={RoutePaths.availableTeams} />}
             bottomRight={
                 <Content>
                     {successMessage && <div className="success-message">{successMessage}</div>}
@@ -130,7 +130,7 @@ const TeamMemberPage: React.FC = () => {
                     </div>
                     <br/>
                     <Button className="button margin-right" onClick={handleSaveClick}>Сохранить</Button>
-                    <Button className="button" onClick={() => navigate(-1)}>Назад</Button>  {/*Реализовать возвращение назад */}
+                    <Button className="button" onClick={() => navigate(-1)}>Назад</Button>
                 </Content>
             }
         />

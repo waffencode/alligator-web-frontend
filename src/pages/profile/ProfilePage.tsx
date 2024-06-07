@@ -22,7 +22,6 @@ const ProfilePage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
 
-    // TODO: move out to api, maybe transform to hook
     useEffect(() => {
         api.profile.getCurUserProfileInfo()
             .then((profile) => {

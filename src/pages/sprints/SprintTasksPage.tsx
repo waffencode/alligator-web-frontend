@@ -313,7 +313,6 @@ const SprintTasksPage: React.FC = () => {
                                 <div>Дедлайн</div>
                                 <div>Тип дедлайна</div>
                                 <div>Роли</div>
-                                {/*<div>Зависимые задачи</div>*/}
                                 <div>SP</div>
                                 <div>Ответственный</div>
                                 <div>Статус</div>
@@ -336,7 +335,6 @@ const SprintTasksPage: React.FC = () => {
                                             {editingTaskId === sprintTask.id ? '✓' : '✎'}
                                         </button>
                                     </div>
-                                    {/* Здесь заменяем комментированный блок "Остальной код задачи" на код отображения описания */}
                                     {expandedSprintTaskId === sprintTask.id && (
                                         <div className={styles.task_description_expanded}>
                                             <button className={styles.close_button} onClick={() => handleDescriptionClick(sprintTask.id)}>
@@ -383,7 +381,6 @@ const SprintTasksPage: React.FC = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            {/*<div></div>*/}
                                             <input
                                                 type="number"
                                                 value={editedTask?.sp || 0}
@@ -424,7 +421,6 @@ const SprintTasksPage: React.FC = () => {
                                             <div>{sprintTask.priority}</div>
                                             <div>{sprintTask.deadline_time ? format(new Date(sprintTask.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{sprintTask.deadline_type ? sprintTask.deadline_type : ''}</div>
-                                            {/*<div></div>*/}
                                             {sprintTask.description ?
                                                 <div onClick={() => handleRolesClick(sprintTask.id)} className={styles.task_description}>
                                                     Роли

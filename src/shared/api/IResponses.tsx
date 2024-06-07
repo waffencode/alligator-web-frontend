@@ -300,8 +300,6 @@ interface Sprint {
     team_name?: string;
     scrumMaster_id?: number;
     scrumMaster_fullName?: string;
-    //team: Team_sprints;
-    //scrumMaster: ScrumMaster;
     _links?: SprintLinks;
 }
 
@@ -393,7 +391,6 @@ interface TeamMember_TeamMember {
 
 // Интерфейс для представления роли участника команды
 interface TeamMemberRole {
-    //selected?: any;
     id: number;
     teamMember: TeamMember_TeamMember;
     role: Role;
@@ -433,7 +430,6 @@ interface SprintTask {
     deadline_time?: string; // дедлайн
     deadline_type?: string; // тип дедлана
     assignation_time?: string;
-    //assigned_task_id?: number; 
     task_id?: number;
     team_member_id?: number; 
     team_member_fullName?: string; // ответственный

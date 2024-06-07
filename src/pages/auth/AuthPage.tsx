@@ -50,8 +50,6 @@ const AuthPage: React.FC = () => {
                 authData?.roles
             );
 
-            //console.log(authenticationContext);
-
             setAuthentication(authenticationContext);
 
             navigate(RoutePaths.profile);

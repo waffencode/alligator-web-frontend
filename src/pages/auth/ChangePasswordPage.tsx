@@ -23,7 +23,6 @@ const ChangePasswordPage: React.FC = () => {
         } else {
             try {
                 const response = await api.user.changePassword(oldPassword, password);
-                //localStorage.setItem('token', response.toString()); // Сохранение токена в локальное хранилище
                 window.location.href = '/profile'; // Перенаправление на защищенную страницу
                 setSuccessMessage('Пароль успешно изменён');
             } catch (error) {

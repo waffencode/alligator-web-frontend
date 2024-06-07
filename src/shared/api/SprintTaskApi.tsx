@@ -15,7 +15,6 @@ import {
     UserResponse
 } from "./IResponses";
 import { TaskApi } from "./TaskApi";
-import { format } from 'date-fns';
 
 export class SprintTaskApi extends BaseApi {
     private taskApi: TaskApi;
@@ -136,7 +135,7 @@ export class SprintTaskApi extends BaseApi {
     public async updateSprintTask(sprintTask: SprintTask): Promise<SprintTask> {
         let wasAssigned = false;
 
-        // TODO: ручное назначение задачи
+        // ручное назначение задачи
         // находим, назначена ли задача
         const assignedTaskGetResp = await this.getAssignedTaskBySprintTaskId(sprintTask.id);
         if (assignedTaskGetResp.page.totalElements != 0) {

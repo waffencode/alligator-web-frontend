@@ -1,5 +1,3 @@
-import {getAuthenticationContextData} from "../lib/authentication";
-
 export class BaseApi {
     private BASE_PATH = "http://localhost:8080";
 

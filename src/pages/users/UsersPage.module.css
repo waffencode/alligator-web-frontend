@@ -50,7 +50,6 @@
 }
 
 .sprint_tile > div {
-    /*white-space: nowrap; !* Запрещаем перенос текста *!*/
     overflow: hidden; /* Обрезаем переполняющий текст */
     text-overflow: ellipsis; /* Добавляем многоточие для переполняющего текста */
     display: flex; /* Используем Flexbox */

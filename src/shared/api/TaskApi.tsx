@@ -35,18 +35,6 @@ export class TaskApi extends BaseApi {
         });
     }
 
-    //TODO: перейти на это
-
-    // public async getTaskDeadline(task: Task) {
-    //     return this.fetchJson<DeadlineResponse>(task._links.deadline.href, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': `Bearer ${this.authenticationContext.accessToken}`,
-    //             'Content-Type': 'application/json'
-    //         }
-    //     });
-    // }
-
     public async getTasksForBacklog(): Promise<Task[]> {
         const tasks = await this.getTasks();
 
@@ -56,11 +44,6 @@ export class TaskApi extends BaseApi {
             task.deadline_time = deadlineResp.time;
             task.deadline_type = deadlineResp.type;
         }
-
-        // зависимости
-
-        // ответственный (кому назначены задачи)
-
         return tasks;
     }
 
@@ -170,7 +153,7 @@ export class TaskApi extends BaseApi {
 
     // удаление задачи
     public async deleteTask(taskId: number): Promise<Task> {
-        // (не) удаляем дедлайн (при условии, что на 1 задачу - 1 дедлайн)
+        // не удаляем дедлайн
         //let newDeadline: DeadlineResponse;
 
         // получаем sprint task id

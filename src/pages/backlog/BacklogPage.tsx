@@ -192,7 +192,6 @@ const BacklogPage: React.FC = () => {
                                 <div>Приоритет</div>
                                 <div>Дедлайн</div>
                                 <div>Тип дедлайна</div>
-                                {/*<div>Зависимые задачи</div>*/}
                                 <div>Статус</div>
                             </div>
                             {tasks.map((task, index) => (
@@ -212,7 +211,6 @@ const BacklogPage: React.FC = () => {
                                             {editingTaskId === task.id ? '✓' : '✎'}
                                         </button>
                                     </div>
-                                    {/* Здесь заменяем комментированный блок "Остальной код задачи" на код отображения описания */}
                                     {expandedTaskId === task.id && (
                                         <div className={styles.task_description_expanded}>
                                             <button className={styles.close_button} onClick={() => handleDescriptionClick(task.id)}>
@@ -257,7 +255,6 @@ const BacklogPage: React.FC = () => {
                                                 <option value="SOFT">SOFT</option>
                                                 <option value="HARD">HARD</option>
                                             </select>
-                                            {/*<div></div>*/}
                                             <select
                                                 value={getValue(editedTask?.state)}
                                                 onChange={(e) => handleTaskChange('state', e.target.value)}
@@ -280,7 +277,6 @@ const BacklogPage: React.FC = () => {
                                             <div>{task.priority}</div>
                                             <div>{task.deadline_time ? format(new Date(task.deadline_time), 'dd.MM.yyyy') : ''}</div>
                                             <div>{task.deadline_type ? task.deadline_type : ''}</div>
-                                            {/*<div></div>*/}
                                             <div>{translateStatus(task.state)}</div>
                                         </>
                                     )}
@@ -333,7 +329,6 @@ const BacklogPage: React.FC = () => {
                                         <option value="SOFT">SOFT</option>
                                         <option value="HARD">HARD</option>
                                     </select>
-                                    {/*<div></div>*/}
                                     <select
                                         value={getValue(newTask.state) ? getValue(newTask.state) : "TODO"}
                                         onChange={(e) => handleNewTaskChange('state', e.target.value)}

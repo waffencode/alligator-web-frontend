@@ -75,7 +75,6 @@ const SprintsPage: React.FC = () => {
                 if (token) {
                     api.sprint.updateSprint(editedSprint)
                         .then(() => {
-                            //setSprints(sprints.map(s => s.id === editedSprint.id ? editedSprint : s));
                             setEditingSprintId(null);
                             setEditedSprint(null);
                             // обновление списка спринтов после внесения изменений

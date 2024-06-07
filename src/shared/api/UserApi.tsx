@@ -1,6 +1,6 @@
 import {BaseApi} from "./BaseApi";
 import {AuthResponse, UserInfoResponse, UserProfile, whoamiResponse, UserInfoWithRolesInterfaces, RolesResponse, UserRole, UserRolesResponse, Role} from "./IResponses";
-import {getAuthenticationContextData, AuthenticationContextData} from "../lib/authentication";
+import {AuthenticationContextData} from "../lib/authentication";
 
 export class UserApi extends BaseApi {
     private authenticationContext: AuthenticationContextData
@@ -23,7 +23,7 @@ export class UserApi extends BaseApi {
     // получение информации обо всех пользователях
     public async getAllUsersInfoWithRoles(): Promise<UserInfoWithRolesInterfaces[]> {
         // получаем инфу о пользователе без ролей (id, fullName, email, phone_number, _links)
-        // TODO: получение истинного id пользователя (user_details)
+        // получение истинного id пользователя (user_details)
         const usersResp = this.userInfoes();
         const users = (await usersResp)._embedded.userInfoes;
 

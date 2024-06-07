@@ -1,7 +1,7 @@
 import {BaseApi} from "./BaseApi";
 import {UserProfileWithRoles} from "./IResponses";
 import {UserApi} from "./UserApi";
-import {AuthenticationContextData, getAuthenticationContextData} from "../lib/authentication";
+import {AuthenticationContextData} from "../lib/authentication";
 
 
 export class ProfileApi extends BaseApi {

@@ -40,16 +40,6 @@ class Api {
     isLoggedIn(): boolean {
         return this._authenticationContext?.accessToken != null && this._authenticationContext?.accessToken != '';
     }
-
-    // // NOTE: token invalid => reset token context
-    // async withReauth<T, U>(func: () => Promise<AxiosResponse<T, U>>): Promise<AxiosResponse<T, U>> {
-    //     return func().catch(async (e) => {
-    //         if (e.response != undefined && e.response.status == 401) {
-    //             this._setTokenContext(new TokenContextData());
-    //         }
-    //         throw e;
-    //     });
-    // }
 }
 
 export { Api };
